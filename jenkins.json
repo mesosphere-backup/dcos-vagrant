@@ -1,0 +1,11 @@
+{
+  "id": "jenkins",
+  "cmd": "cd jenkins-standalone-master && ./jenkins-standalone.sh -z $(cat /etc/mesos/zk) -r redis.example.com",
+  "mem": 256.0,
+  "cpus": 0.25,
+  "disk": 0.0,
+  "instances": 1,
+  "uris": [
+      "https://github.com/rji/jenkins-standalone/archive/master.tar.gz"
+  ]
+}

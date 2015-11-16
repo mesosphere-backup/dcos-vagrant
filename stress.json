@@ -1,0 +1,8 @@
+{
+  "id": "/stress-test",
+  "cpus": 0.5,
+  "mem": 128,
+  "instances": 1,
+  "constraints": [["hostname", "UNIQUE"]],
+  "cmd":"cat /dev/random | openssl enc -aes-256-cbc -salt -out /dev/null -pass 'pass:foobar'"
+}

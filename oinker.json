@@ -1,0 +1,30 @@
+{
+    "id": "/oinker",
+    "instances": 3,
+    "container": {
+        "type": "DOCKER",
+        "docker": {
+            "image": "mesosphere/oinker:shakespeare",
+            "network": "BRIDGE",
+            "portMappings": [
+                {
+                    "containerPort": 3000,
+                    "hostPort": 0,
+                    "protocol": "tcp"
+                }
+            ]
+        }
+    },
+    "healthChecks": [{
+        "protocol": "TCP",
+        "gracePeriodSeconds": 600,
+        "intervalSeconds": 30,
+        "portIndex": 0,
+        "timeoutSeconds": 10,
+        "maxConsecutiveFailures": 2
+    }],
+    "cmd": "until rake cassandra:setup; do sleep 5; done && rails server",
+    "ports": [0],
+    "cpus": 0.25,
+    "mem": 256.0
+}
