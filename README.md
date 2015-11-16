@@ -143,3 +143,6 @@ cp <repo>/etc/hosts.file /etc/hosts
  - IP4 Address 192.168.65.1
  - Netmask 255.255.255.0
 
+### Vagrant Setup Diagram
+
+![Vagrant Diagram](https://github.com/mesosphere/dcos-vagrant-demo/blob/master/docs/dcos_vagrant_setup.png?raw=true)
