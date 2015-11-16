@@ -36,6 +36,7 @@ The purpose of this repo was to create a simple way to quickly provision various
 - On a MacBook Pro (Retina, 13-inch, Early 2015), 2.7 GHz Intel Core i5, 15GB Memory
 - Deploying single framework(s), cassandra.
 - Deploying applications in the repo - spring.json, stress.json, oinker.json and router.json
+- This is a minimal configuration and will not support robust demos or deployments. Minimum 32GB is required for this.
 
 ## 1) Preparation
 
