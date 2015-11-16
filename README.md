@@ -28,7 +28,7 @@ The purpose of this repo was to create a simple way to quickly provision various
 	├── router.json                    # Marathon descriptor for Routing container, deploy with oinker.json
 	├── jenkins.json                   # Marathon descriptor for standalone jenkins, not currently functioning.
 	├── VagrantFile                    # Used to deploy various nodes (boot, masters and workers)
-	├── *dcos_generate_config.sh*      # This is the core installer for DCOS from Mesosphere.
+	├── dcos_generate_config.sh        # This is the core installer for DCOS from Mesosphere.
 	└── README.md
 
 
@@ -39,18 +39,17 @@ This has been tested:
 
 ## 1) Preparation
 
-** 1a) ** This repo assumes a functioning vagrant is setup using the virtualbox provider. To install virtualbox and vagrant please see [Appendix](#appendix)
+**1a)** This repo assumes a functioning vagrant is setup using the virtualbox provider. To install virtualbox and vagrant please see [Appendix](#appendix)
 
-** 1b) ** You'll need to install the following box locally into your Vagrant installation.
+**1b)** You'll need to install the following box locally into your Vagrant installation.
 
-> # non-updated OS [https://github.com/CommanderK5/packer-centos-template/releases/download/0.7.1/vagrant-centos-7.1.box]
+> non-updated OS [https://github.com/CommanderK5/packer-centos-template/releases/download/0.7.1/vagrant-centos-7.1.box]
 
 ```bash
 vagrant box add new-centos https://github.com/CommanderK5/packer-centos-template/releases/download/0.7.1/vagrant-centos-7.1.box
 ```
 
-** 1c) ** You will need to download the dcos_generate_config.sh script locally. Please download the appropriate version for testing and copy directly into the root repo directory.
-
+**1c)** You will need to download the dcos_generate_config.sh script locally. Please download the appropriate version for testing and copy directly into the root repo directory.
 
 If you'd like to customize the base OS, you can do so and will need to adjust the following lines in your VagrantFile.
 
