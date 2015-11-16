@@ -75,7 +75,7 @@ vi VagrantFile # Uncomment appropriate variable to define config.json eg. DCOS_C
 vagrant up boot m1 w1 w2 w3
 ```
 
-### 2b) Multi Master (boot node, master node, 1 x worker node)
+### 2b) Multi Master (boot node, 3 x master node, worker node)
 
 ```bash
 cd <repo>
