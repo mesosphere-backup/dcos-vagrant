@@ -102,11 +102,9 @@ vagrant up m1 m2 m3 --no-provision
 In multiple terminal run the commands simultaneously
 
 ```bash
-vagrant provision m1
-
-vagrant provision m2
-
-vagrant provision m3
+term1# vagrant provision m1
+term2# vagrant provision m2
+term3# vagrant provision m3
 ```
 
 Next Run
