@@ -155,7 +155,7 @@ Appendix
 License and Author
 ==================
 
-Author:: Stathy <stathy@stathy.com>
+Author:: Stathy Touloumis
 
 CreatedBy:: Stathy Touloumis (<stathy@mesosphere.com>)
 
