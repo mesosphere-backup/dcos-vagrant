@@ -123,23 +123,28 @@ Vagrant::Config.run do |config|
           :provision    => DCOS_WORKER_PROVISION
       },
       :w2 => {
-          :ip       => '192.168.65.120',
-          :memory   => 2048,
-          :provision    => DCOS_WORKER_PROVISION
-      },
-      :w3 => {
           :ip       => '192.168.65.121',
           :memory   => 2048,
           :provision    => DCOS_WORKER_PROVISION
       },
-      :w4 => {
+      :w3 => {
           :ip       => '192.168.65.131',
-          :memory   => 4096,
+          :memory   => 2048,
+          :provision    => DCOS_WORKER_PROVISION
+      },
+      :w4 => {
+          :ip       => '192.168.65.141',
+          :memory   => 3072,
           :provision    => DCOS_WORKER_PROVISION
       },
       :w5 => {
-          :ip       => '192.168.65.141',
-          :memory   => 4096,
+          :ip       => '192.168.65.151',
+          :memory   => 3072,
+          :provision    => DCOS_WORKER_PROVISION
+      },
+      :w6 => {
+          :ip       => '192.168.65.161',
+          :memory   => 3072,
           :provision    => DCOS_WORKER_PROVISION
       },
 
