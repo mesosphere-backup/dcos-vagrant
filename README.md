@@ -40,7 +40,7 @@ The purpose of this repo was to create a simple way to quickly provision various
 
 ## 1) Preparation
 
-**1a)** This repo assumes a functioning vagrant is setup using the virtualbox provider. To install virtualbox and vagrant please see [Appendix](#appendix)
+**1a)** Please review the [Appendix](#appendix) section for configuring local system settings, copying files and installing Vagrant + VirtualBox. This repo assumes a functioning vagrant is setup using the virtualbox provider.
 
 **1b)** You'll need to install the following box locally into your Vagrant installation.
 
@@ -109,18 +109,19 @@ vagrant up w1
 
 ### System Setup
 
-*Get the repo*
+1. Get the repo
 
 ```bash
 git clone https://github.com/stathy/dcos-repo
 ```
 
-*Copy etc/hosts.file to your local hosts file (/etc/hosts)*
+2. Copy etc/hosts.file to your local hosts file (/etc/hosts)
 
 ```bash
 cp <repo>/etc/hosts.file /etc/hosts
 ```
 
+3. Download the appropriate dcos_generate_config.sh file from Mesosphere and place into the root repo directory.
 
 *Install VirtualBox*
 
@@ -147,3 +148,9 @@ cp <repo>/etc/hosts.file /etc/hosts
 ### Vagrant Setup Diagram
 
 ![Vagrant Diagram](https://github.com/mesosphere/dcos-vagrant-demo/blob/master/docs/dcos_vagrant_setup.png?raw=true)
+
+# Authors
+
+Stathy G Touloumis @stathy
+
+# License
