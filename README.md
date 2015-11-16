@@ -123,13 +123,13 @@ vagrant up w1
 
 3. Download the appropriate dcos_generate_config.sh file from Mesosphere and place into the root repo directory.
 
-*Install VirtualBox*
+4. Install VirtualBox
 
-> https://www.virtualbox.org/wiki/Downloads
+	> https://www.virtualbox.org/wiki/Downloads
 
-*Intall Vagrant*
+5. Intall Vagrant
 
-> http://www.vagrantup.com/downloads
+	> http://www.vagrantup.com/downloads
 
 ### Vagrant Setup (Virtual Box)
 
