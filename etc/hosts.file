@@ -13,8 +13,8 @@
 192.168.65.101   m3.dcos m3 master3
 192.168.65.103   m4.dcos m4 master4
 192.168.65.105   m5.dcos m5 master5
-192.168.65.111   w1.dcos w1 slave1
-192.168.65.120   w2.dcos w2 slave2
-192.168.65.121   w3.dcos w3 slave3
-192.168.65.141   w5.dcos w5 slave4
-192.168.65.151   w6.dcos w6 slave5
+192.168.65.111   w1.dcos w1 
+192.168.65.120   w2.dcos w2 
+192.168.65.121   w3.dcos w3 
+192.168.65.141   w5.dcos w5 
+192.168.65.151   w6.dcos w6 
