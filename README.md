@@ -1,4 +1,4 @@
-# dcos-repo
+# DCOS Local Demo using Vagrant and Virtual Box
 
 The purpose of this repo was to create a simple way to quickly provision various DCOS cluster(s) on an internal system. This can optionally provide a model for self-guiding customers in a fairly prescriptive fashion. This is done using the opensource VirtualBox virtualization layer (Oracle) and Vagrant, a tool for easily modeling system deployments against various providers (VirtualBox). The driving goals of the implementation are:
 
