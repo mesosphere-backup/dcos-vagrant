@@ -99,7 +99,7 @@ vagrant up boot
 vagrant up m1 m2 m3 --no-provision
 ```
 
-In multiple terminal run the commands simultaneously
+Next, In multiple terminals run the commands simultaneously
 
 ```bash
 term1# vagrant provision m1
@@ -107,7 +107,7 @@ term2# vagrant provision m2
 term3# vagrant provision m3
 ```
 
-Next Run
+Next, deploy the worker node
 
 ```bash
 vagrant up w1
