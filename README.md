@@ -1,4 +1,5 @@
-# DCOS Local Demo using Vagrant and Virtual Box
+DCOS Local Demo using Vagrant and Virtual Box
+==================
 
 The purpose of this repo was to create a simple way to quickly provision various DCOS cluster(s) on an internal system. This can optionally provide a model for self-guiding customers in a fairly prescriptive fashion. This is done using the opensource VirtualBox virtualization layer (Oracle) and Vagrant, a tool for easily modeling system deployments against various providers (VirtualBox). The driving goals of the implementation are:
 
@@ -38,7 +39,8 @@ The purpose of this repo was to create a simple way to quickly provision various
 - Deploying applications in the repo - spring.json, stress.json, oinker.json and router.json
 - This is a minimal configuration and will not support robust demos or deployments. Minimum 32GB is required for this.
 
-## 1) Preparation
+1) Preparation
+------------------
 
 **1a)** Please review the [Appendix](#appendix) section for configuring local system settings, copying files and installing Vagrant + VirtualBox. This repo assumes a functioning vagrant is setup using the virtualbox provider.
 
@@ -64,7 +66,8 @@ If you'd like to customize the base OS, you can do so and will need to adjust th
 
 These commands can be easily extrapolated for a customer engagement as well.
 
-## 2) Deploy Cluster
+2) Deploy Cluster
+------------------
 
 ### 2a) Single Master (boot node, master node, 3 x worker nodes)
 
@@ -104,8 +107,8 @@ Next Run
 vagrant up w1
 ```
 
-
-## Appendix
+Appendix
+==================
 
 ### System Setup
 
@@ -149,8 +152,24 @@ vagrant up w1
 
 ![Vagrant Diagram](https://github.com/mesosphere/dcos-vagrant-demo/blob/master/docs/dcos_vagrant_setup.png?raw=true)
 
-# Authors
+License and Author
+==================
 
-Stathy G Touloumis @stathy
+Author:: Stathy <stathy@stathy.com>
 
-# License
+CreatedBy:: Stathy Touloumis (<stathy@mesosphere.com>)
+
+Copyright:: 2015, Mesosphere
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
