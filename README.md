@@ -111,15 +111,15 @@ vagrant up w1
 
 1. Get the repo
 
-```bash
-git clone https://github.com/stathy/dcos-repo
-```
+	```bash
+	git clone https://github.com/stathy/dcos-repo
+	```
 
 2. Copy etc/hosts.file to your local hosts file (/etc/hosts)
 
-```bash
-cp <repo>/etc/hosts.file /etc/hosts
-```
+	```bash
+	cp <repo>/etc/hosts.file /etc/hosts
+	```
 
 3. Download the appropriate dcos_generate_config.sh file from Mesosphere and place into the root repo directory.
 
