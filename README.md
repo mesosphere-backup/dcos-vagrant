@@ -37,7 +37,6 @@ The purpose of this repo was to create a simple way to quickly provision various
 - On a MacBook Pro (Retina, 13-inch, Early 2015), 2.7 GHz Intel Core i5, 15GB Memory
 - Deploying single framework(s), cassandra.
 - Deploying applications in the repo - spring.json, stress.json, oinker.json and router.json
-- This is a minimal configuration and will not support robust demos or deployments. Minimum 32GB is required for this.
 
 1) Preparation
 ------------------
@@ -71,6 +70,8 @@ These commands can be easily extrapolated for a customer engagement as well.
 
 ### 2a) Single Master (boot node, master node, 3 x worker nodes)
 
+> NOTE: This is a minimal configuration and will not support robust demos or deployments. Sample application deployments will work but not with frameworks.
+
 ```bash
 cd <repo>
 
@@ -78,8 +79,15 @@ vi VagrantFile # Uncomment appropriate variable to define config.json eg. DCOS_C
 
 vagrant up boot m1 w1 w2 w3
 ```
+> NOTE: This will support a minimal framework and application deployment. It was tested against the oinker app + cassandra.
+
+```bash
+vagrant up boot m1 w4 w5 w6
+```
 
 ### 2b) Multi Master (boot node, 3 x master node, worker node)
+
+> NOTE: This is a minimal configuration and will not support robust demos or deployments. Sample application deployments will work but not with frameworks.
 
 ```bash
 cd <repo>
