@@ -32,7 +32,7 @@ The purpose of this repo was to create a simple way to quickly provision various
 	└── README.md
 
 
-This has been tested:
+**Tested On**
 - On a MacBook Pro (Retina, 13-inch, Early 2015), 2.7 GHz Intel Core i5, 15GB Memory
 - Deploying single framework(s), cassandra.
 - Deploying applications in the repo - spring.json, stress.json, oinker.json and router.json
@@ -43,7 +43,7 @@ This has been tested:
 
 **1b)** You'll need to install the following box locally into your Vagrant installation.
 
-> non-updated OS [https://github.com/CommanderK5/packer-centos-template/releases/download/0.7.1/vagrant-centos-7.1.box]
+> [non-updated OS](https://github.com/CommanderK5/packer-centos-template/releases/download/0.7.1/vagrant-centos-7.1.box) https://github.com/CommanderK5/packer-centos-template/releases/download/0.7.1/vagrant-centos-7.1.box
 
 ```bash
 vagrant box add new-centos https://github.com/CommanderK5/packer-centos-template/releases/download/0.7.1/vagrant-centos-7.1.box
@@ -54,6 +54,14 @@ vagrant box add new-centos https://github.com/CommanderK5/packer-centos-template
 If you'd like to customize the base OS, you can do so and will need to adjust the following lines in your VagrantFile.
 
 > BOX_NAME = "new-centos"
+
+**1d)** Optionally review the commands to be executed within the VagrantFile. They are specified at the top for 4 core components:
+- Base OS for all nodes
+- Bootstrap node
+- Master node
+- Worker node
+
+These commands can be easily extrapolated for a customer engagement as well.
 
 ## 2) Deploy Cluster
 
