@@ -23,7 +23,7 @@ The purpose of this repo was to create a simple way to quickly provision various
 	│   ├── 1_master-config.json       # DCOS config for 1 master
 	│   ├── 3_master-config.json       # DCOS config for 3 masters
 	│
-	├── spring.json (by request)       # Marathon descriptor for standalone java spring application.
+	├── spring.json (by request) `xx      # Marathon descriptor for standalone java spring application.
 	├── stress.json                    # Marathon descriptor for standalone commandline which uses CPU.
 	├── oinker.json                    # Marathon descriptor for functioning twitter clone, deploy with router.json
 	├── router.json                    # Marathon descriptor for Routing container, deploy with oinker.json
