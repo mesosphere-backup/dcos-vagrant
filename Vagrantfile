@@ -5,7 +5,8 @@
 ##############################################
 
 # non-updated OS [https://github.com/CommanderK5/packer-centos-template/releases/download/0.7.1/vagrant-centos-7.1.box]
-BOX_NAME = "new-centos"
+#BOX_NAME = "new-centos"
+BOX_NAME = "ubuntu/wily64"
 
 # updated/upgraded OS (faster, no-internet)
 #BOX_NAME = "???"
@@ -27,10 +28,10 @@ DCOS_OS_REQUIREMENTS = <<SHELL
   usermod -aG docker vagrant
   echo ">>> Created groups (nogroup, docker) and adding to users (docker, vagrant)"
 
-  yum install --assumeyes --tolerant --quiet tar xz unzip curl docker
+#  yum install --assumeyes --tolerant --quiet tar xz unzip curl docker
   echo ">>> Added packages (tar, xz, unzip, curl, docker)"
 
-  yum upgrade --assumeyes --tolerant --quiet
+#  yum upgrade --assumeyes --tolerant --quiet
   echo ">>> Upgraded OS"
 
   systemctl enable docker
@@ -153,12 +154,13 @@ Vagrant::Config.run do |config|
         config.vm.define name do |vm_cfg|
           vm_cfg.vm.host_name = "#{name}.dcos"
           vm_cfg.vm.network :hostonly, cfg[:ip]
-
           vm_cfg.vm.box = BOX_NAME
 
-          vm_cfg.vm.customize ["modifyvm", :id, "--name", vm_cfg.vm.host_name]
-          vm_cfg.vm.customize ["modifyvm", :id, "--memory", cfg[:memory]]
-          vm_cfg.vm.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+          vm_cfg.vm"virtualbox" do |v|
+            v.customize ["modifyvm", :id, "--name", v.host_name]
+            v.customize ["modifyvm", :id, "--memory", cfg[:memory]]
+            v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+          end
         
           if cfg[:forwards]
             cfg[:forwards].each do |from,to|
