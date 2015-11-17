@@ -16,6 +16,7 @@ IP_DETECT_SCRIPT="ip-detect"
 DCOS_CONFIG_JSON="1_master-config.json"
 #DCOS_CONFIG_JSON="3_master-config.json"
 
+DCOS_GENERATE_CONFIG_PATH= ENV['DCOS_GENERATE_CONFIG_PATH'] || "file:///vagrant/dcos_generate_config.sh"
 
 #### Commands for configuring systems for DCOS req, master and worker install
 ##############################################
@@ -64,21 +65,21 @@ DCOS_BOOT_PROVISION = <<SHELL
   cp /vagrant/etc/#{DCOS_CONFIG_JSON} ./config.json
   echo ">>> Copied (ip-detect, config.json) for building bootstrap image for system."
 
-  cd ~ && curl -O file:///vagrant/dcos_generate_config.sh
+  cd ~ && curl -O #{DCOS_GENERATE_CONFIG_PATH}
   echo ">>> Downloading (dcos_generate_config.sh) for building bootstrap image for system."
 
   bash ~/dcos_generate_config.sh
   echo ">>> Built bootstrap artifacts under (#{ENV['PWD']}/genconf/serve)."
 
   cp -rp ~/genconf/serve/* /var/tmp/dcos/
-  echo ">>> Copied bootstrap artifacts to nginx directory."
+  echo ">>> Copied bootstrap artifacts to nginx directory (/var/tmp/dcos)."
 
 SHELL
 
 DCOS_MASTER_PROVISION = <<SHELL
   mkdir -p ~/dcos && cd ~/dcos
   curl -O http://boot.dcos/dcos_install.sh
-   bash dcos_install.sh master
+  bash dcos_install.sh master
 
 SHELL
 
