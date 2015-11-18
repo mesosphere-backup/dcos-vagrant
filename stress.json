@@ -8,7 +8,7 @@
   ],
   "labels": {
         "datacenter": "us-west",
-        "version": "v1.234343-5"
+        "app-version": "v1.234343-5"
   },
   "healthChecks": [
     {
