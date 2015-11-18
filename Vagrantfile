@@ -27,10 +27,10 @@ DCOS_OS_REQUIREMENTS = <<SHELL
   usermod -aG docker vagrant
   echo ">>> Created groups (nogroup, docker) and adding to users (docker, vagrant)"
 
-#  yum install --assumeyes --tolerant --quiet tar xz unzip curl docker
+  yum install --assumeyes --tolerant --quiet tar xz unzip curl docker
   echo ">>> Added packages (tar, xz, unzip, curl, docker)"
 
-#  yum upgrade --assumeyes --tolerant --quiet
+  yum upgrade --assumeyes --tolerant --quiet
   echo ">>> Upgraded OS"
 
   systemctl enable docker
@@ -93,7 +93,7 @@ SHELL
 #### Instance config definitions
 ##############################################
 
-Vagrant::Config.run do |config|
+Vagrant.configure(2) do |config|
 
     {
       :boot => {
@@ -151,13 +151,13 @@ Vagrant::Config.run do |config|
     }.each do |name,cfg|
 
         config.vm.define name do |vm_cfg|
-          vm_cfg.vm.host_name = "#{name}.dcos"
-          vm_cfg.vm.network :hostonly, cfg[:ip]
+          vm_cfg.vm.hostname = "#{name}.dcos"
+          vm_cfg.vm.network "private_network", ip: cfg[:ip]
           vm_cfg.vm.box = BOX_NAME
 
-          vm_cfg.vm"virtualbox" do |v|
-            v.customize ["modifyvm", :id, "--name", v.host_name]
-            v.customize ["modifyvm", :id, "--memory", cfg[:memory]]
+          vm_cfg.vm.provider "virtualbox" do |v|
+            v.name = vm_cfg.vm.hostname
+            v.memory = cfg[:memory]
             v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
           end
         
