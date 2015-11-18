@@ -1,8 +1,24 @@
 {
-  "id": "/stress-test",
-  "cpus": 0.5,
-  "mem": 128,
+  "id": "v1.234343-5/stress-test",
+  "cpus": 0.25,
+  "mem": 64,
   "instances": 1,
-  "constraints": [["hostname", "UNIQUE"]],
+  "constraints": [
+  	["hostname", "UNIQUE"]
+  ],
+  "labels": {
+        "datacenter": "us-west",
+        "version": "v1.234343-5"
+  },
+  "healthChecks": [
+    {
+      "protocol": "COMMAND",
+      "command": { "value": "ps ax | grep -v grep | grep -c openssl" },
+      "gracePeriodSeconds": 5,
+      "intervalSeconds": 10,
+      "timeoutSeconds": 10,
+      "maxConsecutiveFailures": 1
+    }
+  ],
   "cmd":"cat /dev/random | openssl enc -aes-256-cbc -salt -out /dev/null -pass 'pass:foobar'"
 }
