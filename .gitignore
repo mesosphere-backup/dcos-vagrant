@@ -1,6 +1,6 @@
 .DS_Store
 spring.json
-dcos_generate_config.sh
+dcos_generate_config*.sh
 exhibitor.properties
 .vagrant
 dcos

@@ -27,6 +27,7 @@ DCOS_OS_REQUIREMENTS = <<SHELL
   usermod -aG docker vagrant
   echo ">>> Created groups (nogroup, docker) and adding to users (docker, vagrant)"
 
+  yum makecache fast
   yum install --assumeyes --tolerant --quiet tar xz unzip curl docker
   echo ">>> Added packages (tar, xz, unzip, curl, docker)"
 
@@ -98,7 +99,7 @@ Vagrant.configure(2) do |config|
     {
       :boot => {
           :ip       => '192.168.65.50',
-          :memory   => 512,
+          :memory   => 128,
           :provision    => DCOS_BOOT_PROVISION
 
       },
@@ -119,32 +120,32 @@ Vagrant.configure(2) do |config|
       },
       :w1 => {
           :ip       => '192.168.65.111',
-          :memory   => 2048,
+          :memory   => 3072,
           :provision    => DCOS_WORKER_PROVISION
       },
       :w2 => {
           :ip       => '192.168.65.121',
-          :memory   => 2048,
+          :memory   => 3072,
           :provision    => DCOS_WORKER_PROVISION
       },
       :w3 => {
           :ip       => '192.168.65.131',
-          :memory   => 2048,
+          :memory   => 3072,
           :provision    => DCOS_WORKER_PROVISION
       },
       :w4 => {
           :ip       => '192.168.65.141',
-          :memory   => 3072,
+          :memory   => 3584,
           :provision    => DCOS_WORKER_PROVISION
       },
       :w5 => {
           :ip       => '192.168.65.151',
-          :memory   => 3072,
+          :memory   => 3584,
           :provision    => DCOS_WORKER_PROVISION
       },
       :w6 => {
           :ip       => '192.168.65.161',
-          :memory   => 3072,
+          :memory   => 3584,
           :provision    => DCOS_WORKER_PROVISION
       },
 

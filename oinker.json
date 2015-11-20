@@ -1,6 +1,6 @@
 {
     "id": "/oinker",
-    "instances": 3,
+    "instances": 2,
     "container": {
         "type": "DOCKER",
         "docker": {
@@ -26,5 +26,5 @@
     "cmd": "until rake cassandra:setup; do sleep 5; done && rails server",
     "ports": [0],
     "cpus": 0.25,
-    "mem": 256.0
+    "mem": 128.0
 }

@@ -1,7 +1,7 @@
 {
   "id": "/oinker-router",
   "cpus": 1,
-  "mem": 256,
+  "mem": 128,
   "instances": 1,
   "constraints": [["hostname", "UNIQUE"]],
   "acceptedResourceRoles": ["slave_public"],
