@@ -8,6 +8,7 @@
 ::1             localhost 
 
 192.168.65.50    boot.dcos boot 
+192.168.65.60    lb.dcos lb spring.acme.org oinker.acme.org
 192.168.65.90    m1.dcos m1
 192.168.65.95    m2.dcos m2
 192.168.65.101   m3.dcos m3

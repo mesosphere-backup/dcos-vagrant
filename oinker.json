@@ -1,6 +1,10 @@
 {
     "id": "/oinker",
     "instances": 2,
+    "labels": {
+        "HAPROXY_GROUP": "external",
+        "HAPROXY_0_VHOST": "oinker.acme.org"
+    },
     "container": {
         "type": "DOCKER",
         "docker": {

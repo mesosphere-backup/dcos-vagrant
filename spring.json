@@ -1,0 +1,33 @@
+{
+    "id": "/java-spring",
+    "cpus": 0.25,
+    "mem": 384,
+    "instances": 1,
+    "cmd": "jre*/bin/java -Xmx256m -jar gs-spring-boot-0.1.0.jar --server.port=$PORT0 --endpoints.shutdown.enabled='true'",
+    "labels": {
+        "HAPROXY_GROUP": "external",
+        "HAPROXY_0_VHOST": "spring.acme.org"
+    },
+    "constraints": [
+        [
+            "hostname",
+            "UNIQUE"
+        ]
+    ],
+    "ports": [0],
+    "healthChecks": [
+        {
+            "protocol": "HTTP",
+            "portIndex": 0,
+            "path": "/",
+            "gracePeriodSeconds": 5,
+            "intervalSeconds": 20,
+            "maxConsecutiveFailures": 3
+        }
+    ],
+    "uris": [
+        "http://boot.dcos/java/gs-spring-boot-0.1.0.jar",
+        "http://boot.dcos/java/jre-8u66-linux-x64.tar.gz"
+    ]
+}
+

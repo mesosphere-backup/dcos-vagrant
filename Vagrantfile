@@ -41,9 +41,6 @@ DCOS_OS_REQUIREMENTS = <<SHELL
   echo ">>> Starting docker and running (docker ps)"
   docker ps
 
-  cp /vagrant/etc/hosts.file /etc/hosts
-  echo ">>> Copying hosts file to system."
-
   sed -i s/SELINUX=enforcing/SELINUX=permissive/g /etc/selinux/config
   echo ">>> Disabled SELinux"
 
@@ -75,6 +72,11 @@ DCOS_BOOT_PROVISION = <<SHELL
   cp -rp ~/genconf/serve/* /var/tmp/dcos/
   echo ">>> Copied bootstrap artifacts to nginx directory (/var/tmp/dcos)."
 
+  mkdir -p /var/tmp/dcos/java
+  cp -rp /vagrant/build/gs-spring-boot-0.1.0.jar /var/tmp/dcos/java/
+  cp -rp /vagrant/build/jre-8u65-linux-x64.gz /var/tmp/dcos/java/
+  echo ">>> Copied java artifacts to nginx dir (/var/tmp/dcos/java)."
+
 SHELL
 
 DCOS_MASTER_PROVISION = <<SHELL
@@ -91,6 +93,13 @@ DCOS_WORKER_PROVISION = <<SHELL
 
 SHELL
 
+DCOS_WORKER_PUBLIC_PROVISION = <<SHELL
+  mkdir -p ~/dcos && cd ~/dcos
+  curl -O http://boot.dcos/dcos_install.sh
+  bash dcos_install.sh slave_public
+
+SHELL
+
 #### Instance config definitions
 ##############################################
 
@@ -99,9 +108,14 @@ Vagrant.configure(2) do |config|
     {
       :boot => {
           :ip       => '192.168.65.50',
-          :memory   => 128,
+          :memory   => 256,
           :provision    => DCOS_BOOT_PROVISION
 
+      },
+      :lb => {
+          :ip       => '192.168.65.60',
+          :memory   => 1256,
+          :provision    => DCOS_WORKER_PUBLIC_PROVISION
       },
       :m1 => {
           :ip       => '192.168.65.90',
@@ -147,7 +161,7 @@ Vagrant.configure(2) do |config|
           :ip       => '192.168.65.161',
           :memory   => 3584,
           :provision    => DCOS_WORKER_PROVISION
-      },
+      }
 
     }.each do |name,cfg|
 
@@ -167,6 +181,11 @@ Vagrant.configure(2) do |config|
               vm_config.vm.forward_port from, to
             end 
           end
+
+          vm_cfg.vm.provision "shell", name: "Hosts File", inline: <<-EOF
+            cp /vagrant/etc/hosts.file /etc/hosts
+            echo ">>> Copying hosts file to system."
+EOF
 
           vm_cfg.vm.provision "shell", name: "Base Provision", inline: DCOS_OS_REQUIREMENTS
 
