@@ -68,10 +68,15 @@ If you'd like to customize the base OS, you can do so and will need to adjust th
 
 These commands can be easily extrapolated for a customer engagement as well.
 
-2) Deploy Cluster
+2) Quick *Hyperscale Ops* Story
 ------------------
 
-### 2a) Single Master (boot node, master node, 3 x worker nodes)
+
+
+Appendix
+==================
+
+### Single Master (boot node, master node, 3 x worker nodes)
 
 > NOTE: This is a minimal configuration and will not support robust demos or deployments. Sample application deployments will work but not with frameworks.
 
@@ -88,7 +93,7 @@ vagrant up boot m1 w1 w2 w3
 vagrant up boot m1 w4 w5 w6
 ```
 
-### 2b) Multi Master (boot node, 3 x master node, worker node)
+### Multi Master (boot node, 3 x master node, worker node)
 
 > NOTE: This is a minimal configuration and will not support robust demos or deployments. Sample application deployments will work but not with frameworks.
 
@@ -115,9 +120,6 @@ Next, deploy the worker node
 ```bash
 vagrant up w1
 ```
-
-Appendix
-==================
 
 ### System Setup
 
