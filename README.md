@@ -20,16 +20,16 @@ The purpose of this repo was to create a simple way to quickly provision various
 	│
 	├── etc
 	│   ├── ip-detect                  # Script for pulling appropriate ip-address. Be sure to confirm interface (enp0s8)
+	│   ├── hosts.file                 # Resolve instances 
 	│   ├── 1_master-config.json       # DCOS config for 1 master
 	│   ├── 3_master-config.json       # DCOS config for 3 masters
 	│
-	├── spring.json (by request) `xx      # Marathon descriptor for standalone java spring application.
+	├── spring.json                    # Marathon descriptor for standalone java spring application.
 	├── stress.json                    # Marathon descriptor for standalone commandline which uses CPU.
-	├── oinker.json                    # Marathon descriptor for functioning twitter clone, deploy with router.json
-	├── router.json                    # Marathon descriptor for Routing container, deploy with oinker.json
+	├── oinker.json                    # Marathon descriptor for functioning twitter clone, use with cassandra
 	├── jenkins.json                   # Marathon descriptor for standalone jenkins, not currently functioning.
 	├── VagrantFile                    # Used to deploy various nodes (boot, masters and workers)
-	├── dcos_generate_config.sh        # This is the core installer for DCOS from Mesosphere.
+	├── <dcos_generate_config.sh>      # This is the core installer for DCOS from Mesosphere.
 	└── README.md
 
 
