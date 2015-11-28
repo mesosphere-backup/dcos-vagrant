@@ -74,7 +74,7 @@ DCOS_BOOT_PROVISION = <<SHELL
 
   mkdir -p /var/tmp/dcos/java
   cp -rp /vagrant/build/gs-spring-boot-0.1.0.jar /var/tmp/dcos/java/
-  cp -rp /vagrant/build/jre-8u65-linux-x64.gz /var/tmp/dcos/java/
+  cp -rp /vagrant/build/jre-8u65-linux-x64.* /var/tmp/dcos/java/
   echo ">>> Copied java artifacts to nginx dir (/var/tmp/dcos/java)."
 
 SHELL

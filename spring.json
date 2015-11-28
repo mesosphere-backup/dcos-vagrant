@@ -27,7 +27,7 @@
     ],
     "uris": [
         "http://boot.dcos/java/gs-spring-boot-0.1.0.jar",
-        "http://boot.dcos/java/jre-8u66-linux-x64.tar.gz"
+        "http://boot.dcos/java/jre-8u66-linux-x64.tgz"
     ]
 }
 

@@ -1,7 +1,9 @@
 DCOS Local Demo using Vagrant and Virtual Box
 ==================
 
-The purpose of this repo was to create a simple way to quickly provision various DCOS cluster(s) on an internal system. This can optionally provide a model for self-guiding customers in a fairly prescriptive fashion. This is done using the opensource VirtualBox virtualization layer (Oracle) and Vagrant, a tool for easily modeling system deployments against various providers (VirtualBox). The driving goals of the implementation are:
+The purpose of this repo was to create a simple way to quickly provision various DCOS cluster(s) on an internal system. In addition, make it easy to discuss and demonstrate some of the core capabilities of DCOS.
+
+This can optionally provide a model for self-guiding customers in a fairly prescriptive fashion. This is done using the opensource VirtualBox virtualization layer (Oracle) and Vagrant, a tool for easily modeling system deployments against various providers (VirtualBox). The driving goals of the implementation are:
 
 - **KISS - Keep It Simple Stupid:** I prefer explicit/simple configuration over flexible/complex so it's easy to understand.
 - **Experiment, Iterate and Test:**
@@ -16,7 +18,8 @@ The purpose of this repo was to create a simple way to quickly provision various
 
 	.
 	├── build
-	│   ├── gs-spring-boot-0.1.0.jar   # Simple standalone java application (uploaded to downloads.mesosphere.com)
+	│   ├── gs-spring-boot-0.1.0.jar   # Simple standalone java application (requires jre 8.1).
+	│   ├── <jre-8u66-linux-x64.tgz>   # Download from Oracle
 	│
 	├── etc
 	│   ├── ip-detect                  # Script for pulling appropriate ip-address. Be sure to confirm interface (enp0s8)
