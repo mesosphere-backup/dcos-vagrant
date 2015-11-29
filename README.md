@@ -68,8 +68,36 @@ If you'd like to customize the base OS, you can do so and will need to adjust th
 
 These commands can be easily extrapolated for a customer engagement as well.
 
-2) Quick *Hyperscale Ops* Story
+2) **Hyperscale Ops** Story
 ------------------
+
+### Prepare env
+
+```bash
+vagrant up boot m1 w1 w2 w3
+```
+
+### Whiteboard
+
+1. Whiteboard business value/outcomes
+
+2. Whiteboard OSS components
+
+3. Whiteboard DCOS Solution
+
+###
+
+```bash
+vagrant up boot m1 w1 w2 w3
+```
+
+ - Show dashboard
+ - Walk through contexts 
+
+```bash
+dcos marathon app add spring.json
+```
+
 
 
 

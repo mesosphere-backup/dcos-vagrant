@@ -5,10 +5,12 @@
 ##############################################
 
 # non-updated OS [https://github.com/CommanderK5/packer-centos-template/releases/download/0.7.1/vagrant-centos-7.1.box]
-BOX_NAME = "new-centos"
+#BOX_NAME = "new-centos"
 
 # updated/upgraded OS (faster, no-internet)
-#BOX_NAME = "???"
+BOX_NAME = "dcos-centos"
+# zk docker and nginx docker loaded
+#BOX_NAME = "dcos-boot"
 
 ## CLUSTER CONFIG
 ##############################################
@@ -48,10 +50,12 @@ DCOS_OS_REQUIREMENTS = <<SHELL
   sysctl -w net.ipv6.conf.default.disable_ipv6=1
   echo ">>> Disabled IPV6"
 
+  mkdir -p ~/dcos && cd ~/dcos
+
 SHELL
 
 DCOS_BOOT_PROVISION = <<SHELL
-  docker run -d -p 2181:2181 -p 2888:2888 -p 3888:3888 --name=dcos_int_zk jplock/zookeeper
+  docker run -d -p 2181:2181 -p 2888:2888 -p 3888:3888 jplock/zookeeper
   echo ">>> Creating docker service (jplock/zookeeper) for exhibitor bootstrap and quorum."
 
   docker run -d -v /var/tmp/dcos:/usr/share/nginx/html -p 80:80 nginx
@@ -74,27 +78,24 @@ DCOS_BOOT_PROVISION = <<SHELL
 
   mkdir -p /var/tmp/dcos/java
   cp -rp /vagrant/build/gs-spring-boot-0.1.0.jar /var/tmp/dcos/java/
-  cp -rp /vagrant/build/jre-8u65-linux-x64.* /var/tmp/dcos/java/
+  cp -rp /vagrant/build/jre-*-linux-x64.* /var/tmp/dcos/java/
   echo ">>> Copied java artifacts to nginx dir (/var/tmp/dcos/java)."
 
 SHELL
 
 DCOS_MASTER_PROVISION = <<SHELL
-  mkdir -p ~/dcos && cd ~/dcos
   curl -O http://boot.dcos/dcos_install.sh
   bash dcos_install.sh master
 
 SHELL
 
 DCOS_WORKER_PROVISION = <<SHELL
-  mkdir -p ~/dcos && cd ~/dcos
   curl -O http://boot.dcos/dcos_install.sh
   bash dcos_install.sh slave
 
 SHELL
 
 DCOS_WORKER_PUBLIC_PROVISION = <<SHELL
-  mkdir -p ~/dcos && cd ~/dcos
   curl -O http://boot.dcos/dcos_install.sh
   bash dcos_install.sh slave_public
 
@@ -109,12 +110,13 @@ Vagrant.configure(2) do |config|
       :boot => {
           :ip       => '192.168.65.50',
           :memory   => 256,
-          :provision    => DCOS_BOOT_PROVISION
+          :provision    => DCOS_BOOT_PROVISION,
+          :box      => 'dcos-boot'
 
       },
       :lb => {
           :ip       => '192.168.65.60',
-          :memory   => 1256,
+          :memory   => 1512,
           :provision    => DCOS_WORKER_PUBLIC_PROVISION
       },
       :m1 => {
@@ -149,17 +151,17 @@ Vagrant.configure(2) do |config|
       },
       :w4 => {
           :ip       => '192.168.65.141',
-          :memory   => 3584,
+          :memory   => 3072,
           :provision    => DCOS_WORKER_PROVISION
       },
       :w5 => {
           :ip       => '192.168.65.151',
-          :memory   => 3584,
+          :memory   => 3072,
           :provision    => DCOS_WORKER_PROVISION
       },
       :w6 => {
           :ip       => '192.168.65.161',
-          :memory   => 3584,
+          :memory   => 3072,
           :provision    => DCOS_WORKER_PROVISION
       }
 
@@ -168,7 +170,7 @@ Vagrant.configure(2) do |config|
         config.vm.define name do |vm_cfg|
           vm_cfg.vm.hostname = "#{name}.dcos"
           vm_cfg.vm.network "private_network", ip: cfg[:ip]
-          vm_cfg.vm.box = BOX_NAME
+          vm_cfg.vm.box = cfg[:box] || BOX_NAME
 
           vm_cfg.vm.provider "virtualbox" do |v|
             v.name = vm_cfg.vm.hostname

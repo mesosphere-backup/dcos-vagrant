@@ -20,9 +20,10 @@
             "protocol": "HTTP",
             "portIndex": 0,
             "path": "/",
-            "gracePeriodSeconds": 5,
-            "intervalSeconds": 20,
-            "maxConsecutiveFailures": 3
+            "gracePeriodSeconds": 3,
+            "intervalSeconds": 5,
+            "maxConsecutiveFailures": 2,
+            "timeoutSeconds": 30
         }
     ],
     "uris": [
