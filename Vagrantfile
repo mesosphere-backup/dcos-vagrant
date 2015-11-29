@@ -84,19 +84,19 @@ DCOS_BOOT_PROVISION = <<SHELL
 SHELL
 
 DCOS_MASTER_PROVISION = <<SHELL
-  curl -O http://boot.dcos/dcos_install.sh
+  curl -O http://boot.dcos/dcos_install.sh && \
   bash dcos_install.sh master
 
 SHELL
 
 DCOS_WORKER_PROVISION = <<SHELL
-  curl -O http://boot.dcos/dcos_install.sh
+  curl -O http://boot.dcos/dcos_install.sh && \
   bash dcos_install.sh slave
 
 SHELL
 
 DCOS_WORKER_PUBLIC_PROVISION = <<SHELL
-  curl -O http://boot.dcos/dcos_install.sh
+  curl -O http://boot.dcos/dcos_install.sh && \
   bash dcos_install.sh slave_public
 
 SHELL
