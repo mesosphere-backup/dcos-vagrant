@@ -4,6 +4,7 @@
     "mem": 275,
     "instances": 1,
     "ports": [0],
+    "cmd": "java -Xmx256m -jar gs-spring-boot-0.1.0.jar --server.port=$PORT0 --endpoints.shutdown.enabled=true",
     "labels": {
         "HAPROXY_GROUP": "external",
         "HAPROXY_0_VHOST": "spring.acme.org"
@@ -30,14 +31,8 @@
         "docker": {
             "image": "stathyinc/java-spring:latest",
             "forcePullImage": true,
-            "network": "BRIDGE",
-            "portMappings": [
-                {
-                    "containerPort": 3060,
-                    "hostPort": 0,
-                    "protocol": "tcp"
-                }
-            ]
+            "network": "HOST"
         }
     }
 }
+
