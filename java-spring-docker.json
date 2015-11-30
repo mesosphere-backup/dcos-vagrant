@@ -1,9 +1,8 @@
 {
-    "id": "/java-spring",
+    "id": "/java-spring-docker",
     "cpus": 0.25,
     "mem": 275,
     "instances": 1,
-    "cmd": "jre*/bin/java -Xmx256m -jar gs-spring-boot-0.1.0.jar --server.port=$PORT0 --endpoints.shutdown.enabled='true'",
     "ports": [0],
     "labels": {
         "HAPROXY_GROUP": "external",
@@ -26,9 +25,19 @@
             "timeoutSeconds": 30
         }
     ],
-    "uris": [
-        "http://boot.dcos/java/gs-spring-boot-0.1.0.jar",
-        "http://boot.dcos/java/jre-8u66-linux-x64.tgz"
-    ]
+    "container": {
+        "type": "DOCKER",
+        "docker": {
+            "image": "stathyinc/java-spring:latest",
+            "forcePullImage": true,
+            "network": "BRIDGE",
+            "portMappings": [
+                {
+                    "containerPort": 3060,
+                    "hostPort": 0,
+                    "protocol": "tcp"
+                }
+            ]
+        }
+    }
 }
-

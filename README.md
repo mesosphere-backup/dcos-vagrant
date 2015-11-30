@@ -20,14 +20,16 @@ This can optionally provide a model for self-guiding customers in a fairly presc
 	├── build
 	│   ├── gs-spring-boot-0.1.0.jar   # Simple standalone java application (requires jre 8.1).
 	│   ├── <jre-8u66-linux-x64.tgz>   # Download from Oracle
+	│   ├── Dockerfile                 # Docker build file
 	│
 	├── etc
-	│   ├── ip-detect                  # Script for pulling appropriate ip-address. Be sure to confirm interface (enp0s8)
+	│   ├── ip-detect                  # Script for pulling appropriate ip. Be sure to confirm interface (enp0s8)
 	│   ├── hosts.file                 # Resolve instances 
 	│   ├── 1_master-config.json       # DCOS config for 1 master
 	│   ├── 3_master-config.json       # DCOS config for 3 masters
 	│
-	├── spring.json                    # Marathon descriptor for standalone java spring application.
+	├── java-spring.json               # Marathon descriptor for standalone java spring application.
+	├── java-spring-docker.json        # Marathon descriptor for docker based java spring application.
 	├── stress.json                    # Marathon descriptor for standalone commandline which uses CPU.
 	├── oinker.json                    # Marathon descriptor for functioning twitter clone, use with cassandra
 	├── jenkins.json                   # Marathon descriptor for standalone jenkins, not currently functioning.
