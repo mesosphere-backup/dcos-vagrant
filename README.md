@@ -116,6 +116,9 @@ dcos package update --validate
 dcos package install marathon-lb --yes
 ```
 
+**Refresh to see instances in pool**
+
+
 ```bash
 curl http://spring.acme.org
 ```
