@@ -73,34 +73,52 @@ These commands can be easily extrapolated for a customer engagement as well.
 2) **Hyperscale Ops** Story
 ------------------
 
-### Prepare env
+###Prepare env
 
 ```bash
-vagrant up boot m1 w1 w2 w3
+vagrant up boot m1 w1 w2 w3 lb
 ```
 
-### Whiteboard
+###Deploy java-spring app instance
 
-1. Whiteboard business value/outcomes
-
-2. Whiteboard OSS components
-
-3. Whiteboard DCOS Solution
-
-###
+**Deploy app**
 
 ```bash
-vagrant up boot m1 w1 w2 w3
+dcos marathon app add java-spring.json
 ```
 
- - Show dashboard
- - Walk through contexts 
+**Scale out**
 
 ```bash
-dcos marathon app add spring.json
+dcos marathon app update java-spring instances=3
 ```
 
+**Verify through dashboard, browser**
 
+```bash
+curl http://<ip>:<port>
+```
+
+###Deploy front-end LB
+
+**Add Multi-verse to Config**
+
+```bash
+dcos config prepend package.sources \
+https://github.com/mesosphere/multiverse/archive/version-1.x.zip
+
+dcos package update --validate
+```
+
+**Deploy Marathon LB**
+
+```bash
+dcos package install marathon-lb --yes
+```
+
+```bash
+curl http://spring.acme.org
+```
 
 
 Appendix
