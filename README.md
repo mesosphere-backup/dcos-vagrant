@@ -70,7 +70,7 @@ If you'd like to customize the base OS, you can do so and will need to adjust th
 
 These commands can be easily extrapolated for a customer engagement as well.
 
-2) **Hyperscale Ops** Story
+2) Example Deployment
 ------------------
 
 ###Prepare env
