@@ -30,7 +30,6 @@
         "type": "DOCKER",
         "docker": {
             "image": "stathyinc/java-spring:latest",
-            "forcePullImage": true,
             "network": "HOST"
         }
     }

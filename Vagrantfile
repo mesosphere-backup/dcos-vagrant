@@ -4,7 +4,9 @@
 ## BASE OS
 ##############################################
 
-# non-updated OS [https://github.com/CommanderK5/packer-centos-template/releases/download/0.7.1/vagrant-centos-7.1.box]
+# non-updated CentOS 7.1 OS
+# Uncomment line below after running:
+# vagrant box add --name new-centos https://github.com/CommanderK5/packer-centos-template/releases/download/0.7.1/vagrant-centos-7.1.box
 #BOX_NAME = "new-centos"
 
 # updated/upgraded OS (faster, no-internet)
@@ -116,7 +118,7 @@ Vagrant.configure(2) do |config|
       },
       :lb => {
           :ip       => '192.168.65.60',
-          :memory   => 1512,
+          :memory   => 1750,
           :provision    => DCOS_WORKER_PUBLIC_PROVISION
       },
       :m1 => {
@@ -136,17 +138,17 @@ Vagrant.configure(2) do |config|
       },
       :w1 => {
           :ip       => '192.168.65.111',
-          :memory   => 3072,
+          :memory   => 2750,
           :provision    => DCOS_WORKER_PROVISION
       },
       :w2 => {
           :ip       => '192.168.65.121',
-          :memory   => 3072,
+          :memory   => 2750,
           :provision    => DCOS_WORKER_PROVISION
       },
       :w3 => {
           :ip       => '192.168.65.131',
-          :memory   => 3072,
+          :memory   => 2750,
           :provision    => DCOS_WORKER_PROVISION
       },
       :w4 => {

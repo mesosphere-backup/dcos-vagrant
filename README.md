@@ -53,7 +53,7 @@ This can optionally provide a model for self-guiding customers in a fairly presc
 > [non-updated OS](https://github.com/CommanderK5/packer-centos-template/releases/download/0.7.1/vagrant-centos-7.1.box) github.com/CommanderK5/packer-centos-template/releases/download/0.7.1/vagrant-centos-7.1.box
 
 ```bash
-vagrant box add new-centos https://github.com/CommanderK5/packer-centos-template/releases/download/0.7.1/vagrant-centos-7.1.box
+vagrant box add --name new-centos https://github.com/CommanderK5/packer-centos-template/releases/download/0.7.1/vagrant-centos-7.1.box
 ```
 
 **1c)** You will need to download the dcos_generate_config.sh script locally. Please download the appropriate version for testing and copy directly into the root repo directory.
