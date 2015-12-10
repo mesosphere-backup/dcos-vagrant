@@ -26,14 +26,14 @@ DCOS_GENERATE_CONFIG_PATH= ENV['DCOS_GENERATE_CONFIG_PATH'] || "file:///vagrant/
 ##############################################
 
 DCOS_OS_REQUIREMENTS = <<SHELL
+  yum makecache fast
+  yum install --assumeyes --tolerant --quiet tar xz unzip curl docker
+  echo ">>> Added packages (tar, xz, unzip, curl, docker)"
+
   groupadd nogroup
   groupadd docker
   usermod -aG docker vagrant
   echo ">>> Created groups (nogroup, docker) and adding to users (docker, vagrant)"
-
-  yum makecache fast
-  yum install --assumeyes --tolerant --quiet tar xz unzip curl docker
-  echo ">>> Added packages (tar, xz, unzip, curl, docker)"
 
   yum upgrade --assumeyes --tolerant --quiet
   echo ">>> Upgraded OS"
@@ -64,18 +64,18 @@ DCOS_BOOT_PROVISION = <<SHELL
   echo ">>> Creating docker service (nginx) for ease of distributing bootstrap artificats to cluster."
   docker ps
 
-  mkdir -p ~/genconf && cd ~/genconf
-  cp /vagrant/etc/#{IP_DETECT_SCRIPT} ./ip-detect
-  cp /vagrant/etc/#{DCOS_CONFIG_JSON} ./config.json
+  mkdir -p ~/dcos/genconf && cd ~/dcos
+  cp /vagrant/etc/#{IP_DETECT_SCRIPT} ~/dcos/genconf/ip-detect
+  cp /vagrant/etc/#{DCOS_CONFIG_JSON} ~/dcos/genconf/config.json
   echo ">>> Copied (ip-detect, config.json) for building bootstrap image for system."
 
   cd ~ && curl -O #{DCOS_GENERATE_CONFIG_PATH}
   echo ">>> Downloading (dcos_generate_config.sh) for building bootstrap image for system."
 
-  bash ~/dcos_generate_config.sh
+  bash ~/dcos/dcos_generate_config.sh
   echo ">>> Built bootstrap artifacts under (#{ENV['PWD']}/genconf/serve)."
 
-  cp -rp ~/genconf/serve/* /var/tmp/dcos/
+  cp -rp ~/dcos/genconf/serve/* /var/tmp/dcos/
   echo ">>> Copied bootstrap artifacts to nginx directory (/var/tmp/dcos)."
 
   mkdir -p /var/tmp/dcos/java
