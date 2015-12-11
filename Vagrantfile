@@ -27,7 +27,7 @@ DCOS_GENERATE_CONFIG_PATH= ENV['DCOS_GENERATE_CONFIG_PATH'] || "file:///vagrant/
 
 DCOS_OS_REQUIREMENTS = <<SHELL
   yum makecache fast
-  yum install --assumeyes --tolerant --quiet tar xz unzip curl docker
+  yum install --assumeyes --tolerant --quiet tar xz unzip curl docker bind-utils
   echo ">>> Added packages (tar, xz, unzip, curl, docker)"
 
   groupadd nogroup
