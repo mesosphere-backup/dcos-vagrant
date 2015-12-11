@@ -69,7 +69,7 @@ DCOS_BOOT_PROVISION = <<SHELL
   cp /vagrant/etc/#{DCOS_CONFIG_JSON} ~/dcos/genconf/config.json
   echo ">>> Copied (ip-detect, config.json) for building bootstrap image for system."
 
-  cd ~ && curl -O #{DCOS_GENERATE_CONFIG_PATH}
+  cd ~/dcos && curl -O #{DCOS_GENERATE_CONFIG_PATH}
   echo ">>> Downloading (dcos_generate_config.sh) for building bootstrap image for system."
 
   bash ~/dcos/dcos_generate_config.sh
