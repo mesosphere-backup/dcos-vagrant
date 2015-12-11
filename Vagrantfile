@@ -7,10 +7,10 @@
 # non-updated CentOS 7.1 OS
 # Uncomment line below after running:
 # vagrant box add --name new-centos https://github.com/CommanderK5/packer-centos-template/releases/download/0.7.1/vagrant-centos-7.1.box
-#BOX_NAME = "new-centos"
+BOX_NAME = "new-centos"
 
 # updated/upgraded OS (faster, no-internet)
-BOX_NAME = "dcos-centos"
+#BOX_NAME = "dcos-centos"
 # zk docker and nginx docker loaded
 #BOX_NAME = "dcos-boot"
 
