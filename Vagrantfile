@@ -28,12 +28,12 @@ DCOS_GENERATE_CONFIG_PATH= ENV['DCOS_GENERATE_CONFIG_PATH'] || "file:///vagrant/
 DCOS_OS_REQUIREMENTS = <<SHELL
   yum makecache fast
   yum install --assumeyes --tolerant --quiet tar xz unzip curl docker bind-utils
-  echo ">>> Added packages (tar, xz, unzip, curl, docker)"
+  echo ">>> Added packages (tar, xz, unzip, curl, docker, bind-utils)"
 
   groupadd nogroup
   groupadd docker
   usermod -aG docker vagrant
-  echo ">>> Created groups (nogroup, docker) and adding to users (docker, vagrant)"
+  echo ">>> Created groups (nogroup, docker) and adding to user."
 
   yum upgrade --assumeyes --tolerant --quiet
   echo ">>> Upgraded OS"
@@ -57,6 +57,8 @@ DCOS_OS_REQUIREMENTS = <<SHELL
 SHELL
 
 DCOS_BOOT_PROVISION = <<SHELL
+  service docker restart
+
   docker run -d -p 2181:2181 -p 2888:2888 -p 3888:3888 jplock/zookeeper
   echo ">>> Creating docker service (jplock/zookeeper) for exhibitor bootstrap and quorum."
 
@@ -153,17 +155,17 @@ Vagrant.configure(2) do |config|
       },
       :w4 => {
           :ip       => '192.168.65.141',
-          :memory   => 3072,
+          :memory   => 2750,
           :provision    => DCOS_WORKER_PROVISION
       },
       :w5 => {
           :ip       => '192.168.65.151',
-          :memory   => 3072,
+          :memory   => 2750,
           :provision    => DCOS_WORKER_PROVISION
       },
       :w6 => {
           :ip       => '192.168.65.161',
-          :memory   => 3072,
+          :memory   => 4724,
           :provision    => DCOS_WORKER_PROVISION
       }
 
