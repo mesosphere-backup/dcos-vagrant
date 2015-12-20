@@ -59,7 +59,7 @@ vagrant box add --name new-centos https://github.com/CommanderK5/packer-centos-t
 **1c)** You will need to ensure the internal private network for the cluster is configured to the 192.168.65.0/24 subnet. You can use the following command to create it on the vboxnet0 interface.
 
 ```bash
-VBoxManage hostonlyif ipconfig vboxnet0 --ip 192.168.65.0
+VBoxManage hostonlyif ipconfig vboxnet0 --ip 192.168.65.1
 ```
 
 ![Vagrant Network Settings](https://github.com/mesosphere/dcos-vagrant-demo/blob/master/docs/vbox_network.png?raw=true)
