@@ -62,6 +62,8 @@ vagrant box add --name new-centos https://github.com/CommanderK5/packer-centos-t
 VBoxManage hostonlyif ipconfig vboxnet0 --ip 192.168.65.0
 ```
 
+![Vagrant Network Settings](https://github.com/mesosphere/dcos-vagrant-demo/blob/master/docs/vbox_network.png?raw=true)
+
 **1d)** You will need to download the dcos_generate_config.sh script locally. Please download the appropriate version for testing and copy directly into the root repo directory. Contact your Mesosphere account executive to begin the trial process.
 
 If you'd like to customize the base OS, you can do so and will need to adjust the following lines in your VagrantFile.
