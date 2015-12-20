@@ -56,19 +56,25 @@ This can optionally provide a model for self-guiding customers in a fairly presc
 vagrant box add --name new-centos https://github.com/CommanderK5/packer-centos-template/releases/download/0.7.1/vagrant-centos-7.1.box
 ```
 
-**1c)** You will need to download the dcos_generate_config.sh script locally. Please download the appropriate version for testing and copy directly into the root repo directory.
+**1c)** You will need to ensure the internal private network for the cluster is configured to the 192.168.65.0/24 subnet. You can use the following command to create it on the vboxnet0 interface.
+
+```bash
+VBoxManage hostonlyif ipconfig vboxnet0 --ip 192.168.65.0
+```
+
+**1d)** You will need to download the dcos_generate_config.sh script locally. Please download the appropriate version for testing and copy directly into the root repo directory. Contact your Mesosphere account executive to begin the trial process.
 
 If you'd like to customize the base OS, you can do so and will need to adjust the following lines in your VagrantFile.
 
 > BOX_NAME = "new-centos"
 
-**1d)** Optionally review the commands to be executed within the VagrantFile. They are specified at the top for 4 core components:
+**1e)** Optionally review the commands to be executed within the VagrantFile. They are specified at the top for 4 core components:
 - Base OS for all nodes
 - Bootstrap node
 - Master node
 - Worker node
 
-These commands can be easily extrapolated for a customer engagement as well.
+These commands can be easily extrapolated for a non-virtualbox installation as well.
 
 2) Example Deployment
 ------------------
