@@ -7,17 +7,17 @@
 # non-updated CentOS 7.1 OS
 # Uncomment line below after running:
 # vagrant box add --name new-centos https://github.com/CommanderK5/packer-centos-template/releases/download/0.7.1/vagrant-centos-7.1.box
-BOX_NAME = "new-centos"
+# BOX_NAME = "new-centos"
 
 # updated/upgraded OS (faster, no-internet)
-#BOX_NAME = "dcos-centos"
+BOX_NAME = "dcos-centos"
 # zk docker and nginx docker loaded
 #BOX_NAME = "dcos-boot"
 
 ## CLUSTER CONFIG
 ##############################################
 IP_DETECT_SCRIPT="ip-detect"
-DCOS_CONFIG_JSON="1_master-config.json"
+DCOS_CONFIG_JSON="1_master-config.yaml"
 #DCOS_CONFIG_JSON="3_master-config.json"
 
 DCOS_GENERATE_CONFIG_PATH= ENV['DCOS_GENERATE_CONFIG_PATH'] || "file:///vagrant/dcos_generate_config.sh"
@@ -26,8 +26,8 @@ DCOS_GENERATE_CONFIG_PATH= ENV['DCOS_GENERATE_CONFIG_PATH'] || "file:///vagrant/
 ##############################################
 
 DCOS_OS_REQUIREMENTS = <<SHELL
-  yum makecache fast
-  yum install --assumeyes --tolerant --quiet tar xz unzip curl docker bind-utils
+#  yum makecache fast
+#  yum install --assumeyes --tolerant --quiet tar xz unzip curl docker bind-utils
   echo ">>> Added packages (tar, xz, unzip, curl, docker, bind-utils)"
 
   groupadd nogroup
@@ -35,13 +35,13 @@ DCOS_OS_REQUIREMENTS = <<SHELL
   usermod -aG docker vagrant
   echo ">>> Created groups (nogroup, docker) and adding to user."
 
-  yum upgrade --assumeyes --tolerant --quiet
+#  yum upgrade --assumeyes --tolerant --quiet
   echo ">>> Upgraded OS"
 
   systemctl enable docker
   echo ">>> Enabling docker"
 
-  service docker start
+  service docker restart
   echo ">>> Starting docker and running (docker ps)"
   docker ps
 
@@ -68,7 +68,7 @@ DCOS_BOOT_PROVISION = <<SHELL
 
   mkdir -p ~/dcos/genconf && cd ~/dcos
   cp /vagrant/etc/#{IP_DETECT_SCRIPT} ~/dcos/genconf/ip-detect
-  cp /vagrant/etc/#{DCOS_CONFIG_JSON} ~/dcos/genconf/config.json
+  cp /vagrant/etc/#{DCOS_CONFIG_JSON} ~/dcos/genconf/config.yaml
   echo ">>> Copied (ip-detect, config.json) for building bootstrap image for system."
 
   cd ~/dcos && curl -O #{DCOS_GENERATE_CONFIG_PATH}
