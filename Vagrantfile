@@ -5,9 +5,9 @@
 ##############################################
 
 # non-updated CentOS 7.1 OS
-# Uncomment line below after running:
-# vagrant box add --name new-centos https://github.com/CommanderK5/packer-centos-template/releases/download/0.7.1/vagrant-centos-7.1.box
-BOX_NAME = "new-centos"
+# Uncomment BOX_NAME below after running:
+# vagrant box add --name CentOS-7.1-x64 https://github.com/CommanderK5/packer-centos-template/releases/download/0.7.1/vagrant-centos-7.1.box
+BOX_NAME = "CentOS-7.1-x64"
 
 # updated/upgraded OS (faster, no-internet)
 #BOX_NAME = "dcos-centos"
@@ -17,29 +17,37 @@ BOX_NAME = "new-centos"
 ## CLUSTER CONFIG
 ##############################################
 IP_DETECT_SCRIPT="ip-detect"
-DCOS_CONFIG_JSON="1_master-config.json"
-#DCOS_CONFIG_JSON="3_master-config.json"
+#DCOS_CONFIG="1_master-config.json"
+#DCOS_CONFIG="3_master-config.json"
+DCOS_CONFIG="5_master-config.json"
+#DCOS_CONFIG="5_master-config.yaml"
 
 DCOS_GENERATE_CONFIG_PATH= ENV['DCOS_GENERATE_CONFIG_PATH'] || "file:///vagrant/dcos_generate_config.sh"
 
-#### Commands for configuring systems for DCOS req, master and worker install
+## Commands for configuring systems for DCOS req, master and worker install
 ##############################################
 
 DCOS_OS_REQUIREMENTS = <<SHELL
   yum makecache fast
-  yum install --assumeyes --tolerant --quiet tar xz unzip curl docker
-  echo ">>> Added packages (tar, xz, unzip, curl, docker)"
+  yum install --assumeyes --tolerant --quiet deltarpm
+  yum install --assumeyes --tolerant --quiet tar xz unzip curl git bind-utils
+  echo ">>> Installed tar, xz, unzip, curl, git, bind-utils & deltarpm"
+  yum install --assumeyes --tolerant --quiet vim strace perf
+  yum install --assumeyes --tolerant --quiet python-pip python-virtualenv
+  echo ">>> Installed vim, strace, perf, pip, virtualenv"
+  
+  curl -sSL https://get.docker.com | sh
+  echo ">>> Installed Docker"
 
   groupadd nogroup
-  groupadd docker
   usermod -aG docker vagrant
-  echo ">>> Created groups (nogroup, docker) and adding to users (docker, vagrant)"
+  echo ">>> Created the nogroup group, added vagrant to the docker group"
 
   yum upgrade --assumeyes --tolerant --quiet
-  echo ">>> Upgraded OS"
+  echo ">>> Upgraded Base OS"
 
   systemctl enable docker
-  echo ">>> Enabling docker"
+  echo ">>> Enabling Docker"
 
   service docker start
   echo ">>> Starting docker and running (docker ps)"
@@ -68,10 +76,10 @@ DCOS_BOOT_PROVISION = <<SHELL
 
   mkdir -p ~/dcos/genconf && cd ~/dcos
   cp /vagrant/etc/#{IP_DETECT_SCRIPT} ~/dcos/genconf/ip-detect
-  cp /vagrant/etc/#{DCOS_CONFIG_JSON} ~/dcos/genconf/config.json
+  cp /vagrant/etc/#{DCOS_CONFIG} ~/dcos/genconf/config.json
   echo ">>> Copied (ip-detect, config.json) for building bootstrap image for system."
 
-  cd ~/dcos && curl -O #{DCOS_GENERATE_CONFIG_PATH}
+  cd ~/dcos && curl -O -sS #{DCOS_GENERATE_CONFIG_PATH}
   echo ">>> Downloading (dcos_generate_config.sh) for building bootstrap image for system."
 
   bash ~/dcos/dcos_generate_config.sh
@@ -88,19 +96,19 @@ DCOS_BOOT_PROVISION = <<SHELL
 SHELL
 
 DCOS_MASTER_PROVISION = <<SHELL
-  curl -O http://boot.dcos/dcos_install.sh && \
+  curl -O -sS http://boot.dcos/dcos_install.sh && \
   bash dcos_install.sh master
 
 SHELL
 
 DCOS_WORKER_PROVISION = <<SHELL
-  curl -O http://boot.dcos/dcos_install.sh && \
+  curl -O -sS http://boot.dcos/dcos_install.sh && \
   bash dcos_install.sh slave
 
 SHELL
 
 DCOS_WORKER_PUBLIC_PROVISION = <<SHELL
-  curl -O http://boot.dcos/dcos_install.sh && \
+  curl -O -sS http://boot.dcos/dcos_install.sh && \
   bash dcos_install.sh slave_public
 
 SHELL
@@ -113,59 +121,69 @@ Vagrant.configure(2) do |config|
     {
       :boot => {
           :ip       => '192.168.65.50',
-          :memory   => 256,
+          :memory   => 1024,
           :provision    => DCOS_BOOT_PROVISION,
-          :box      => 'new-centos'
+          :box      => 'CentOS-7.1-x64'
 
       },
       :lb => {
           :ip       => '192.168.65.60',
-          :memory   => 1750,
+          :memory   => 1024,
           :provision    => DCOS_WORKER_PUBLIC_PROVISION
       },
       :m1 => {
           :ip       => '192.168.65.90',
-          :memory   => 3072,
+          :memory   => 2048,
           :provision    => DCOS_MASTER_PROVISION
       },
       :m2 => {
-          :ip       => '192.168.65.95',
-          :memory   => 3072,
+          :ip       => '192.168.65.91',
+          :memory   => 2048,
           :provision    => DCOS_MASTER_PROVISION
        },
       :m3 => {
-          :ip       => '192.168.65.101',
-          :memory   => 3072,
+          :ip       => '192.168.65.92',
+          :memory   => 2048,
+          :provision    => DCOS_MASTER_PROVISION
+      },
+      :m4 => {
+          :ip       => '192.168.65.93',
+          :memory   => 2048,
+          :provision    => DCOS_MASTER_PROVISION
+      },
+      :m5 => {
+          :ip       => '192.168.65.94',
+          :memory   => 2048,
           :provision    => DCOS_MASTER_PROVISION
       },
       :w1 => {
-          :ip       => '192.168.65.111',
-          :memory   => 2750,
+          :ip       => '192.168.65.100',
+          :memory   => 2048,
           :provision    => DCOS_WORKER_PROVISION
       },
       :w2 => {
-          :ip       => '192.168.65.121',
-          :memory   => 2750,
+          :ip       => '192.168.65.101',
+          :memory   => 2048,
           :provision    => DCOS_WORKER_PROVISION
       },
       :w3 => {
-          :ip       => '192.168.65.131',
-          :memory   => 2750,
+          :ip       => '192.168.65.102',
+          :memory   => 2048,
           :provision    => DCOS_WORKER_PROVISION
       },
       :w4 => {
-          :ip       => '192.168.65.141',
-          :memory   => 3072,
+          :ip       => '192.168.65.103',
+          :memory   => 2048,
           :provision    => DCOS_WORKER_PROVISION
       },
       :w5 => {
-          :ip       => '192.168.65.151',
-          :memory   => 3072,
+          :ip       => '192.168.65.104',
+          :memory   => 2048,
           :provision    => DCOS_WORKER_PROVISION
       },
       :w6 => {
-          :ip       => '192.168.65.161',
-          :memory   => 3072,
+          :ip       => '192.168.65.105',
+          :memory   => 2048,
           :provision    => DCOS_WORKER_PROVISION
       }
 
