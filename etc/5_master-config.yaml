@@ -1,0 +1,21 @@
+cluster_config:
+  bootstrap_url: http://boot.docs:2181
+  cluster_name: dcos
+  exhibitor_storage_backend: zookeeper
+  exhibitor_zk_hosts: boot.dcos:2181
+  exhibitor_zk_path: /dcos
+  master_discovery: static
+  master_list:
+    - 192.168.65.90
+    - 192.168.65.91
+    - 192.168.65.92
+    - 192.168.65.93
+    - 192.168.65.94
+  resolvers:
+    - 192.168.0.1
+    - 192.168.0.2
+  roles: slave_public
+  weights: slave_public=1
+
+ssh_config:
+  log_directory: /genconf/logs
