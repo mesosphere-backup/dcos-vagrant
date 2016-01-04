@@ -7,10 +7,10 @@
 # non-updated CentOS 7.1 OS
 # Uncomment BOX_NAME below after running:
 # vagrant box add --name CentOS-7.1-x64 https://github.com/CommanderK5/packer-centos-template/releases/download/0.7.1/vagrant-centos-7.1.box
-BOX_NAME = "CentOS-7.1-x64"
+#BOX_NAME = "CentOS-7.1-x64"
 
 # updated/upgraded OS (faster, no-internet)
-#BOX_NAME = "dcos-centos"
+BOX_NAME = "dcos-centos"
 # zk docker and nginx docker loaded
 #BOX_NAME = "dcos-boot"
 
@@ -28,44 +28,48 @@ DCOS_GENERATE_CONFIG_PATH= ENV['DCOS_GENERATE_CONFIG_PATH'] || "file:///vagrant/
 ##############################################
 
 DCOS_OS_REQUIREMENTS = <<SHELL
-  yum makecache fast
-  yum install --assumeyes --tolerant --quiet deltarpm
-  yum install --assumeyes --tolerant --quiet tar xz unzip curl git bind-utils
-  echo ">>> Installed tar, xz, unzip, curl, git, bind-utils & deltarpm"
-  yum install --assumeyes --tolerant --quiet vim strace perf
-  yum install --assumeyes --tolerant --quiet python-pip python-virtualenv
-  echo ">>> Installed vim, strace, perf, pip, virtualenv"
+  #yum makecache fast
+  #yum install --assumeyes --tolerant --quiet deltarpm
+  #yum install --assumeyes --tolerant --quiet tar xz unzip curl git bind-utils
+  #echo ">>> Installed tar, xz, unzip, curl, git, bind-utils & deltarpm"
+  #yum install --assumeyes --tolerant --quiet vim strace perf
+  #yum install --assumeyes --tolerant --quiet python-pip python-virtualenv
+  #echo ">>> Installed vim, strace, perf, pip, virtualenv"
   
-  curl -sSL https://get.docker.com | sh
-  echo ">>> Installed Docker"
+  #curl -sSL https://get.docker.com | sh
+  #echo ">>> Installed Docker"
 
-  groupadd nogroup
-  usermod -aG docker vagrant
-  echo ">>> Created the nogroup group, added vagrant to the docker group"
+  #groupadd nogroup
+  #usermod -aG docker vagrant
+  #echo ">>> Created the nogroup group, added vagrant to the docker group"
 
-  yum upgrade --assumeyes --tolerant --quiet
-  echo ">>> Upgraded Base OS"
+  #yum upgrade --assumeyes --tolerant --quiet
+  #echo ">>> Upgraded Base OS"
+  
+  #yum install --assumeyes --tolerant --quiet dkms
+  #/etc/init.d/vboxadd setup
+  #echo ">>> Rebuilt Virtualbox Additions"
 
-  systemctl enable docker
-  echo ">>> Enabling Docker"
+  #systemctl enable docker
+  #echo ">>> Enabling Docker"
 
-  service docker start
-  echo ">>> Starting docker and running (docker ps)"
-  docker ps
+  #service docker start
+  #echo ">>> Starting docker and running (docker ps)"
+  #docker ps
 
-  sed -i s/SELINUX=enforcing/SELINUX=permissive/g /etc/selinux/config
-  echo ">>> Disabled SELinux"
+  #sed -i s/SELINUX=enforcing/SELINUX=permissive/g /etc/selinux/config
+  #echo ">>> Disabled SELinux"
 
-  sysctl -w net.ipv6.conf.all.disable_ipv6=1
-  sysctl -w net.ipv6.conf.default.disable_ipv6=1
-  echo ">>> Disabled IPV6"
+  #sysctl -w net.ipv6.conf.all.disable_ipv6=1
+  #sysctl -w net.ipv6.conf.default.disable_ipv6=1
+  #echo ">>> Disabled IPV6"
 
   mkdir -p ~/dcos && cd ~/dcos
 
 SHELL
 
 DCOS_BOOT_PROVISION = <<SHELL
-  service docker restart
+  #service docker restart
 
   docker run -d -p 2181:2181 -p 2888:2888 -p 3888:3888 jplock/zookeeper
   echo ">>> Creating docker service (jplock/zookeeper) for exhibitor bootstrap and quorum."
@@ -123,7 +127,7 @@ Vagrant.configure(2) do |config|
           :ip       => '192.168.65.50',
           :memory   => 1024,
           :provision    => DCOS_BOOT_PROVISION,
-          :box      => 'CentOS-7.1-x64'
+          :box      => BOX_NAME
 
       },
       :lb => {
