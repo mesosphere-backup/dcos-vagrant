@@ -185,7 +185,7 @@ vagrant up w1
 1. Get the repo
 
 	```bash
-	git clone https://github.com/stathy/dcos-repo
+	git clone https://github.com/mesosphere/dcos-vagrant-demo
 	```
 
 2. Copy etc/hosts.file to your local hosts file (/etc/hosts)
