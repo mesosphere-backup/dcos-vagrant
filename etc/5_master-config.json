@@ -1,12 +1,12 @@
 {
-    "bootstrap_url":"http://boot.dcos",
+    "bootstrap_url":"http://boot.dcos:8888",
     "cluster_name": "dcos-demo",
     "exhibitor_storage_backend": "zookeeper",
-    "exhibitor_zk_hosts": "boot.dcos:2181",
+    "exhibitor_zk_hosts": "boot.dcos:3181",
     "exhibitor_zk_path": "/dcos-demo",
     "master_discovery":"static",
     "master_list": "[\"192.168.65.90\",\"192.168.65.91\",\"192.168.65.92\",\"192.168.65.93\",\"192.168.65.94\"]",
-    "resolvers": "[\"10.0.2.3\", \"8.8.8.8\"]",
+    "resolvers": "[\"192.168.121.1\", \"8.8.4.4\"]",
     "roles": "slave_public",
     "weights": "slave_public=1"
 }

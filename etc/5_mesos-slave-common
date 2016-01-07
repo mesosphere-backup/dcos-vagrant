@@ -1,0 +1,1 @@
+MESOS_MASTER=zk://m1.dcos:2181,m2.dcos:2181,m3.dcos:2181,m4.dcos:2181,m5.dcos:2181/mesos

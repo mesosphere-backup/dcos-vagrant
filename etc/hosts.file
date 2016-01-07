@@ -4,19 +4,19 @@
 # localhost is used to configure the loopback interface
 # when the system is booting.  Do not change this entry.
 ##
-127.0.0.1	localhost
-::1             localhost 
+127.0.0.1       localhost
+::1             localhost
 
-192.168.65.50    boot.dcos boot 
-192.168.65.60    lb.dcos lb spring.acme.org oinker.acme.org
-192.168.65.90    m1.dcos m1
-192.168.65.91    m2.dcos m2
-192.168.65.92    m3.dcos m3
-192.168.65.93    m4.dcos m4
-192.168.65.94    m5.dcos m5
-192.168.65.100   w1.dcos w1
-192.168.65.101   w2.dcos w2 
-192.168.65.102   w3.dcos w3 
-192.168.65.103   w4.dcos w4 
-192.168.65.104   w5.dcos w5
-192.168.65.105   w6.dcos w6
+192.168.65.50   boot.dcos  boot dcoslb          dcoslb
+192.168.65.60   mlb.dcos   mlb  spring.acme.org oinker.acme.org
+192.168.65.90   m1.dcos    m1
+192.168.65.91   m2.dcos    m2
+192.168.65.92   m3.dcos    m3
+192.168.65.93   m4.dcos    m4
+192.168.65.94   m5.dcos    m5
+192.168.65.100  w1.dcos    w1
+192.168.65.101  w2.dcos    w2
+192.168.65.102  w3.dcos    w3
+192.168.65.103  w4.dcos    w4
+192.168.65.104  w5.dcos    w5
+192.168.65.105  w6.dcos    w6

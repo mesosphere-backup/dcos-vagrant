@@ -1,0 +1,9 @@
+[core]
+ssl_verify = "false"
+dcos_url = "http://dcoslb"
+reporting = false
+timeout = 5
+email = "support+vagrant@mesosphere.io"
+[package]
+sources = [ "https://github.com/mesosphere/multiverse/archive/version-1.x.zip", "https://github.com/mesosphere/universe/archive/version-1.x.zip",]
+cache = "/home/vagrant/.dcos/cache"

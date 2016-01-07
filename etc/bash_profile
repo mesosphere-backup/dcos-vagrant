@@ -1,0 +1,16 @@
+# .bash_profile
+
+# Get the aliases and functions
+if [ -f ~/.bashrc ]; then
+        . ~/.bashrc
+fi
+
+# User specific environment and startup programs
+
+PATH=$PATH:$HOME/.local/bin:$HOME/bin
+export PATH
+
+# path to the DCOS CLI binary
+if [[ "$PATH" != *"/home/vagrant/dcos/bin"* ]];
+  then export PATH=$PATH:/home/vagrant/dcos/bin;
+fi
