@@ -1,0 +1,13 @@
+--- 
+cluster_config: 
+  bootstrap_url: "http://boot.dcos"
+  cluster_name: dcos-demo
+  exhibitor_storage_backend: zookeeper
+  exhibitor_zk_hosts: "boot.dcos:2181"
+  exhibitor_zk_path: /zk-shared
+  master_discovery: static
+  master_list: 
+    - "192.168.65.90"
+  resolvers: 
+    - "10.0.2.3"
+    - "8.8.8.8"
