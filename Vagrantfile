@@ -127,7 +127,8 @@ DCOS_MASTER_PROVISION = <<-SHELL
 SHELL
 
 DCOS_WORKER_PROVISION = <<-SHELL
-  cp /vagrant/etc/#{DCOS_LB_CONFIG} /var/lib/dcos/mesos-slave-common
+  mkdir -p /var/lib/dcos
+  cp /vagrant/etc/#{DCOS_SLAVE_CONFIG} /var/lib/dcos/mesos-slave-common
   echo ">>> Overriding Zookeper URL to ensure proper HA when masters fail"
   ln -s /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem /etc/ssl/certs/ca-certificates.crt
   echo ">>> Added /etc/ssl/certs/ca-certificates.crt symlink to /etc/ssl/certs/ca-certificates.crt to make cURL happy" 
@@ -139,7 +140,8 @@ DCOS_WORKER_PROVISION = <<-SHELL
 SHELL
 
 DCOS_WORKER_PUBLIC_PROVISION = <<-SHELL
-  cp /vagrant/etc/#{DCOS_LB_CONFIG} /var/lib/dcos/mesos-slave-common
+  mkdir -p /var/lib/dcos
+  cp /vagrant/etc/#{DCOS_SLAVE_CONFIG} /var/lib/dcos/mesos-slave-common
   echo ">>> Overriding Zookeper URL to ensure proper HA when masters fail"
   ln -s /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem /etc/ssl/certs/ca-certificates.crt
   echo ">>> Added /etc/ssl/certs/ca-certificates.crt symlink to /etc/ssl/certs/ca-certificates.crt to make cURL happy" 
