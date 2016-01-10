@@ -1,0 +1,12 @@
+[Unit]
+Description=DCOS Bootstrap Zookeeper Docker
+After=docker.service
+Requires=docker.service
+
+[Service]
+Restart=always
+ExecStart=/usr/bin/docker run -p 3181:2181 -p 2888:2888 -p 3888:3888 --name dcos_bootstrap_zookeeper jplock/zookeeper:3.4.7
+ExecStop=/usr/bin/docker stop -t 2 dcos_bootstrap_zookeeper ; /usr/bin/docker rm -f dcos_bootstrap_zookeeper
+
+[Install]
+WantedBy=multi-user.target
