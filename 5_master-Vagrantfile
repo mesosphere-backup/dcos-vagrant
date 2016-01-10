@@ -112,15 +112,15 @@ DCOS_BOOT_PROVISION = <<-SHELL
     docker load < /vagrant/build/nginx-docker-latest.tar
     docker images
 
-    docker run -d -p 3181:2181 -p 2888:2888 -p 3888:3888 jplock/zookeeper:3.4.7
     cp /vagrant/etc/dcos-bootstrap-zookeeper.service /etc/systemd/system
     systemctl daemon-reload
+    systemctl start dcos-bootstrap-zookeeper
     systemctl enable dcos-bootstrap-zookeeper
     echo ">>> Created Zookeeper docker service (jplock/zookeeper:3.4.7) for Exhibitor"
 
-    docker run -d -p 8888:80 -v /var/tmp/dcos:/usr/share/nginx/html nginx
     cp /vagrant/etc/dcos-bootstrap-nginx.service /etc/systemd/system
     systemctl daemon-reload
+    systemctl start dcos-bootstrap-nginx
     systemctl enable dcos-bootstrap-nginx
     echo ">>> Created Nginx docker service (nginx:latest) for installation artifact distribution to DCOS cluster."
 
