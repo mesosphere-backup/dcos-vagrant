@@ -147,11 +147,11 @@ DCOS_BOOT_PROVISION = <<-SHELL
     pip install --quiet --upgrade pip
     pip install --quiet --upgrade virtualenv
     echo ">>> Installed and updated pip and virtualenv"
-    sudo -i -u vagrant sh -c 'mkdir -p ~/dcos && rm -rf ~/dcos/* && cd dcos && virtualenv --quiet . && source bin/activate && pip install --quiet --upgrade pip dcoscli httpie'
+    sudo -i -u vagrant sh -c 'mkdir -p ~/dcos && rm -rf ~/dcos/* && cd ~/dcos && virtualenv --quiet . && source bin/activate && pip install --quiet --upgrade pip dcoscli httpie'
     echo ">>> Installed and updated dcoscli and HTTPie"
     sudo -i -u vagrant sh -c 'mkdir -p ~/.dcos && cp /vagrant/etc/dcos.toml ~/.dcos && cp /vagrant/etc/bash_profile ~/.bash_profile'
     echo ">>> Setup dcoscli config"
-    sudo -i -u vagrant sh -c 'cd dcos && source bin/env-setup && dcos package update --validate && dcos package search --json | jq '.[].packages[].name' | xargs -L 1 dcos package install --cli --yes'
+    sudo -i -u vagrant sh -c 'cd ~/dcos && source bin/env-setup && dcos package update --validate && dcos package search --json | jq '.[].packages[].name' | xargs -L 1 dcos package install --cli --yes'
     echo ">>> Setup DCOS CLI configuration, updated package manifest and installed available subcommands for DCOS Services"
 
     mkdir -p /var/tmp/dcos/java && rm -rf /var/tmp/dcos/java/*
@@ -162,8 +162,7 @@ SHELL
 
 DCOS_INSTALL_PROVISION = <<-SHELL
     groupadd nogroup
-    mkdir -p ~/dcos && rm -rf ~/dcos && cd ~/dcos
-    curl -O -sS http://boot.dcos:8888/dcos_install.sh && \
+    mkdir -p ~/dcos && rm -rf ~/dcos/* && cd ~/dcos && curl -O -sS http://boot.dcos:8888/dcos_install.sh
     echo ">>> Mesos install script downloaded"
 SHELL
 
