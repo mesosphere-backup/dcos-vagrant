@@ -5,3 +5,4 @@ exhibitor.properties
 dcos
 build/jre-*-linux-x64.tgz
 build/jre-*-linux-x64.tar.gz
+build/*-docker*.tar

@@ -52,6 +52,8 @@ DCOS_OS_PROVISION = <<-SHELL
     #echo ">>> Upgraded Base OS"
 
     #yum install --assumeyes --tolerant --quiet dkms qemu-guest-agent
+    #systemctl start qemu-guest-agent
+    #systemctl enable qemu-guest-agent
     #echo ">>> Installed dkms & qemu-guest-agent"
     #/etc/init.d/vboxadd setup
     #echo ">>> Rebuilt Virtualbox Additions"
@@ -105,11 +107,16 @@ SHELL
 
 DCOS_BOOT_PROVISION = <<-SHELL
     mkdir -p /var/tmp/dcos && rm -rf /var/tmp/dcos/*
-    docker run -d -p 3181:2181 -p 2888:2888 -p 3888:3888 jplock/zookeeper
-    echo ">>> Creating docker service (jplock/zookeeper) for exhibitor bootstrap and quorum."
+
+    docker load < /vagrant/build/jplock-zookeper-docker-3.4.7.tar
+    docker load < /vagrant/build/nginx-docker-latest.tar
+    docker images
+
+    docker run -d -p 3181:2181 -p 2888:2888 -p 3888:3888 jplock/zookeeper:3.4.7
+    echo ">>> Creating docker service (jplock/zookeeper:3.4.7) for exhibitor bootstrap and quorum."
 
     docker run -d -p 8888:80 -v /var/tmp/dcos:/usr/share/nginx/html nginx
-    echo ">>> Creating docker service (nginx) for ease of distributing bootstrap artifacts to cluster."
+    echo ">>> Creating docker service (nginx:latest) for ease of distributing bootstrap artifacts to cluster."
 
     docker ps
 
