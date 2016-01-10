@@ -32,6 +32,18 @@ DCOS_GENERATE_CONFIG_PATH= ENV['DCOS_GENERATE_CONFIG_PATH'] || "file:///vagrant/
 ## Commands for configuring systems for DCOS req, master and worker install
 ##############################################
 
+DCOS_DISK_PROVISION = <<-SHELL
+    pvcreate /dev/vdb
+    pvdisplay
+    vgextend centos /dev/vdb
+    vgdisplay
+    lvextend --extents +100%FREE /dev/centos/root
+    lvdisplay
+    xfs_growfs /
+    df -h
+    echo ">>> Disk space extended successfully"
+SHELL
+
 DCOS_OS_PROVISION = <<-SHELL
     #setenforce 0
     #sed -i s/SELINUX=enforcing/SELINUX=permissive/g /etc/selinux/config
@@ -201,13 +213,13 @@ Vagrant.configure(2) do |config|
         :boot => {
                   :box => BOX_NAME,
                   :ip => '192.168.65.50',
-                  :memory => 1024,
+                  :memory => 512,
                   :provision => [DCOS_CORE_USER_PROVISION,
                                  DCOS_BOOT_PROVISION],
                   },
         :mlb => {
                  :ip => '192.168.65.60',
-                 :memory => 1024,
+                 :memory => 512,
                  :provision => [DCOS_CORE_USER_PROVISION,
                                 DCOS_INSTALL_PROVISION,
                                 DCOS_WORKER_ZK_PROVISION,
@@ -236,7 +248,8 @@ Vagrant.configure(2) do |config|
                 },
         :w1 => {
                 :ip => '192.168.65.100',
-                :memory => 3584,
+                :memory => 4096,
+                :disk => '15G',
                 :provision => [DCOS_CORE_USER_PROVISION,
                                DCOS_INSTALL_PROVISION,
                                DCOS_WORKER_ZK_PROVISION,
@@ -244,7 +257,8 @@ Vagrant.configure(2) do |config|
                 },
         :w2 => {
                 :ip => '192.168.65.101',
-                :memory => 3584,
+                :memory => 4096,
+                :disk => '15G',
                 :provision => [DCOS_CORE_USER_PROVISION,
                                DCOS_INSTALL_PROVISION,
                                DCOS_WORKER_ZK_PROVISION,
@@ -252,7 +266,8 @@ Vagrant.configure(2) do |config|
                 },
         :w3 => {
                 :ip => '192.168.65.102',
-                :memory => 3584,
+                :memory => 4096,
+                :disk => '15G',
                 :provision => [DCOS_CORE_USER_PROVISION,
                                DCOS_INSTALL_PROVISION,
                                DCOS_WORKER_ZK_PROVISION,
@@ -260,7 +275,8 @@ Vagrant.configure(2) do |config|
                 },
         :w4 => {
                 :ip => '192.168.65.103',
-                :memory => 3584,
+                :memory => 4096,
+                :disk => '15G',
                 :provision => [DCOS_CORE_USER_PROVISION,
                                DCOS_INSTALL_PROVISION,
                                DCOS_WORKER_ZK_PROVISION,
@@ -268,7 +284,8 @@ Vagrant.configure(2) do |config|
                 },
         :w5 => {
                 :ip => '192.168.65.104',
-                :memory => 3584,
+                :memory => 4096,
+                :disk => '15G',
                 :provision => [DCOS_CORE_USER_PROVISION,
                                DCOS_INSTALL_PROVISION,
                                DCOS_WORKER_ZK_PROVISION,
@@ -276,7 +293,8 @@ Vagrant.configure(2) do |config|
                 },
         :w6 => {
                 :ip => '192.168.65.105',
-                :memory => 3584,
+                :memory => 4096,
+                :disk => '15G',
                 :provision => [DCOS_CORE_USER_PROVISION,
                                DCOS_INSTALL_PROVISION,
                                DCOS_WORKER_ZK_PROVISION,
@@ -299,13 +317,20 @@ Vagrant.configure(2) do |config|
             #end
 
             vm_cfg.vm.provider "libvirt" do |libvirt|
-                libvirt.cpus = 2
+                libvirt.cpus = 3
                 libvirt.memory = cfg[:memory]
                 libvirt.storage_pool_name = "default"
+                if cfg[:disk]
+                    libvirt.storage :file, :size => cfg[:disk]
+                end
                 libvirt.graphics_type = "spice"
                 libvirt.video_type = "qxl"
                 libvirt.video_vram = 65536
                 libvirt.input :type => "tablet", :bus => "usb"
+            end
+
+            if cfg[:disk]
+                vm_cfg.vm.provision "shell", name: "DCOS Disk provisioning", inline: DCOS_DISK_PROVISION
             end
 
             if cfg[:forwards]
