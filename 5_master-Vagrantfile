@@ -167,7 +167,7 @@ DCOS_INSTALL_PROVISION = <<-SHELL
 SHELL
 
 DCOS_MASTER_PROVISION = <<-SHELL
-    bash dcos_install.sh master
+    cd ~/dcos && bash dcos_install.sh master
     echo ">>> Mesos Master installed"
 SHELL
 
@@ -178,12 +178,12 @@ DCOS_WORKER_ZK_PROVISION = <<-SHELL
 SHELL
 
 DCOS_WORKER_PROVISION = <<-SHELL
-    bash dcos_install.sh slave
+    cd ~/dcos && bash dcos_install.sh slave
     echo ">>> Mesos Agent installed"
 SHELL
 
 DCOS_WORKER_PUBLIC_PROVISION = <<-SHELL
-    bash dcos_install.sh slave_public
+    cd ~/dcos && bash dcos_install.sh slave_public
     echo ">>> Mesos Public Agent installed"
 SHELL
 
