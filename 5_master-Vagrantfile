@@ -309,7 +309,7 @@ Vagrant.configure(2) do |config|
             vm_cfg.vm.provider "libvirt" do |libvirt|
                 libvirt.cpus = 2
                 libvirt.memory = cfg[:memory]
-                libvirt.storage_pool_name = "tank"
+                libvirt.storage_pool_name = "default"
                 libvirt.graphics_type = "spice"
                 libvirt.video_type = "qxl"
                 libvirt.video_vram = 65536
