@@ -60,8 +60,8 @@ DCOS_OS_PROVISION = <<-SHELL
 
     #yum install --assumeyes --tolerant --quiet tar xz unzip curl git bind-utils nfs-client
     #echo ">>> Installed tar, xz, unzip, curl, git, bind-utils & nfs-client"
-    #yum install --assumeyes --tolerant --quiet vim strace perf htop bash-completion
-    #echo ">>> Installed vim, strace, perf, htop & bash-completion"
+    #yum install --assumeyes --tolerant --quiet vim strace perf sysstat htop bash-completion
+    #echo ">>> Installed vim, strace, perf, sysstat, htop & bash-completion"
     #yum install --assumeyes --tolerant --quiet python-pip
     #echo ">>> Installed python-pip"
 
