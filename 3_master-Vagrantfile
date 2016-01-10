@@ -7,7 +7,7 @@
 # non-updated CentOS 7.1 OS
 # Uncomment BOX_NAME below after running:
 # vagrant box add --name CentOS-7-x64 https://github.com/CommanderK5/packer-centos-template/releases/download/0.7.1/vagrant-centos-7.1.box
-BOX_NAME = "CentOS-7-x64"
+BOX_NAME = "CentOS-7.2-x64"
 
 # updated/upgraded OS (faster, no-internet)
 #BOX_NAME = "dcos-centos"
@@ -37,13 +37,14 @@ DCOS_OS_PROVISION = <<-SHELL
     #sed -i s/SELINUX=enforcing/SELINUX=permissive/g /etc/selinux/config
     #echo ">>> Set SELinux to permissive"
 
-    useradd -m -s /bin/bash -g wheel -N core
-    sudo -i -u core sh -c 'mkdir -p ~/.ssh && chmod 700 ~/.ssh && rm -rf ~/.ssh/* && cd ~/.ssh && cp /vagrant/etc/authorized_keys . && chmod 600 authorized_keys'
-    echo ">>> Setup default Mesosphere user: core"
-
     #sysctl -w net.ipv6.conf.all.disable_ipv6=1
     #sysctl -w net.ipv6.conf.default.disable_ipv6=1
+    #cp /vagrant/etc/99-ipv6.conf /etc/sysctl.d/
     #echo ">>> Disabled IPV6"
+
+    #sysctemctl stop firewalld
+    #sysctemctl disable firewalld
+    #echo ">>> Stopped and disabled firewalld"
 
     #yum makecache fast
     #yum install --assumeyes --tolerant --quiet deltarpm epel-release
@@ -57,10 +58,10 @@ DCOS_OS_PROVISION = <<-SHELL
 
     #yum install --assumeyes --tolerant --quiet tar xz unzip curl git bind-utils nfs-client
     #echo ">>> Installed tar, xz, unzip, curl, git, bind-utils & nfs-client"
-    yum install --assumeyes --tolerant --quiet vim strace perf htop bash-completion
-    echo ">>> Installed vim, strace, perf, htop & bash-completion"
-    yum install --assumeyes --tolerant --quiet python-pip
-    echo ">>> Installed python-pip"
+    #yum install --assumeyes --tolerant --quiet vim strace perf htop bash-completion
+    #echo ">>> Installed vim, strace, perf, htop & bash-completion"
+    #yum install --assumeyes --tolerant --quiet python-pip
+    #echo ">>> Installed python-pip"
 
     #curl -sSL https://get.docker.com | sh
     #echo ">>> Installed Docker"
@@ -68,12 +69,12 @@ DCOS_OS_PROVISION = <<-SHELL
     #usermod -aG docker vagrant
     #echo ">>> Added vagrant to the docker group"
 
-    cp /vagrant/etc/overlay.conf /etc/modules-load.d/
-    cp /vagrant/etc/docker.service /etc/systemd/system/
-    systemctl daemon-reload
-    systemctl restart systemd-modules-load
-    systemctl restart docker
-    echo ">>> Setup docker to use the OverlayFS storage engine"
+    #cp /vagrant/etc/overlay.conf /etc/modules-load.d/
+    #cp /vagrant/etc/docker.service /etc/systemd/system/
+    #systemctl daemon-reload
+    #systemctl restart systemd-modules-load
+    #systemctl restart docker
+    #echo ">>> Setup docker to use the OverlayFS storage engine"
 
     #systemctl enable docker
     #echo ">>> Enabled Docker to start on reboot"
@@ -82,17 +83,24 @@ DCOS_OS_PROVISION = <<-SHELL
     #echo ">>> Starting docker and running (docker ps)"
     #docker ps
 
-    ln -sf /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem /etc/ssl/certs/ca-certificates.crt
-    ln -sf /etc/pki/ca-trust/extracted/openssl/ca-bundle.trust.crt /etc/ssl/certs/ca-bundle.trust.crt
-    echo ">>> Added /etc/ssl/certs/ca-certificates.crt symlink to /etc/ssl/certs/ca-certificates.crt to make cURL happy"
+    #ln -sf /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem /etc/ssl/certs/ca-certificates.crt
+    #ln -sf /etc/pki/ca-trust/extracted/openssl/ca-bundle.trust.crt /etc/ssl/certs/ca-bundle.trust.crt
+    #echo ">>> Added /etc/ssl/certs/ca-certificates.crt symlink to /etc/ssl/certs/ca-certificates.crt to make cURL happy"
 
-    yum clean all
-    echo ">>> Cleaned up yum"
+    #yum clean all
+    #echo ">>> Cleaned up yum"
 SHELL
 
 DCOS_HOSTSFILE_PROVISION = <<-SHELL
     cp /vagrant/etc/hosts.file /etc/hosts
     echo ">>> Setup /etc/hosts"
+SHELL
+
+DCOS_CORE_USER_PROVISION = <<-SHELL
+    useradd -m -s /bin/bash -g wheel -N core
+    usermod -aG docker vagrant
+    sudo -i -u core sh -c 'mkdir -p ~/.ssh && chmod 700 ~/.ssh && rm -rf ~/.ssh/* && cd ~/.ssh && cp /vagrant/etc/authorized_keys . && chmod 600 authorized_keys'
+    echo ">>> Setup default Mesosphere user: core"
 SHELL
 
 DCOS_BOOT_PROVISION = <<-SHELL
@@ -182,72 +190,83 @@ Vagrant.configure(2) do |config|
                   :box => BOX_NAME,
                   :ip => '192.168.65.50',
                   :memory => 1024,
-                  :provision => [DCOS_BOOT_PROVISION],
+                  :provision => [DCOS_CORE_USER_PROVISION,
+                                 DCOS_BOOT_PROVISION],
                   },
         :mlb => {
                  :ip => '192.168.65.60',
                  :memory => 1024,
-                 :provision => [DCOS_INSTALL_PROVISION,
+                 :provision => [DCOS_CORE_USER_PROVISION,
+                                DCOS_INSTALL_PROVISION,
                                 DCOS_WORKER_ZK_PROVISION,
                                 DCOS_WORKER_PUBLIC_PROVISION],
                  },
         :m1 => {
                 :ip => '192.168.65.90',
                 :memory => 2048,
-                :provision => [DCOS_INSTALL_PROVISION,
+                :provision => [DCOS_CORE_USER_PROVISION,
+                               DCOS_INSTALL_PROVISION,
                                DCOS_MASTER_PROVISION],
                 },
         :m2 => {
                 :ip => '192.168.65.91',
                 :memory => 2048,
-                :provision => [DCOS_INSTALL_PROVISION,
+                :provision => [DCOS_CORE_USER_PROVISION,
+                               DCOS_INSTALL_PROVISION,
                                DCOS_MASTER_PROVISION]
                },
         :m3 => {
                 :ip  => '192.168.65.92',
                 :memory => 2048,
-                :provision => [DCOS_INSTALL_PROVISION,
+                :provision => [DCOS_CORE_USER_PROVISION,
+                               DCOS_INSTALL_PROVISION,
                                DCOS_MASTER_PROVISION],
                 },
         :w1 => {
                 :ip => '192.168.65.100',
                 :memory => 3584,
-                :provision => [DCOS_INSTALL_PROVISION,
+                :provision => [DCOS_CORE_USER_PROVISION,
+                               DCOS_INSTALL_PROVISION,
                                DCOS_WORKER_ZK_PROVISION,
                                DCOS_WORKER_PROVISION],
                 },
         :w2 => {
                 :ip => '192.168.65.101',
                 :memory => 3584,
-                :provision => [DCOS_INSTALL_PROVISION,
+                :provision => [DCOS_CORE_USER_PROVISION,
+                               DCOS_INSTALL_PROVISION,
                                DCOS_WORKER_ZK_PROVISION,
                                DCOS_WORKER_PROVISION],
                 },
         :w3 => {
                 :ip => '192.168.65.102',
                 :memory => 3584,
-                :provision => [DCOS_INSTALL_PROVISION,
+                :provision => [DCOS_CORE_USER_PROVISION,
+                               DCOS_INSTALL_PROVISION,
                                DCOS_WORKER_ZK_PROVISION,
                                DCOS_WORKER_PROVISION],
                 },
         :w4 => {
                 :ip => '192.168.65.103',
                 :memory => 3584,
-                :provision => [DCOS_INSTALL_PROVISION,
+                :provision => [DCOS_CORE_USER_PROVISION,
+                               DCOS_INSTALL_PROVISION,
                                DCOS_WORKER_ZK_PROVISION,
                                DCOS_WORKER_PROVISION],
                 },
         :w5 => {
                 :ip => '192.168.65.104',
                 :memory => 3584,
-                :provision => [DCOS_INSTALL_PROVISION,
+                :provision => [DCOS_CORE_USER_PROVISION,
+                               DCOS_INSTALL_PROVISION,
                                DCOS_WORKER_ZK_PROVISION,
                                DCOS_WORKER_PROVISION],
                 },
         :w6 => {
                 :ip => '192.168.65.105',
                 :memory => 3584,
-                :provision => [DCOS_INSTALL_PROVISION,
+                :provision => [DCOS_CORE_USER_PROVISION,
+                               DCOS_INSTALL_PROVISION,
                                DCOS_WORKER_ZK_PROVISION,
                                DCOS_WORKER_PROVISION],
                 }
@@ -259,7 +278,7 @@ Vagrant.configure(2) do |config|
             vm_cfg.vm.network :private_network,
                     ip: cfg[:ip],
                     libvirt__network_name: "dcos"
-            #vm_cfg.vm.synced_folder './', '/vagrant', type: 'rsync'
+            vm_cfg.vm.synced_folder './', '/vagrant', type: '9p'
 
             #vm_cfg.vm.provider "virtualbox" do |virtualbox|
             #  virtualbox.name = vm_cfg.vm.hostname
