@@ -10,9 +10,9 @@
 # BOX_NAME = "new-centos"
 
 # updated/upgraded OS (faster, no-internet)
-BOX_NAME = "dcos-centos"
+#BOX_NAME = "dcos-centos"
 # zk docker and nginx docker loaded
-#BOX_NAME = "dcos-boot"
+BOX_NAME = "dcos-test"
 
 ## CLUSTER CONFIG
 ##############################################
