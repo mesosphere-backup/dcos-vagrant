@@ -1,6 +1,6 @@
-yum makecache fast
+# yum makecache fast
 
-yum install --assumeyes --tolerant gcc make gcc-c++ kernel-devel-`uname -r` perl tar xz unzip curl docker bind-utils
+yum install --assumeyes --tolerant bzip2 perl tar xz unzip curl docker bind-utils
 echo ">>> Added packages (gcc make gcc-c++ kernel-devel* perl tar xz unzip curl docker bind-utils)"
 
 groupadd nogroup
@@ -10,6 +10,8 @@ echo ">>> Created groups (nogroup, docker) and adding to user."
 
 yum upgrade --assumeyes --tolerant
 echo ">>> Upgraded OS"
+
+yum install --assumeyes --tolerant gcc make gcc-c++ kernel-devel-`uname -r`
 
 systemctl enable docker
 echo ">>> Enabling docker"

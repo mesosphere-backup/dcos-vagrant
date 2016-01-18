@@ -12,7 +12,7 @@
 # updated/upgraded OS (faster, no-internet)
 #BOX_NAME = "dcos-centos"
 # zk docker and nginx docker loaded
-BOX_NAME = "dcos-test"
+BOX_NAME = "dcos"
 
 ## CLUSTER CONFIG
 ##############################################
@@ -28,15 +28,15 @@ DCOS_GENERATE_CONFIG_PATH= ENV['DCOS_GENERATE_CONFIG_PATH'] || "file:///vagrant/
 DCOS_OS_REQUIREMENTS = <<SHELL
 #  yum makecache fast
 #  yum install --assumeyes --tolerant --quiet tar xz unzip curl docker bind-utils
-  echo ">>> Added packages (tar, xz, unzip, curl, docker, bind-utils)"
+#  echo ">>> Added packages (tar, xz, unzip, curl, docker, bind-utils)"
 
-  groupadd nogroup
-  groupadd docker
-  usermod -aG docker vagrant
-  echo ">>> Created groups (nogroup, docker) and adding to user."
+#  groupadd nogroup
+#  groupadd docker
+#  usermod -aG docker vagrant
+#  echo ">>> Created groups (nogroup, docker) and adding to user."
 
 #  yum upgrade --assumeyes --tolerant --quiet
-  echo ">>> Upgraded OS"
+#  echo ">>> Upgraded OS"
 
   systemctl enable docker
   echo ">>> Enabling docker"
@@ -45,19 +45,19 @@ DCOS_OS_REQUIREMENTS = <<SHELL
   echo ">>> Starting docker and running (docker ps)"
   docker ps
 
-  sed -i s/SELINUX=enforcing/SELINUX=permissive/g /etc/selinux/config
-  echo ">>> Disabled SELinux"
+#  sed -i s/SELINUX=enforcing/SELINUX=permissive/g /etc/selinux/config
+#  echo ">>> Disabled SELinux"
 
-  sysctl -w net.ipv6.conf.all.disable_ipv6=1
-  sysctl -w net.ipv6.conf.default.disable_ipv6=1
-  echo ">>> Disabled IPV6"
+#  sysctl -w net.ipv6.conf.all.disable_ipv6=1
+#  sysctl -w net.ipv6.conf.default.disable_ipv6=1
+#  echo ">>> Disabled IPV6"
 
   mkdir -p ~/dcos && cd ~/dcos
 
 SHELL
 
 DCOS_BOOT_PROVISION = <<SHELL
-  service docker restart
+#  service docker restart
 
   docker run -d -p 2181:2181 -p 2888:2888 -p 3888:3888 jplock/zookeeper
   echo ">>> Creating docker service (jplock/zookeeper) for exhibitor bootstrap and quorum."
@@ -115,8 +115,6 @@ Vagrant.configure(2) do |config|
           :ip       => '192.168.65.50',
           :memory   => 256,
           :provision    => DCOS_BOOT_PROVISION,
-          :box      => 'dcos-boot'
-
       },
       :lb => {
           :ip       => '192.168.65.60',
