@@ -6,3 +6,4 @@ dcos
 build/jre-*-linux-x64.tgz
 packer_cache
 output-virtualbox-iso
+*.box
