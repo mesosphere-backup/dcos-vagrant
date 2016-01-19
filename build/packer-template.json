@@ -20,7 +20,7 @@
       "type": "vagrant",
       "override": {
         "virtualbox": {
-          "output": "centos-dcos-0116.box"
+          "output": "centos-dcos.box"
         }
       }
     }

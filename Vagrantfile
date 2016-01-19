@@ -4,14 +4,9 @@
 ## BASE OS
 ##############################################
 
-# non-updated CentOS 7.1 OS
-# Uncomment line below after running:
-# vagrant box add --name new-centos https://github.com/CommanderK5/packer-centos-template/releases/download/0.7.1/vagrant-centos-7.1.box
-# BOX_NAME = "new-centos"
-
-# updated/upgraded OS (faster, no-internet)
-#BOX_NAME = "dcos-centos"
-# zk docker and nginx docker loaded
+# cd <repo>/build && packer build packer-template.json
+# ...
+# vagrant box add dcos centos-dcos.box
 BOX_NAME = "dcos"
 
 ## CLUSTER CONFIG
@@ -26,18 +21,6 @@ DCOS_GENERATE_CONFIG_PATH= ENV['DCOS_GENERATE_CONFIG_PATH'] || "file:///vagrant/
 ##############################################
 
 DCOS_OS_REQUIREMENTS = <<SHELL
-#  yum makecache fast
-#  yum install --assumeyes --tolerant --quiet tar xz unzip curl docker bind-utils
-#  echo ">>> Added packages (tar, xz, unzip, curl, docker, bind-utils)"
-
-#  groupadd nogroup
-#  groupadd docker
-#  usermod -aG docker vagrant
-#  echo ">>> Created groups (nogroup, docker) and adding to user."
-
-#  yum upgrade --assumeyes --tolerant --quiet
-#  echo ">>> Upgraded OS"
-
   systemctl enable docker
   echo ">>> Enabling docker"
 
@@ -45,20 +28,11 @@ DCOS_OS_REQUIREMENTS = <<SHELL
   echo ">>> Starting docker and running (docker ps)"
   docker ps
 
-#  sed -i s/SELINUX=enforcing/SELINUX=permissive/g /etc/selinux/config
-#  echo ">>> Disabled SELinux"
-
-#  sysctl -w net.ipv6.conf.all.disable_ipv6=1
-#  sysctl -w net.ipv6.conf.default.disable_ipv6=1
-#  echo ">>> Disabled IPV6"
-
   mkdir -p ~/dcos && cd ~/dcos
 
 SHELL
 
 DCOS_BOOT_PROVISION = <<SHELL
-#  service docker restart
-
   docker run -d -p 2181:2181 -p 2888:2888 -p 3888:3888 jplock/zookeeper
   echo ">>> Creating docker service (jplock/zookeeper) for exhibitor bootstrap and quorum."
 
