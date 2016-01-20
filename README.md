@@ -48,7 +48,15 @@ This can optionally provide a model for self-guiding customers in a fairly presc
 
 **1a)** Please review the [Appendix](#appendix) section for configuring local system settings, copying files and installing Vagrant + VirtualBox. This repo assumes a functioning vagrant is setup using the virtualbox provider.
 
-**1b)** You'll need to install the following box locally into your Vagrant installation.
+**1b)** You can use packer to build the base image along with the system requirements to install a cluster. This will significantly speed up bringing up a cluster from scratch. You can use the following commands to do this.
+
+```bash
+cd <repo>/build
+
+packer build packer-template.json
+
+vagrant add box dcos centos-dcos.box && rm -rf centos-dcos.box
+```
 
 > [non-updated OS](https://github.com/CommanderK5/packer-centos-template/releases/download/0.7.1/vagrant-centos-7.1.box) github.com/CommanderK5/packer-centos-template/releases/download/0.7.1/vagrant-centos-7.1.box
 
