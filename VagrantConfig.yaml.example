@@ -1,0 +1,55 @@
+boot:
+  ip: 192.168.65.50
+  cpus: 2
+  memory: 256
+  type: boot
+lb:
+  ip: 192.168.65.60
+  cpus: 2
+  memory: 1024
+  type: worker-public
+m1:
+  ip: 192.168.65.90
+  cpus: 2
+  memory: 1024
+  type: master
+m2:
+  ip: 192.168.65.95
+  cpus: 2
+  memory: 1024
+  type: master
+m3:
+  ip: 192.168.65.101
+  cpus: 2
+  memory: 1024
+  type: master
+w1:
+  ip: 192.168.65.111
+  cpus: 4
+  memory: 3328
+  type: worker-private
+w2:
+  ip: 192.168.65.121
+  cpus: 4
+  memory: 1536
+  type: worker-private
+w3:
+  ip: 192.168.65.131
+  cpus: 4
+  memory: 1536
+  type: worker-private
+w4:
+  ip: 192.168.65.141
+  cpus: 4
+  memory: 1536
+  type: worker-private
+w5:
+  ip: 192.168.65.151
+  cpus: 4
+  memory: 1536
+  type: worker-private
+w6:
+  ip: 192.168.65.161
+  cpus: 4
+  memory: 1536
+  type: worker-private

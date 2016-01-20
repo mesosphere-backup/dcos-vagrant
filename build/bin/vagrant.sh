@@ -1,3 +1,9 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
 date > /etc/vagrant_box_build_time
 
 mkdir -pm 700 /home/vagrant/.ssh

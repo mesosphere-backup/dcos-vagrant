@@ -1,3 +1,9 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
 VBOX_VERSION=$(cat /home/vagrant/.vbox_version)
 
 # required for VirtualBox 4.3.26
@@ -5,7 +11,8 @@ VBOX_VERSION=$(cat /home/vagrant/.vbox_version)
 
 cd /tmp
 mount -o loop /home/vagrant/VBoxGuestAdditions_$VBOX_VERSION.iso /mnt
-sh /mnt/VBoxLinuxAdditions.run
+# TODO: fix OpenGL support module installation
+sh /mnt/VBoxLinuxAdditions.run || true
 umount /mnt
 rm -rf /home/vagrant/VBoxGuestAdditions_*.iso
 

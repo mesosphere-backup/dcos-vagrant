@@ -1,9 +1,15 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
 # yum makecache fast
 
 yum install --assumeyes --tolerant docker
 #echo ">>> Added packages (gcc make gcc-c++ kernel-devel* perl tar xz unzip curl docker bind-utils)"
 
-/usr/sbin/groupadd docker
+/usr/sbin/groupadd -f docker
 /usr/sbin/usermod -aG docker vagrant
 echo ">>> Created groups (docker) and adding to user."
 

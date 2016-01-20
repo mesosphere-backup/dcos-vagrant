@@ -142,7 +142,7 @@ Appendix
 ```bash
 cd <repo>
 
-vi VagrantFile # Uncomment appropriate variable to define config.json eg. DCOS_CONFIG_JSON="1_master-config.json"
+vi VagrantFile # Uncomment appropriate variable to define config.json eg. DCOS_CONFIG="1_master-config.json"
 
 vagrant up boot m1 w1 w2 w3
 ```
@@ -159,7 +159,7 @@ vagrant up boot m1 w4 w5 w6
 ```bash
 cd <repo>
 
-vi VagrantFile # Uncomment appropriate variable to define config.json eg. DCOS_CONFIG_JSON="3_master-config.json"
+vi VagrantFile # Uncomment appropriate variable to define config.json eg. DCOS_CONFIG="3_master-config.json"
 
 vagrant up boot
 
