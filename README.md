@@ -97,6 +97,20 @@ If you'd like to customize the base OS, you can do so and will need to adjust th
 
 These commands can be easily extrapolated for a non-virtualbox installation as well.
 
+**1f)** Configure the DCOS machine types (e.g. cpus, memory)
+
+Copy one of the example VagrantConfig files:
+
+```
+cd <repo>
+cp VagrantConfig.yaml.example VagrantConfig.yaml
+```
+
+Update `VagrantConfig.yaml` to match your requirements. Some frameworks (e.g. cassandra) may require more nodes/resources than others.
+
+**IMPORTANT**: Make sure your local machine has enough memory to launch all your desired VMs, otherwise your machine will lock up as all the memory is consumed.
+
+
 2) Example Deployment
 ------------------
 
