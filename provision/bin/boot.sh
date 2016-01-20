@@ -21,9 +21,11 @@ cp "/vagrant/etc/${DCOS_CONFIG}" "${HOME}/dcos/genconf/config.${DCOS_CONFIG_EXT}
 echo ">>> Downloading (dcos_generate_config.sh) for building bootstrap image for system."
 curl "${DCOS_GENERATE_CONFIG_PATH}" > ~/dcos/dcos_generate_config.sh
 
-echo ">>> Building bootstrap artifacts under (${VAGRANT_DIR}/genconf/serve)."
+echo ">>> Building bootstrap artifacts under (/genconf/serve)."
 cd ~/dcos
 bash ./dcos_generate_config.sh --genconf
+
+sleep 5
 
 echo ">>> Copying bootstrap artifacts to nginx directory (/var/tmp/dcos)."
 cp -rp ~/dcos/genconf/serve/* /var/tmp/dcos/
