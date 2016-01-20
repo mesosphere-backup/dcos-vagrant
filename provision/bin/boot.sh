@@ -21,12 +21,12 @@ cp "/vagrant/etc/${DCOS_CONFIG}" "${HOME}/dcos/genconf/config.${DCOS_CONFIG_EXT}
 echo ">>> Downloading (dcos_generate_config.sh) for building bootstrap image for system."
 curl "${DCOS_GENERATE_CONFIG_PATH}" > ~/dcos/dcos_generate_config.sh
 
-echo ">>> Building bootstrap artifacts under (${VAGRANT_DIR}/genconf/serve)."
 cd ~/dcos
+echo ">>> Building bootstrap artifacts under ($(pwd)/genconf/serve)."
 bash ./dcos_generate_config.sh --genconf
 
 echo ">>> Copying bootstrap artifacts to nginx directory (/var/tmp/dcos)."
-cp -rp ~/dcos/genconf/serve/* /var/tmp/dcos/
+cp -rpv ~/dcos/genconf/serve/* /var/tmp/dcos/
 
 if [ "${JAVA_ENABLED:-false}" == "true" ]; then
   echo ">>> Copying java artifacts to nginx dir (/var/tmp/dcos/java)."

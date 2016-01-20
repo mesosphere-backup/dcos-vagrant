@@ -22,7 +22,6 @@ PROVISION_ENV = {
   "DCOS_CONFIG" => "1_master-config.yaml",
   #"DCOS_CONFIG" => "3_master-config.json",
   "DCOS_GENERATE_CONFIG_PATH" => ENV['DCOS_GENERATE_CONFIG_PATH'] || "file:///vagrant/dcos_generate_config.sh",
-  "VAGRANT_DIR" => ENV["PWD"],
   "JAVA_ENABLED" => "false",
 }
 
