@@ -23,9 +23,16 @@ curl "${DCOS_GENERATE_CONFIG_PATH}" > ~/dcos/dcos_generate_config.sh
 
 cd ~/dcos
 echo ">>> Building bootstrap artifacts under ($(pwd)/genconf/serve)."
-bash ./dcos_generate_config.sh --genconf
+bash ./dcos_generate_config.sh
+# TODO: --genconf required by DCOS 1.5
+#bash ./dcos_generate_config.sh --genconf
 
-sleep 5
+# TODO: sleeping seems to be necessary for DCOS 1.5... bug?
+SLEPT=0
+while [ ! -d ~/dcos/genconf/serve ] && [ ${SLEPT} -lt 10 ]; do
+  sleep 1
+  let SLEPT=SLEPT+1
+done
 
 echo ">>> Copying bootstrap artifacts to nginx directory (/var/tmp/dcos)."
 cp -rpv ~/dcos/genconf/serve/* /var/tmp/dcos/
