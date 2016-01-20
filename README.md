@@ -18,24 +18,34 @@ This can optionally provide a model for self-guiding customers in a fairly presc
 
 	.
 	├── build
-	│   ├── gs-spring-boot-0.1.0.jar   # Simple standalone java application (requires jre 8.1).
-	│   ├── <jre-8u66-linux-x64.tgz>   # Download from Oracle
-	│   ├── Dockerfile                 # Docker build file
+	│   ├── bin                        # build scripts (multiple stages)
+	│   ├── packer-template.json       # packer script for building a pre-provisioned box with DCOS dependencies
+	│   └── Dockerfile                 # Docker build file
 	│
 	├── etc
-	│   ├── ip-detect                  # Script for pulling appropriate ip. Be sure to confirm interface (enp0s8)
-	│   ├── hosts.file                 # Resolve instances 
-	│   ├── 1_master-config.json       # DCOS config for 1 master
-	│   ├── 3_master-config.json       # DCOS config for 3 masters
+	│   ├── 1_master-config.json       # DCOS config for 1 master (DCOS 1.4)
+	│   ├── 1_master-config.yaml       # DCOS config for 1 master (DCOS 1.5)
+	│   ├── 3_master-config.json       # DCOS config for 3 masters (DCOS 1.4)
+	│   ├── hosts.file                 # Resolve instances
+	│   └── ip-detect                  # Script for pulling appropriate ip. Be sure to confirm interface (enp0s8)
 	│
-	├── java-spring.json               # Marathon descriptor for standalone java spring application.
-	├── java-spring-docker.json        # Marathon descriptor for docker based java spring application.
-	├── stress.json                    # Marathon descriptor for standalone commandline which uses CPU.
-	├── oinker.json                    # Marathon descriptor for functioning twitter clone, use with cassandra
-	├── jenkins.json                   # Marathon descriptor for standalone jenkins, not currently functioning.
-	├── VagrantFile                    # Used to deploy various nodes (boot, masters and workers)
-	├── <dcos_generate_config.sh>      # This is the core installer for DCOS from Mesosphere.
-	└── README.md
+	├── marathon
+	│   ├── java-spring.json           # Marathon descriptor for standalone java spring application
+	│   ├── java-spring-docker.json    # Marathon descriptor for docker based java spring application
+	│   ├── jenkins.json               # Marathon descriptor for jenkins application
+	│   ├── oinker.json                # Marathon descriptor for functioning twitter clone, use with cassandra
+	│   └── stress.json                # Marathon descriptor for standalone commandline which uses CPU
+	│
+	├── provision
+	│   ├── bin                        # provision scripts (multiple stages, multiple vm types)
+	│   ├── gs-spring-boot-0.1.0.jar   # Simple standalone java application (requires jre 8.1).
+	│   └── <jre-8u66-linux-x64.tgz>   # Download from Oracle
+	│
+	├── <dcos_generate_config.sh>      # DCOS installer supplied by Mesosphere
+	├── README.md                      # This document
+	├── <VagrantConfig.yaml>           # VM configuration (IPs, cpu, memory, machine types)
+	├── VagrantConfig.yaml.example     # VM configuration example
+	└── VagrantFile                    # Vagrant deployment script
 
 
 **Tested On**
@@ -77,11 +87,13 @@ If you'd like to customize the base OS, you can do so and will need to adjust th
 
 > BOX_NAME = "new-centos"
 
-**1e)** Optionally review the commands to be executed within the VagrantFile. They are specified at the top for 4 core components:
+**1e)** Optionally review the commands to be executed by the VagrantFile. They are in `provision/bin`:
+- Hosts file for all nodes
 - Base OS for all nodes
 - Bootstrap node
 - Master node
-- Worker node
+- Worker node (private)
+- Worker node (public)
 
 These commands can be easily extrapolated for a non-virtualbox installation as well.
 
@@ -99,13 +111,13 @@ vagrant up boot m1 w1 w2 w3 lb
 **Deploy app**
 
 ```bash
-dcos marathon app add java-spring.json
+dcos marathon app add marathon/java-spring.json
 ```
 
 **Scale out**
 
 ```bash
-dcos marathon app update java-spring instances=3
+dcos marathon app update marathon/java-spring instances=3
 ```
 
 **Verify through dashboard, browser**
