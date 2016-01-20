@@ -52,10 +52,9 @@ This can optionally provide a model for self-guiding customers in a fairly presc
 
 ```bash
 cd <repo>/build
-
 packer build packer-template.json
-
-vagrant add box dcos centos-dcos.box && rm -rf centos-dcos.box
+cd ..
+vagrant box add dcos build/centos-dcos.box
 ```
 
 > [non-updated OS](https://github.com/CommanderK5/packer-centos-template/releases/download/0.7.1/vagrant-centos-7.1.box) github.com/CommanderK5/packer-centos-template/releases/download/0.7.1/vagrant-centos-7.1.box
