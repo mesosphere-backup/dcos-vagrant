@@ -4,20 +4,15 @@
 ## BASE OS
 ##############################################
 
-# non-updated CentOS 7.1 OS
-# Uncomment line below after running:
-# vagrant box add --name new-centos https://github.com/CommanderK5/packer-centos-template/releases/download/0.7.1/vagrant-centos-7.1.box
-BOX_NAME = "new-centos"
-
-# updated/upgraded OS (faster, no-internet)
-#BOX_NAME = "dcos-centos"
-# zk docker and nginx docker loaded
-#BOX_NAME = "dcos-boot"
+# cd <repo>/build && packer build packer-template.json
+# ...
+# vagrant box add dcos centos-dcos.box
+BOX_NAME = "dcos"
 
 ## CLUSTER CONFIG
 ##############################################
 IP_DETECT_SCRIPT="ip-detect"
-DCOS_CONFIG_JSON="1_master-config.json"
+DCOS_CONFIG_JSON="1_master-config.yaml"
 #DCOS_CONFIG_JSON="3_master-config.json"
 
 DCOS_GENERATE_CONFIG_PATH= ENV['DCOS_GENERATE_CONFIG_PATH'] || "file:///vagrant/dcos_generate_config.sh"
@@ -26,31 +21,12 @@ DCOS_GENERATE_CONFIG_PATH= ENV['DCOS_GENERATE_CONFIG_PATH'] || "file:///vagrant/
 ##############################################
 
 DCOS_OS_REQUIREMENTS = <<SHELL
-  yum makecache fast
-  yum install --assumeyes --tolerant --quiet tar xz unzip curl docker
-  echo ">>> Added packages (tar, xz, unzip, curl, docker)"
-
-  groupadd nogroup
-  groupadd docker
-  usermod -aG docker vagrant
-  echo ">>> Created groups (nogroup, docker) and adding to users (docker, vagrant)"
-
-  yum upgrade --assumeyes --tolerant --quiet
-  echo ">>> Upgraded OS"
-
   systemctl enable docker
   echo ">>> Enabling docker"
 
-  service docker start
+  service docker restart
   echo ">>> Starting docker and running (docker ps)"
   docker ps
-
-  sed -i s/SELINUX=enforcing/SELINUX=permissive/g /etc/selinux/config
-  echo ">>> Disabled SELinux"
-
-  sysctl -w net.ipv6.conf.all.disable_ipv6=1
-  sysctl -w net.ipv6.conf.default.disable_ipv6=1
-  echo ">>> Disabled IPV6"
 
   mkdir -p ~/dcos && cd ~/dcos
 
@@ -68,7 +44,7 @@ DCOS_BOOT_PROVISION = <<SHELL
 
   mkdir -p ~/dcos/genconf && cd ~/dcos
   cp /vagrant/etc/#{IP_DETECT_SCRIPT} ~/dcos/genconf/ip-detect
-  cp /vagrant/etc/#{DCOS_CONFIG_JSON} ~/dcos/genconf/config.json
+  cp /vagrant/etc/#{DCOS_CONFIG_JSON} ~/dcos/genconf/config.yaml
   echo ">>> Copied (ip-detect, config.json) for building bootstrap image for system."
 
   cd ~/dcos && curl -O #{DCOS_GENERATE_CONFIG_PATH}
@@ -115,8 +91,6 @@ Vagrant.configure(2) do |config|
           :ip       => '192.168.65.50',
           :memory   => 256,
           :provision    => DCOS_BOOT_PROVISION,
-          :box      => 'new-centos'
-
       },
       :lb => {
           :ip       => '192.168.65.60',
@@ -155,17 +129,17 @@ Vagrant.configure(2) do |config|
       },
       :w4 => {
           :ip       => '192.168.65.141',
-          :memory   => 3072,
+          :memory   => 2750,
           :provision    => DCOS_WORKER_PROVISION
       },
       :w5 => {
           :ip       => '192.168.65.151',
-          :memory   => 3072,
+          :memory   => 2750,
           :provision    => DCOS_WORKER_PROVISION
       },
       :w6 => {
           :ip       => '192.168.65.161',
-          :memory   => 3072,
+          :memory   => 4724,
           :provision    => DCOS_WORKER_PROVISION
       }
 
