@@ -18,19 +18,19 @@ This can optionally provide a model for self-guiding customers in a fairly presc
 
 	.
 	├── build
-	│	│
-	│	├── bin                        # Base setup scripts
-	│	│	├── base.sh                # 
-	│	│	├── cleanup.sh             # 
-	│	│	├── vagrant.sh             # 
-	│	│	├── virtualbox.sh          # 
-	│	│	└── zerodisk.sh            # 
-	│	│
-	│	├── http                       # Artifact repo for packer build process (kickstart, etc.)
-	│	│	└── ks.cfg                 # Kickstart definition for base image provisioning			
-	│	│
-	│	├── Dockerfile                 # Docker build file
-	│	└── packer_template.json       # template for creating base image using packer
+	│   │
+	│   ├── bin                        # Base setup scripts
+	│   │   ├── base.sh                # 
+	│   │   ├── cleanup.sh             # 
+	│   │   ├── vagrant.sh             # 
+	│   │   ├── virtualbox.sh          # 
+	│   │   └── zerodisk.sh            # 
+	│   │
+	│   ├── http                       # Artifact repo for packer build process (kickstart, etc.)
+	│   │   └── ks.cfg                 # Kickstart definition for base image provisioning			
+	│   │
+	│   ├── Dockerfile                 # Docker build file
+	│   └── packer_template.json       # template for creating base image using packer
 	│
 	├─── docs                          # Misc images or supporting documentation
 	│
