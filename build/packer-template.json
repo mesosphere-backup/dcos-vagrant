@@ -6,7 +6,9 @@
       "override": {
         "virtualbox-iso": {
           "scripts": [
-            "bin/base.sh",
+            "bin/os.sh",
+            "bin/docker.sh",
+            "bin/dcos-deps.sh",
             "bin/vagrant.sh",
             "bin/virtualbox.sh",
             "bin/cleanup.sh"

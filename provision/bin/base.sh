@@ -7,9 +7,5 @@ set -o pipefail
 echo ">>> Enabling docker"
 systemctl enable docker
 
-echo ">>> Starting docker and running (docker ps)"
+echo ">>> Starting docker"
 service docker restart
-docker ps
-
-echo ">>> Creating ~/dcos"
-mkdir -p ~/dcos && cd ~/dcos

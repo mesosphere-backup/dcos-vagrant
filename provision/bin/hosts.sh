@@ -5,4 +5,4 @@ set -o nounset
 set -o pipefail
 
 echo ">>> Copying hosts file to system."
-cp /vagrant/etc/hosts.file /etc/hosts
+cp -v /vagrant/etc/hosts.file /etc/hosts
