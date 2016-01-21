@@ -12,4 +12,4 @@ service docker restart
 docker ps
 
 echo ">>> Creating ~/dcos"
-mkdir -p ~/dcos
+mkdir -p ~/dcos && cd ~/dcos
