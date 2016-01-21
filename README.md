@@ -35,23 +35,23 @@ This can optionally provide a model for self-guiding customers in a fairly presc
 	├─── docs                          # Misc images or supporting documentation
 	│
 	├─── etc
-	│	├── ip-detect                  # Script for pulling appropriate ip. Be sure to confirm interface (enp0s8)
-	│	├── hosts.file                 # Resolve instances 
-	│	├── 1_master-config.yaml       # DCOS config for 1 master
-	│	└── 3_master-config.yaml       # DCOS config for 3 masters
+	│   ├── ip-detect                  # Script for pulling appropriate ip. Be sure to confirm interface (enp0s8)
+	│   ├── hosts.file                 # Resolve instances 
+	│   ├── 1_master-config.yaml       # DCOS config for 1 master
+	│   └── 3_master-config.yaml       # DCOS config for 3 masters
 	│
 	├── provision
-	│	│
-	│	├── bin
-	│	│	├── base.sh                # 
-	│	│	├── boot.sh                # 
-	│	│	├── hosts.sh               # 
-	│	│	├── master.sh              # 
-	│	│	├── worker-private.sh      # 
-	│	│	└── worker-public.sh       # 
-	│	│
-	│	├── gs-spring-boot-0.1.0.jar   # Simple standalone java application (requires jre 8.1).
-	│	└── <jre-8u66-linux-x64.tgz>   # Download from Oracle
+	│   │
+	│   ├── bin
+	│   │   ├── base.sh                # 
+	│   │   ├── boot.sh                # 
+	│   │   ├── hosts.sh               # 
+	│   │   ├── master.sh              # 
+	│   │   ├── worker-private.sh      # 
+	│   │   └── worker-public.sh       # 
+	│   │
+	│   ├── gs-spring-boot-0.1.0.jar   # Simple standalone java application (requires jre 8.1).
+	│   └── <jre-8u66-linux-x64.tgz>   # Download from Oracle
 	│
 	├── <dcos_generate_config.sh>      # This is the core installer for DCOS from Mesosphere.
 	├── java-spring-docker.json        # Marathon descriptor for docker based java spring application.
