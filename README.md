@@ -17,41 +17,41 @@ This can optionally provide a model for self-guiding customers in a fairly presc
 **Repo Structure**
 
 	./
-	├─── build
-	│ 	 │
-	│    ├── bin                        # Base setup scripts
-	│	 │   ├── base.sh                # 
-	│	 │   ├── cleanup.sh             # 
-	│	 │   ├── vagrant.sh             # 
-	│	 │   ├── virtualbox.sh          # 
-	│    │	 └── zerodisk.sh            # 
-	│	 │
-	│    ├── http                       # Artifact repo for packer build process (kickstart, etc.)
-	│	 │   └── ks.cfg                 # Kickstart definition for base image provisioning			
-	│	 │
-	│    ├── Dockerfile                 # Docker build file
-	│    └── packer_template.json       # template for creating base image using packer
+	├── build
+	│ 	│
+	│   ├── bin                        # Base setup scripts
+	│	│	├── base.sh                # 
+	│	│	├── cleanup.sh             # 
+	│	│	├── vagrant.sh             # 
+	│	│	├── virtualbox.sh          # 
+	│   │	└── zerodisk.sh            # 
+	│	│
+	│   ├── http                       # Artifact repo for packer build process (kickstart, etc.)
+	│	│	└── ks.cfg                 # Kickstart definition for base image provisioning			
+	│	│
+	│   ├── Dockerfile                 # Docker build file
+	│   └── packer_template.json       # template for creating base image using packer
 	│
 	├─── docs                          # Misc images or supporting documentation
 	│
 	├─── etc
-	│    ├── ip-detect                  # Script for pulling appropriate ip. Be sure to confirm interface (enp0s8)
-	│    ├── hosts.file                 # Resolve instances 
-	│    ├── 1_master-config.yaml       # DCOS config for 1 master
-	│    └── 3_master-config.yaml       # DCOS config for 3 masters
+	│	├── ip-detect                  # Script for pulling appropriate ip. Be sure to confirm interface (enp0s8)
+	│	├── hosts.file                 # Resolve instances 
+	│	├── 1_master-config.yaml       # DCOS config for 1 master
+	│	└── 3_master-config.yaml       # DCOS config for 3 masters
 	│
-	├─── provision
-	│ 	 │
-	│    ├── bin
-	│	 │   ├── base.sh                # 
-	│	 │   ├── boot.sh                # 
-	│	 │   ├── hosts.sh               # 
-	│	 │   ├── master.sh              # 
-	│    │	 ├── worker-private.sh      # 
-	│    │	 └── worker-public.sh       # 
-	│    │
-	│    ├── gs-spring-boot-0.1.0.jar   # Simple standalone java application (requires jre 8.1).
-	│    └── <jre-8u66-linux-x64.tgz>   # Download from Oracle
+	├── provision
+	│	│
+	│	├── bin
+	│	│	├── base.sh                # 
+	│	│	├── boot.sh                # 
+	│	│	├── hosts.sh               # 
+	│	│	├── master.sh              # 
+	│	│	├── worker-private.sh      # 
+	│	│	└── worker-public.sh       # 
+	│	│
+	│	├── gs-spring-boot-0.1.0.jar   # Simple standalone java application (requires jre 8.1).
+	│	└── <jre-8u66-linux-x64.tgz>   # Download from Oracle
 	│
 	├── <dcos_generate_config.sh>      # This is the core installer for DCOS from Mesosphere.
 	├── java-spring-docker.json        # Marathon descriptor for docker based java spring application.
@@ -62,37 +62,6 @@ This can optionally provide a model for self-guiding customers in a fairly presc
 	├── stress.json                    # Marathon descriptor for standalone commandline which uses CPU.
 	├── VagrantConfig.yaml.example     # Used to define vagrant instances. Copy to VagrantConfig.yaml
 	└── VagrantFile                    # Used to deploy various nodes (boot, masters and workers)
-=======
-	.
-	├── build
-	│   ├── bin                        # build scripts (multiple stages)
-	│   ├── packer-template.json       # packer script for building a pre-provisioned box with DCOS dependencies
-	│   └── Dockerfile                 # Docker build file
-	│
-	├── etc
-	│   ├── 1_master-config.json       # DCOS config for 1 master (DCOS 1.4)
-	│   ├── 1_master-config.yaml       # DCOS config for 1 master (DCOS 1.5)
-	│   ├── 3_master-config.json       # DCOS config for 3 masters (DCOS 1.4)
-	│   ├── hosts.file                 # Resolve instances
-	│   └── ip-detect                  # Script for pulling appropriate ip. Be sure to confirm interface (enp0s8)
-	│
-	├── marathon
-	│   ├── java-spring.json           # Marathon descriptor for standalone java spring application
-	│   ├── java-spring-docker.json    # Marathon descriptor for docker based java spring application
-	│   ├── jenkins.json               # Marathon descriptor for jenkins application
-	│   ├── oinker.json                # Marathon descriptor for functioning twitter clone, use with cassandra
-	│   └── stress.json                # Marathon descriptor for standalone commandline which uses CPU
-	│
-	├── provision
-	│   ├── bin                        # provision scripts (multiple stages, multiple vm types)
-	│   ├── gs-spring-boot-0.1.0.jar   # Simple standalone java application (requires jre 8.1).
-	│   └── <jre-8u66-linux-x64.tgz>   # Download from Oracle
-	│
-	├── <dcos_generate_config.sh>      # DCOS installer supplied by Mesosphere
-	├── README.md                      # This document
-	├── <VagrantConfig.yaml>           # VM configuration (IPs, cpu, memory, machine types)
-	├── VagrantConfig.yaml.example     # VM configuration example
-	└── VagrantFile                    # Vagrant deployment script
 
 **Tested On**
 - On a MacBook Pro (Retina, 13-inch, Early 2015), 2.7 GHz Intel Core i5, 15GB Memory
