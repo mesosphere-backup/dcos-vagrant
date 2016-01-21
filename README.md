@@ -62,7 +62,37 @@ This can optionally provide a model for self-guiding customers in a fairly presc
 	├── stress.json                    # Marathon descriptor for standalone commandline which uses CPU.
 	├── VagrantConfig.yaml.example     # Used to define vagrant instances. Copy to VagrantConfig.yaml
 	└── VagrantFile                    # Used to deploy various nodes (boot, masters and workers)
-
+=======
+	.
+	├── build
+	│   ├── bin                        # build scripts (multiple stages)
+	│   ├── packer-template.json       # packer script for building a pre-provisioned box with DCOS dependencies
+	│   └── Dockerfile                 # Docker build file
+	│
+	├── etc
+	│   ├── 1_master-config.json       # DCOS config for 1 master (DCOS 1.4)
+	│   ├── 1_master-config.yaml       # DCOS config for 1 master (DCOS 1.5)
+	│   ├── 3_master-config.json       # DCOS config for 3 masters (DCOS 1.4)
+	│   ├── hosts.file                 # Resolve instances
+	│   └── ip-detect                  # Script for pulling appropriate ip. Be sure to confirm interface (enp0s8)
+	│
+	├── marathon
+	│   ├── java-spring.json           # Marathon descriptor for standalone java spring application
+	│   ├── java-spring-docker.json    # Marathon descriptor for docker based java spring application
+	│   ├── jenkins.json               # Marathon descriptor for jenkins application
+	│   ├── oinker.json                # Marathon descriptor for functioning twitter clone, use with cassandra
+	│   └── stress.json                # Marathon descriptor for standalone commandline which uses CPU
+	│
+	├── provision
+	│   ├── bin                        # provision scripts (multiple stages, multiple vm types)
+	│   ├── gs-spring-boot-0.1.0.jar   # Simple standalone java application (requires jre 8.1).
+	│   └── <jre-8u66-linux-x64.tgz>   # Download from Oracle
+	│
+	├── <dcos_generate_config.sh>      # DCOS installer supplied by Mesosphere
+	├── README.md                      # This document
+	├── <VagrantConfig.yaml>           # VM configuration (IPs, cpu, memory, machine types)
+	├── VagrantConfig.yaml.example     # VM configuration example
+	└── VagrantFile                    # Vagrant deployment script
 
 **Tested On**
 - On a MacBook Pro (Retina, 13-inch, Early 2015), 2.7 GHz Intel Core i5, 15GB Memory
@@ -106,13 +136,29 @@ If you'd like to customize the base OS, you can do so and will need to adjust th
 
 > BOX_NAME = "new-centos"
 
-**1e)** Optionally review the commands to be executed within the VagrantFile. They are specified at the top for 4 core components:
+**1e)** Optionally review the commands to be executed by the VagrantFile. They are in `provision/bin`:
+- Hosts file for all nodes
 - Base OS for all nodes
 - Bootstrap node
 - Master node
-- Worker node
+- Worker node (private)
+- Worker node (public)
 
 These commands can be easily extrapolated for a non-virtualbox installation as well.
+
+**1f)** Configure the DCOS machine types (e.g. cpus, memory)
+
+Copy one of the example VagrantConfig files:
+
+```
+cd <repo>
+cp VagrantConfig.yaml.example VagrantConfig.yaml
+```
+
+Update `VagrantConfig.yaml` to match your requirements. Some frameworks (e.g. cassandra) may require more nodes/resources than others.
+
+**IMPORTANT**: Make sure your local machine has enough memory to launch all your desired VMs, otherwise your machine will lock up as all the memory is consumed.
+
 
 2) Example Deployment
 ------------------
@@ -128,13 +174,13 @@ vagrant up boot m1 w1 w2 w3 lb
 **Deploy app**
 
 ```bash
-dcos marathon app add java-spring.json
+dcos marathon app add marathon/java-spring.json
 ```
 
 **Scale out**
 
 ```bash
-dcos marathon app update java-spring instances=3
+dcos marathon app update marathon/java-spring instances=3
 ```
 
 **Verify through dashboard, browser**

@@ -18,8 +18,8 @@ BOX_NAME = "dcos"
 
 PROVISION_ENV = {
   "IP_DETECT_SCRIPT" => "ip-detect",
-  #"DCOS_CONFIG" => "1_master-config.json",
-  "DCOS_CONFIG" => "1_master-config.yaml",
+  "DCOS_CONFIG" => "1_master-config.json",
+  #"DCOS_CONFIG" => "1_master-config.yaml",
   #"DCOS_CONFIG" => "3_master-config.json",
   "DCOS_GENERATE_CONFIG_PATH" => ENV['DCOS_GENERATE_CONFIG_PATH'] || "file:///vagrant/dcos_generate_config.sh",
   "JAVA_ENABLED" => "false",
