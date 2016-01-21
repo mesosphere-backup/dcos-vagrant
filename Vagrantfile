@@ -54,7 +54,6 @@ Vagrant.configure(2) do |config|
       end
 
       vm_cfg.vm.provision "shell", name: "Hosts Provision", path: provision_path("hosts")
-      vm_cfg.vm.provision "shell", name: "Base Provision", path: provision_path("base")
       if cfg["type"]
         vm_cfg.vm.provision "shell", name: "#{cfg['type'].capitalize} Provision", path: provision_path(cfg["type"]), env: PROVISION_ENV
       end

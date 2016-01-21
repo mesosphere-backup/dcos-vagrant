@@ -11,7 +11,7 @@ echo ">>> Creating docker group and adding vagrant user to it"
 /usr/sbin/groupadd -f docker
 /usr/sbin/usermod -aG docker vagrant
 
-echo ">>> Enabling docker"
+echo ">>> Enabling docker on boot"
 systemctl enable docker
 
 echo ">>> Starting docker"
