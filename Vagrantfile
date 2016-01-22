@@ -16,13 +16,19 @@ BOX_NAME = "dcos"
 ## CLUSTER CONFIG
 ##############################################
 
+def vagrant_path(path)
+  if ! /^\w*:\/\//.match(path)
+    path = "file:///vagrant/" + path
+  end
+  puts path
+  return path
+end
+
 PROVISION_ENV = {
-  "IP_DETECT_SCRIPT" => "ip-detect",
-  #"DCOS_CONFIG" => "1_master-config.json",
-  "DCOS_CONFIG" => "1_master-config.yaml",
-  #"DCOS_CONFIG" => "3_master-config.json",
-  "DCOS_GENERATE_CONFIG_PATH" => ENV['DCOS_GENERATE_CONFIG_PATH'] || "file:///vagrant/dcos_generate_config.sh",
-  "JAVA_ENABLED" => "false",
+  "DCOS_IP_DETECT_PATH" => vagrant_path(ENV.fetch("IP_DETECT_PATH", "etc/ip-detect")),
+  "DCOS_CONFIG_PATH" => vagrant_path(ENV.fetch("DCOS_CONFIG_PATH", "etc/1_master-config.json")),
+  "DCOS_GENERATE_CONFIG_PATH" => vagrant_path(ENV.fetch("DCOS_GENERATE_CONFIG_PATH", "dcos_generate_config.sh")),
+  "DCOS_JAVA_ENABLED" => ENV.fetch("DCOS_JAVA_ENABLED", "false"),
 }
 
 def provision_path(type)
