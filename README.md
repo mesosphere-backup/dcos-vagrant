@@ -6,13 +6,13 @@ Quickly provision a DCOS cluster on a local machine for development, testing, or
 
 # Table of Contents
 
-- [Audience](#Audience)
-- [Goals](#Goals)
-- [Requirements](#Requirements)
-- [Repo Structure](#Repo-Structure)
-- [Preparation](#Preparation)
-- [Deployment Examples](#Deployment-Examples)
-- [Appendix](#Appendix)
+- [Audience](#audience)
+- [Goals](#goals)
+- [Requirements](#requirements)
+- [Repo Structure](#repo-structure)
+- [Preparation](#preparation)
+- [Deployment Examples](#deployment-examples)
+- [Appendix](#appendix)
 
 
 # Audience
