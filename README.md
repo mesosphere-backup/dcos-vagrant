@@ -3,14 +3,14 @@ DCOS Local Demo using Vagrant and Virtual Box
 
 The purpose of this repo was to create a simple way to quickly provision various DCOS cluster(s) on an internal system. In addition, make it easy to discuss and demonstrate some of the core capabilities of DCOS.
 
-This can optionally provide a model for self-guiding customers in a fairly prescriptive fashion. This is done using the opensource VirtualBox virtualization layer (Oracle) 5.0.10 and Vagrant 1.8.1, a tool for easily modeling system deployments against various providers (VirtualBox). The driving goals of the implementation are:
+This can optionally provide a model for a self-guided trial that is quick yet still robust. The cluster is setup using the opensource VirtualBox virtualization layer (Oracle) 5.0.10 and Vagrant 1.8.1 which is a tool for easily modeling system deployments against various providers (VirtualBox). The driving goals of this implementation are:
 
 - **KISS - Keep It Simple Stupid:** I prefer explicit/simple configuration over flexible/complex so it's easy to understand.
 - **Experiment, Iterate and Test:**
- - Experiment: The more field people can validate with new releases, demos and customer engagements.
+ - Experiment: Make DCOS accessible to more people that can validate new releases, demos and use cases.
  - Iterate: Various config changes can be tried to find better ways they will function and operate.
  - Test: New releases and customer env can be tested more thoroughly ensuring a more positive customer experience.
-- **Localized:** Ensure ease of use without network constraints.
+- **Localized:** Ensure ease of use without network constraints and a more mutable cluster.
 
 **NOTE: Before making changes to your local repo be sure to fork the repo or create a branch. Also, take note of the files in the .gitignore file which will not be committed.**
 
@@ -19,17 +19,17 @@ This can optionally provide a model for self-guiding customers in a fairly presc
 	.
 	├── build
 	│   │
-	│   ├── bin                        # Base setup scripts
-	│   │   ├── base.sh                # 
-	│   │   ├── cleanup.sh             # 
-	│   │   ├── vagrant.sh             # 
-	│   │   ├── virtualbox.sh          # 
-	│   │   └── zerodisk.sh            # 
+	│   ├── bin
+	│   │   ├── base.sh                # Base virtual-box OS script
+	│   │   ├── cleanup.sh             # Cleanup script
+	│   │   ├── vagrant.sh             # Vagrant specific setup script
+	│   │   ├── virtualbox.sh          # virtualbox specific (guest-additions, etc.)  script
+	│   │   └── zerodisk.sh            # virtualbox image compression
 	│   │
 	│   ├── http                       # Artifact repo for packer build process (kickstart, etc.)
 	│   │   └── ks.cfg                 # Kickstart definition for base image provisioning			
 	│   │
-	│   ├── Dockerfile                 # Docker build file
+	│   ├── Dockerfile                 # Docker file for java-spring applications
 	│   └── packer_template.json       # template for creating base image using packer
 	│
 	├─── docs                          # Misc images or supporting documentation
@@ -43,12 +43,12 @@ This can optionally provide a model for self-guiding customers in a fairly presc
 	├── provision
 	│   │
 	│   ├── bin
-	│   │   ├── base.sh                # 
-	│   │   ├── boot.sh                # 
-	│   │   ├── hosts.sh               # 
-	│   │   ├── master.sh              # 
-	│   │   ├── worker-private.sh      # 
-	│   │   └── worker-public.sh       # 
+	│   │   ├── base.sh                # Base OS for all nodes
+	│   │   ├── boot.sh                # Bootstrap node
+	│   │   ├── hosts.sh               # Hosts file for all nodes
+	│   │   ├── master.sh              # Master node
+	│   │   ├── worker-private.sh      # Worker node (private)
+	│   │   └── worker-public.sh       # Worker node (public)
 	│   │
 	│   ├── gs-spring-boot-0.1.0.jar   # Simple standalone java application (requires jre 8.1).
 	│   └── <jre-8u66-linux-x64.tgz>   # Download from Oracle
@@ -73,7 +73,7 @@ This can optionally provide a model for self-guiding customers in a fairly presc
 
 **1a)** Please review the [Appendix](#appendix) section for configuring local system settings, copying files and installing Vagrant + VirtualBox. This repo assumes a functioning vagrant is setup using the virtualbox provider.
 
-**1b)** You can use packer to build the base image along with the system requirements to install a cluster. This will significantly speed up bringing up a cluster from scratch. You can use the following commands to do this.
+**1b)** Ideally you'll want to use packer to build the base image along with the system requirements to install a cluster. This will significantly speed up bringing up a cluster from scratch. You can use the following commands to do this.
 
 ```bash
 cd <repo>/build
@@ -85,13 +85,15 @@ cd ..
 vagrant box add dcos build/centos-dcos.box
 ```
 
-> [non-updated OS](https://github.com/CommanderK5/packer-centos-template/releases/download/0.7.1/vagrant-centos-7.1.box) github.com/CommanderK5/packer-centos-template/releases/download/0.7.1/vagrant-centos-7.1.box
+**1c)** Optionally use a standard base box
+
+[non-updated OS](https://github.com/CommanderK5/packer-centos-template/releases/download/0.7.1/vagrant-centos-7.1.box) github.com/CommanderK5/packer-centos-template/releases/download/0.7.1/vagrant-centos-7.1.box
 
 ```bash
 vagrant box add --name new-centos https://github.com/CommanderK5/packer-centos-template/releases/download/0.7.1/vagrant-centos-7.1.box
 ```
 
-**1c)** You will need to ensure the internal private network for the cluster is configured to the 192.168.65.0/24 subnet. You can use the following command to create it on the vboxnet0 interface.
+**1d)** You will need to ensure the internal private network for the cluster is configured to the 192.168.65.0/24 subnet. You can use the following command to create it on the vboxnet0 interface.
 
 ```bash
 VBoxManage hostonlyif ipconfig vboxnet0 --ip 192.168.65.1
@@ -99,21 +101,24 @@ VBoxManage hostonlyif ipconfig vboxnet0 --ip 192.168.65.1
 
 ![Vagrant Network Settings](https://github.com/mesosphere/dcos-vagrant-demo/blob/master/docs/vbox_network.png?raw=true)
 
-**1d)** You will need to download the dcos_generate_config.sh script locally. Please download the appropriate version for testing and copy directly into the root repo directory. Contact your Mesosphere account executive to begin the trial process.
+**1e)** You will need to download the dcos_generate_config.sh installer locally.
 
-If you'd like to customize the base OS, you can do so and will need to adjust the following lines in your VagrantFile.
+**Important**: Contact your sales representative or sales@mesosphere.io to obtain the DCOS setup file.
 
-> BOX_NAME = "new-centos"
+**1f)** Optionally review the commands to be executed by the VagrantFile. They are in `provision/bin`:
 
-**1e)** Optionally review the commands to be executed by the VagrantFile. They are in `provision/bin`:
-- Hosts file for all nodes
-- Base OS for all nodes
-- Bootstrap node
-- Master node
-- Worker node (private)
-- Worker node (public)
+	.
+	├── provision
+	│   │
+	│   ├── bin
+	│   │   ├── base.sh                # Base OS for all nodes
+	│   │   ├── boot.sh                # Bootstrap node
+	│   │   ├── hosts.sh               # Hosts file for all nodes
+	│   │   ├── master.sh              # Master node
+	│   │   ├── worker-private.sh      # Worker node (private)
+	│   │   └── worker-public.sh       # Worker node (public)
 
-These commands can be easily extrapolated for a non-virtualbox installation as well.
+These commands can be easily extrapolated for a non-virtualbox (bare-metal, cloud, etc) installation as well.
 
 **1f)** Configure the DCOS machine types (e.g. cpus, memory)
 
@@ -276,7 +281,7 @@ vagrant up w1
 License and Author
 ==================
 
-Author:: Stathy Touloumis
+Author:: Stathy Touloumis, Karl Isenberg
 
 CreatedBy:: Stathy Touloumis (<stathy@mesosphere.com>)
 
