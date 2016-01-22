@@ -1,27 +1,69 @@
-DCOS Local Demo using Vagrant and Virtual Box
+DCOS Vagrant
 ==================
 
-The purpose of this repo was to create a simple way to quickly provision various DCOS cluster(s) on an internal system. In addition, make it easy to discuss and demonstrate some of the core capabilities of DCOS.
+Quickly provision a DCOS cluster on a local machine for development, testing, or demonstration.
 
-This can optionally provide a model for a self-guided trial that is quick yet still robust. The cluster is setup using the opensource VirtualBox virtualization layer (Oracle) 5.0.10 and Vagrant 1.8.1 which is a tool for easily modeling system deployments against various providers (VirtualBox). The driving goals of this implementation are:
 
-- **KISS - Keep It Simple Stupid:** I prefer explicit/simple configuration over flexible/complex so it's easy to understand.
-- **Experiment, Iterate and Test:**
- - Experiment: Make DCOS accessible to more people that can validate new releases, demos and use cases.
- - Iterate: Various config changes can be tried to find better ways they will function and operate.
- - Test: New releases and customer env can be tested more thoroughly ensuring a more positive customer experience.
-- **Localized:** Ensure ease of use without network constraints and a more mutable cluster.
+# Table of Contents
 
-**NOTE: Before making changes to your local repo be sure to fork the repo or create a branch. Also, take note of the files in the .gitignore file which will not be committed.**
+- [Audience](#Audience)
+- [Goals](#Goals)
+- [Requirements](#Requirements)
+- [Repo Structure](#Repo-Structure)
+- [Preparation](#Preparation)
+- [Deployment Examples](#Deployment-Examples)
+- [Appendix](#Appendix)
 
-**Repo Structure**
+
+# Audience
+
+- Developers
+  - DCOS
+  - DCOS Services
+  - Mesos Frameworks
+  - Marathon Apps
+- Continuous Integration (testing)
+- Sales Engineers (demos)
+- Prospective Customers/Users (kick the tires)
+
+
+# Goals
+
+- Enable **free**, **local** demonstration of the core capabilities of DCOS
+- Deploy, test, and debug development versions of DCOS Services, Mesos Frameworks, and Marathon Apps
+- Deploy, test, and debug development versions of DCOS itself
+- Decrease the cycle time from local code-change to deployment and testing
+- Support multiple use cases to facilitate sharing of pain and gain
+- Stay as close to the process of production deployment as possible to reduce maintenance cost of multiple deployment methods
+- Facilitate onboarding of new DCOS users by preferring intuitive usability over complex configuration
+- Facilitate customization of virtualized machine resources to emulate diverse environments
+
+
+# Requirements
+
+- [Vagrant](https://www.vagrantup.com/) (>= 1.8.1)
+- [VirtualBox](https://www.virtualbox.org/) (>= 4.3)
+
+## Tested On
+
+- MacBook Pro (Retina, 13-inch, Early 2015), 2.7 GHz Intel Core i5, 15GB Memory
+- Deploying single framework(s), cassandra.
+- Deploying applications in the repo - spring.json, stress.json, oinker.json and router.json
+
+
+# Repo Structure
+
+**NOTE: Take note of the files in [.gitignore](./.gitignore) which will not be committed.**
 
 	.
 	├── build
 	│   │
-	│   ├── bin
-	│   │   ├── base.sh                # Base virtual-box OS script
+=======
+	│   ├── bin                        # Base setup scripts
 	│   │   ├── cleanup.sh             # Cleanup script
+	│   │   ├── dcos-deps.sh           #
+	│   │   ├── docker.sh              #
+	│   │   ├── os.sh                  #
 	│   │   ├── vagrant.sh             # Vagrant specific setup script
 	│   │   ├── virtualbox.sh          # virtualbox specific (guest-additions, etc.)  script
 	│   │   └── zerodisk.sh            # virtualbox image compression
@@ -35,40 +77,39 @@ This can optionally provide a model for a self-guided trial that is quick yet st
 	├─── docs                          # Misc images or supporting documentation
 	│
 	├─── etc
-	│   ├── ip-detect                  # Script for pulling appropriate ip. Be sure to confirm interface (enp0s8)
-	│   ├── hosts.file                 # Resolve instances 
-	│   ├── 1_master-config.yaml       # DCOS config for 1 master
-	│   └── 3_master-config.yaml       # DCOS config for 3 masters
+	│   ├── 1_master-config.json       # DCOS config for 1 master (CM.4)
+	│   ├── 1_master-config.yaml       # DCOS config for 1 master (CM.5)
+	│   ├── 3_master-config.json       # DCOS config for 3 masters (CM.4)
+	│   ├── hosts.file                 # Resolve instance hosts to IPs
+	│   └── ip-detect                  # Script for pulling appropriate ip. Be sure to confirm interface (enp0s8)
+	│
+	├─── examples                      # Example app/service definitions
+	│   ├── java-spring.json           # Marathon descriptor for standalone java spring application
+	│   ├── java-spring-docker.json    # Marathon descriptor for docker based java spring application
+	│   ├── jenkins.json               # Marathon descriptor for standalone jenkins, not currently functioning
+	│   ├── oinker.json                # Marathon descriptor for functioning twitter clone, use with cassandra
+	│   └── stress.json                # Marathon descriptor for standalone commandline which uses CPU
 	│
 	├── provision
 	│   │
 	│   ├── bin
-	│   │   ├── base.sh                # Base OS for all nodes
-	│   │   ├── boot.sh                # Bootstrap node
-	│   │   ├── hosts.sh               # Hosts file for all nodes
-	│   │   ├── master.sh              # Master node
-	│   │   ├── worker-private.sh      # Worker node (private)
-	│   │   └── worker-public.sh       # Worker node (public)
+	│   │   ├── boot.sh                # provision script for "boot" type machines
+	│   │   ├── hosts.sh               # base provision script to synchronize /etc/hosts
+	│   │   ├── master.sh              # provision script for "master" type machines
+	│   │   ├── worker-private.sh      # provision script for "worker-private" type machines
+	│   │   └── worker-public.sh       # provision script for "worker-public" type machines
 	│   │
-	│   ├── gs-spring-boot-0.1.0.jar   # Simple standalone java application (requires jre 8.1).
-	│   └── <jre-8u66-linux-x64.tgz>   # Download from Oracle
+	│   ├── gs-spring-boot-0.1.0.jar   # Optional standalone java application (requires jre 8.1)
+	│   └── <jre-8u66-linux-x64.tgz>   # Optional Java Runtime Environment (Download from Oracle)
 	│
-	├── <dcos_generate_config.sh>      # This is the core installer for DCOS from Mesosphere.
-	├── java-spring-docker.json        # Marathon descriptor for docker based java spring application.
-	├── java-spring.json               # Marathon descriptor for standalone java spring application.
-	├── jenkins.json                   # Marathon descriptor for standalone jenkins, not currently functioning.
-	├── oinker.json                    # Marathon descriptor for functioning twitter clone, use with cassandra
+	├── <dcos_generate_config.sh>      # DCOS installer from Mesosphere
 	├── README.md
-	├── stress.json                    # Marathon descriptor for standalone commandline which uses CPU.
+	├── <VagrantConfig.yaml>           # Machine resource definitions
 	├── VagrantConfig.yaml.example     # Used to define vagrant instances. Copy to VagrantConfig.yaml
 	└── VagrantFile                    # Used to deploy various nodes (boot, masters and workers)
 
-**Tested On**
-- On a MacBook Pro (Retina, 13-inch, Early 2015), 2.7 GHz Intel Core i5, 15GB Memory
-- Deploying single framework(s), cassandra.
-- Deploying applications in the repo - spring.json, stress.json, oinker.json and router.json
 
-1) Preparation
+# Preparation
 ------------------
 
 **1a)** Please review the [Appendix](#appendix) section for configuring local system settings, copying files and installing Vagrant + VirtualBox. This repo assumes a functioning vagrant is setup using the virtualbox provider.
@@ -134,7 +175,7 @@ Update `VagrantConfig.yaml` to match your requirements. Some frameworks (e.g. ca
 **IMPORTANT**: Make sure your local machine has enough memory to launch all your desired VMs, otherwise your machine will lock up as all the memory is consumed.
 
 
-2) Example Deployment
+# Deployment Examples
 ------------------
 
 ###Prepare env
@@ -148,13 +189,13 @@ vagrant up boot m1 w1 w2 w3 lb
 **Deploy app**
 
 ```bash
-dcos marathon app add marathon/java-spring.json
+dcos marathon app add examples/java-spring.json
 ```
 
 **Scale out**
 
 ```bash
-dcos marathon app update marathon/java-spring instances=3
+dcos marathon app update examples/java-spring instances=3
 ```
 
 **Verify through dashboard, browser**
@@ -188,7 +229,7 @@ curl http://spring.acme.org
 ```
 
 
-Appendix
+# Appendix
 ==================
 
 ### Single Master (boot node, master node, 3 x worker nodes)
@@ -285,7 +326,7 @@ Author:: Stathy Touloumis, Karl Isenberg
 
 CreatedBy:: Stathy Touloumis (<stathy@mesosphere.com>)
 
-Copyright:: 2015, Mesosphere
+Copyright:: 2016, Mesosphere
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
