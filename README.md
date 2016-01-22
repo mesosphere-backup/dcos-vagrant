@@ -58,7 +58,6 @@ Quickly provision a DCOS cluster on a local machine for development, testing, or
 	.
 	├── build
 	│   │
-=======
 	│   ├── bin                        # Base setup scripts
 	│   │   ├── cleanup.sh             # Cleanup script
 	│   │   ├── dcos-deps.sh           #
