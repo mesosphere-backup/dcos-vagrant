@@ -9,7 +9,7 @@ require "yaml"
 
 # cd <repo>/build && packer build packer-template.json
 # ...
-# cd <repo> && vagrant box add dcos build/centos-dcos.box
+# cd <repo> && vagrant box add dcos build/dcos-centos-virtualbox.box
 BOX_NAME = "dcos"
 
 

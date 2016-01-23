@@ -79,7 +79,7 @@ Quickly provision a DCOS cluster on a local machine for development, testing, or
 
     Note that because the build process uses internet repositories with unversioned requirements, it's not **exactly** reproducible. Each built box may be slightly differen than the last, but deployments using the same box should be exactly the same.
 
-    Use the following commands to build a centos-dcos box:
+    Use the following commands to build a dcos-centos-virtualbox box:
 
     ```bash
     cd <repo>/build
@@ -88,7 +88,7 @@ Quickly provision a DCOS cluster on a local machine for development, testing, or
 
     cd ..
 
-    vagrant box add dcos build/centos-dcos.box
+    vagrant box add dcos build/dcos-centos-virtualbox.box
     ```
 
 4. Configure VirtualBox Networking
