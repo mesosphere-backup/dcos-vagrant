@@ -115,7 +115,7 @@ Quickly provision a DCOS cluster on a local machine for development, testing, or
 
     Download dcos_generate_config.sh to the root of the repo (the repo will be mounted into the vagrant machines as `/vagrant`).
 
-    **Important**: Contact your sales representative or [[sales@mesosphere.com]] to obtain the DCOS setup file.
+    **Important**: Contact your sales representative or <sales@mesosphere.com> to obtain the DCOS setup file.
 
 7. Configure the DCOS Machine Types
 
@@ -177,7 +177,7 @@ vagrant up boot m1 m2 m3 m4 m5 w1 w2 w3 w4 w5 w6 lb
 
 ## Deploy DCOS Services
 
-Once DCOS is installed, services can be installed using the DCOS CLI as a package manager. In order to install the DCOS CLI itself, follow the instructions in the popup when first visiting the DCOS dashboard ([[http://m1.dcos/]]). For more information, see the [DCOS CLI Docs](https://docs.mesosphere.com/administration/introcli/).
+Once DCOS is installed, services can be installed using the DCOS CLI as a package manager. In order to install the DCOS CLI itself, follow the instructions in the popup when first visiting the DCOS dashboard (http://m1.dcos/). For more information, see the [DCOS CLI Docs](https://docs.mesosphere.com/administration/introcli/).
 
 For example, the following installs cassandra (which requires at least 3 private worker nodes):
 
