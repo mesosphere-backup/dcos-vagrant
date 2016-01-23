@@ -73,9 +73,13 @@ Quickly provision a DCOS cluster on a local machine for development, testing, or
    	git clone https://github.com/mesosphere/dcos-vagrant
    	```
 
-3. Build the Packer Box
+3. (Optional) Build the Packer Box
 
     Packer is used to build a pre-provisioned virtual machine disk image. This significantly speeds up cluster deployment.
+
+    By default, vagrant will download the (~900MB) box from vagrant-cloud (https://atlas.hashicorp.com/karlkfi/dcos-centos-virtualbox).
+
+    You can alternatively build your own box locally.
 
     Note that because the build process uses internet repositories with unversioned requirements, it's not **exactly** reproducible. Each built box may be slightly differen than the last, but deployments using the same box should be exactly the same.
 
@@ -88,7 +92,7 @@ Quickly provision a DCOS cluster on a local machine for development, testing, or
 
     cd ..
 
-    vagrant box add dcos build/dcos-centos-virtualbox.box
+    vagrant box add karlkfi/dcos-centos-virtualbox build/dcos-centos-virtualbox.box
     ```
 
 4. Configure VirtualBox Networking

@@ -7,10 +7,7 @@ require "yaml"
 ## BASE OS
 ##############################################
 
-# cd <repo>/build && packer build packer-template.json
-# ...
-# cd <repo> && vagrant box add dcos build/dcos-centos-virtualbox.box
-BOX_NAME = "dcos"
+BOX_NAME = "karlkfi/dcos-centos-virtualbox"
 
 
 ## CLUSTER CONFIG
@@ -20,7 +17,6 @@ def vagrant_path(path)
   if ! /^\w*:\/\//.match(path)
     path = "file:///vagrant/" + path
   end
-  puts path
   return path
 end
 
