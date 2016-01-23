@@ -53,6 +53,11 @@ Quickly provision a DCOS cluster on a local machine for development, testing, or
 - Deploying single framework(s), cassandra.
 - Deploying applications in the repo - spring.json, stress.json, oinker.json and router.json
 
+## Supported DCOS Versions
+
+- CM.4
+- CM.5 (1.5)
+
 
 # Setup
 
