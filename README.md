@@ -11,8 +11,11 @@ Quickly provision a DCOS cluster on a local machine for development, testing, or
 - [Requirements](#requirements)
 - [Setup](#setup)
 - [Deploy](#deploy)
-- [Repo Structure](#repo-structure)
-- [Appendix](#appendix)
+- [Appendix: Architecture](#appendix-architecture)
+- [Appendix: Build OS Image](#appendix-build-os-image)
+- [Appendix: Repo Structure](#appendix-repo-structure)
+- [Appendix: Troubleshooting](#appendix-troubleshooting)
+- [License and Author](#license-and-author)
 
 
 # Audience
@@ -65,37 +68,15 @@ Quickly provision a DCOS cluster on a local machine for development, testing, or
 
     This repo assumes vagrant and virtualbox are installed and configured to work together.
 
-    See the [Appendix](#appendix) for details about the DCOS-Vagrant cluster architecture.
+    See [Appendix: Architecture](#appendix-architecture) for details about the DCOS-Vagrant cluster architecture.
 
-2. Clone This Repo
+1. Clone This Repo
 
     ```bash
     git clone https://github.com/mesosphere/dcos-vagrant
     ```
 
-3. (Optional) Build the Packer Box
-
-    Packer is used to build a pre-provisioned virtual machine disk image. This significantly speeds up cluster deployment.
-
-    By default, vagrant will download the (~900MB) box from vagrant-cloud (https://atlas.hashicorp.com/karlkfi/dcos-centos-virtualbox).
-
-    You can alternatively build your own box locally.
-
-    Note that because the build process uses internet repositories with unversioned requirements, it's not **exactly** reproducible. Each built box may be slightly differen than the last, but deployments using the same box should be exactly the same.
-
-    Use the following commands to build a dcos-centos-virtualbox box:
-
-    ```bash
-    cd <repo>/build
-
-    packer build packer-template.json
-
-    cd ..
-
-    vagrant box add karlkfi/dcos-centos-virtualbox build/dcos-centos-virtualbox.box
-    ```
-
-4. Configure VirtualBox Networking
+1. Configure VirtualBox Networking
 
     Ensure the internal private network for the cluster is configured to the 192.168.65.0/24 subnet.
 
@@ -107,7 +88,7 @@ Quickly provision a DCOS cluster on a local machine for development, testing, or
 
     ![Vagrant Network Settings](https://github.com/mesosphere/dcos-vagrant-demo/blob/master/docs/vbox_network.png?raw=true)
 
-5. Update Routable Hosts
+1. Update Routable Hosts
 
     Copy etc/hosts.file to your local hosts file (/etc/hosts)
 
@@ -115,13 +96,13 @@ Quickly provision a DCOS cluster on a local machine for development, testing, or
     cp <repo>/etc/hosts.file /etc/hosts
     ```
 
-6. Download the DCOS Installer
+1. Download the DCOS Installer
 
     Download dcos_generate_config.sh to the root of the repo (the repo will be mounted into the vagrant machines as `/vagrant`).
 
     **Important**: Contact your sales representative or <sales@mesosphere.com> to obtain the DCOS setup file.
 
-7. Configure the DCOS Machine Types
+1. Configure the DCOS Machine Types
 
     Copy one of the example VagrantConfig files:
 
@@ -196,7 +177,45 @@ Marathon apps can be installed by using the [dcos cli marathon plugin](https://d
 For example, see the [Java-Spring Example App](./examples/java-spring/).
 
 
-# Repo Structure
+# Appendix: Architecture
+
+**Networking**
+
+- NatNetwork
+  - DHCP
+  - 10.0.1.0/24
+  - No static port forwarding
+
+- vboxnet0
+  - No DHCP
+  - IP4 Address 192.168.65.1
+  - Netmask 255.255.255.0
+
+## Architecture Diagram
+
+![Vagrant Diagram](https://github.com/mesosphere/dcos-vagrant-demo/blob/master/docs/dcos_vagrant_setup.png?raw=true)
+
+
+# Appendix: Build OS Image
+
+Packer is used to build a pre-provisioned virtual machine disk image. This significantly speeds up cluster deployment.
+
+By default, vagrant will download the (~900MB) box from vagrant-cloud (https://atlas.hashicorp.com/karlkfi/dcos-centos-virtualbox).
+
+Note that because the build process uses internet repositories with unversioned requirements, it's not **exactly** reproducible. Each built box may be slightly different than the last, but deployments using the same box should be exactly the same.
+
+Use the following commands to build a dcos-centos-virtualbox box:
+
+```bash
+cd <repo>/build
+
+packer build packer-template.json
+
+vagrant box add karlkfi/dcos-centos-virtualbox dcos-centos-virtualbox.box
+```
+
+
+# Appendix: Repo Structure
 
 **NOTE: Take note of the files in [.gitignore](./.gitignore) which will not be committed. These are indicated by angle brackets below. Some of them must be provided for deployment to succeed.**
 
@@ -256,41 +275,21 @@ For example, see the [Java-Spring Example App](./examples/java-spring/).
 	└── VagrantFile                    # Used to deploy various nodes (boot, masters and workers)
 
 
-# Appendix
-
-## Troubleshooting
+# Appendix: Troubleshooting
 
 Common errors when bringing up the cluster, and their solutions.
 
-### The following settings shouldn't exist: env
+- **Problem:** `The following settings shouldn't exist: env`
 
-**Solution**: [Upgrade Vagrant](https://www.vagrantup.com/downloads.html) to >= 1.8.1
+    **Solution**: [Upgrade Vagrant](https://www.vagrantup.com/downloads.html) to >= 1.8.1
 
-### Specified config file '/genconf/config.yaml' does not exist
+- **Problem:** `Specified config file '/genconf/config.yaml' does not exist`
 
-**Solution**: DCOS 1.5 needs a different config path. Add the following to the host machine's environment before running vagrant:
+    **Solution**: DCOS 1.5 needs a different config path. Add the following to the host machine's environment before running vagrant:
 
-```
-export DCOS_CONFIG_PATH=etc/1_master-config.yaml
-```
-
-## Vagrant Setup (Virtual Box)
-
-**Networking**
-
-- NatNetwork
-  - DHCP
-  - 10.0.1.0/24
-  - No static port forwarding
-
-- vboxnet0
-  - No DHCP
-  - IP4 Address 192.168.65.1
-  - Netmask 255.255.255.0
-
-### Vagrant Setup Diagram
-
-![Vagrant Diagram](https://github.com/mesosphere/dcos-vagrant-demo/blob/master/docs/dcos_vagrant_setup.png?raw=true)
+    ```
+    export DCOS_CONFIG_PATH=etc/1_master-config.yaml
+    ```
 
 
 # License and Author
