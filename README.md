@@ -42,7 +42,6 @@ Quickly provision a DCOS cluster on a local machine for development, testing, or
 # Requirements
 
 - [Vagrant](https://www.vagrantup.com/) (>= 1.8.1).
-  - If you see errors about "The following settings shouldn't exist: env" then you need to [upgrade Vagrant](https://www.vagrantup.com/downloads.html).
 - [VirtualBox](https://www.virtualbox.org/) (>= 4.3)
 - [Packer](https://www.packer.io/)
 - [Git](https://git-scm.com/)
@@ -70,9 +69,9 @@ Quickly provision a DCOS cluster on a local machine for development, testing, or
 
 2. Clone This Repo
 
-   	```bash
-   	git clone https://github.com/mesosphere/dcos-vagrant
-   	```
+    ```bash
+    git clone https://github.com/mesosphere/dcos-vagrant
+    ```
 
 3. (Optional) Build the Packer Box
 
@@ -110,11 +109,11 @@ Quickly provision a DCOS cluster on a local machine for development, testing, or
 
 5. Update Routable Hosts
 
-   Copy etc/hosts.file to your local hosts file (/etc/hosts)
+    Copy etc/hosts.file to your local hosts file (/etc/hosts)
 
-   	```bash
-   	cp <repo>/etc/hosts.file /etc/hosts
-   	```
+    ```bash
+    cp <repo>/etc/hosts.file /etc/hosts
+    ```
 
 6. Download the DCOS Installer
 
@@ -259,19 +258,35 @@ For example, see the [Java-Spring Example App](./examples/java-spring/).
 
 # Appendix
 
+## Troubleshooting
+
+Common errors when bringing up the cluster, and their solutions.
+
+### The following settings shouldn't exist: env
+
+**Solution**: [Upgrade Vagrant](https://www.vagrantup.com/downloads.html) to >= 1.8.1
+
+### Specified config file '/genconf/config.yaml' does not exist
+
+**Solution**: DCOS 1.5 needs a different config path. Add the following to the host machine's environment before running vagrant:
+
+```
+export DCOS_CONFIG_PATH=etc/1_master-config.yaml
+```
+
 ## Vagrant Setup (Virtual Box)
 
 **Networking**
 
 - NatNetwork
- - DHCP
- - 10.0.1.0/24
- - No static port forwarding
+  - DHCP
+  - 10.0.1.0/24
+  - No static port forwarding
 
-- vboxnet0 
- - No DHCP
- - IP4 Address 192.168.65.1
- - Netmask 255.255.255.0
+- vboxnet0
+  - No DHCP
+  - IP4 Address 192.168.65.1
+  - Netmask 255.255.255.0
 
 ### Vagrant Setup Diagram
 
