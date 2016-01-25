@@ -41,7 +41,7 @@ Quickly provision a DCOS cluster on a local machine for development, testing, or
 
 # Requirements
 
-- [Vagrant](https://www.vagrantup.com/) (>= 1.8.1).
+- [Vagrant](https://www.vagrantup.com/) (>= 1.8.1)
 - [VirtualBox](https://www.virtualbox.org/) (>= 4.3)
 - [Packer](https://www.packer.io/)
 - [Git](https://git-scm.com/)
