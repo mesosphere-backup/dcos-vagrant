@@ -42,7 +42,7 @@ Quickly provision a DCOS cluster on a local machine for development, testing, or
 # Requirements
 
 - [Vagrant](https://www.vagrantup.com/) (>= 1.8.1).
-  - If you see errors about "The following settings shouldn't exist: env" then your version is too old!
+  - If you see errors about "The following settings shouldn't exist: env" then you need to [upgrade Vagrant](https://www.vagrantup.com/downloads.html).
 - [VirtualBox](https://www.virtualbox.org/) (>= 4.3)
 - [Packer](https://www.packer.io/)
 - [Git](https://git-scm.com/)
