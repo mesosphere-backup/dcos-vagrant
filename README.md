@@ -59,7 +59,9 @@ Quickly provision a DCOS cluster on a local machine for development, testing, or
 ## Supported DCOS Versions
 
 - CM.4
+  - requires json config
 - CM.5 (1.5)
+  - requires yaml config
 
 
 # Setup
