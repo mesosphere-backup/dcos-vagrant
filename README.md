@@ -46,8 +46,8 @@ Quickly provision a DCOS cluster on a local machine for development, testing, or
 
 - [Vagrant](https://www.vagrantup.com/) (>= 1.8.1)
 - [VirtualBox](https://www.virtualbox.org/) (>= 4.3)
-- [Packer](https://www.packer.io/)
 - [Git](https://git-scm.com/)
+- (Optional) [Packer](https://www.packer.io/) - tool for OS image building
 - (Optional) [jq](https://stedolan.github.io/jq/) - json parser used by examples
 
 ## Tested On
