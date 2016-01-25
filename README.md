@@ -110,11 +110,13 @@ Quickly provision a DCOS cluster on a local machine for development, testing, or
 
    DCOS versions <= 1.4 require a json config. DCOS versions >= 1.5 require a yaml config.
 
-   If you're using DCOS 1.5 or higher, or want a multiple-master cluster, the `DCOS_CONFIG` environment variable must be set:
+   **If you're using DCOS 1.5 or higher, or want a multiple-master cluster, the `DCOS_CONFIG` environment variable must be set.**
 
-   - (default) **DCOS 1.4 1-master**: `export DCOS_CONFIG=etc/1_master-config.json`
-   - **DCOS 1.4 3-master**: `export DCOS_CONFIG=etc/3_master-config.json`
-   - **DCOS 1.5 1-master**: `export DCOS_CONFIG=etc/1_master-config.yaml`
+   Included config files (select one):
+
+   - DCOS 1.4 1-master: `export DCOS_CONFIG=etc/1_master-config.json` (default)
+   - DCOS 1.4 3-master: `export DCOS_CONFIG=etc/3_master-config.json`
+   - DCOS 1.5 1-master: `export DCOS_CONFIG=etc/1_master-config.yaml`
 
    The path to the config file is relative to the repo dir, because the repo dir will be mounted as `/vagrant` within each VM.
    Other configurations can be added to the `<repo>/etc/` dir and configured in a similar manner.
@@ -141,7 +143,7 @@ The following steps will walk through DCOS and DCOS Apps/Service.
 
 ## Deploy DCOS
 
-**DCOS can be deployed with 1, 3, or 5 master nodes and any number of public and/or private worker nodes. For more details, see [Configure the DCOS Installer](#configure-the-dcos-installer).**
+DCOS can be deployed with 1, 3, or 5 master nodes and any number of public and/or private worker nodes, depending on the DCOS installer configuration. See [Configure the DCOS Installer](#configure-the-dcos-installer) for more details.
 
 In order to deploy DCOS, a bootstrap node is also required to facilitate installation configuration, install file distribution, and zookeeper bootstrapping.
 
