@@ -104,6 +104,23 @@ Quickly provision a DCOS cluster on a local machine for development, testing, or
 
     **Important**: Contact your sales representative or <sales@mesosphere.com> to obtain the DCOS setup file.
 
+1. <a name="configure-the-dcos-installer"></a>Configure the DCOS Installer
+
+   By default, the single-master json (DCOS 1.4) DCOS installer configuration is used.
+
+   DCOS versions <= 1.4 require a json config. DCOS versions >= 1.5 require a yaml config.
+
+   If you're using DCOS 1.5 or higher, or want a multiple-master cluster, the `DCOS_CONFIG` environment variable must be set:
+
+   - (default) **DCOS 1.4 1-master**: `export DCOS_CONFIG=etc/1_master-config.json`
+   - **DCOS 1.4 3-master**: `export DCOS_CONFIG=etc/3_master-config.json`
+   - **DCOS 1.5 1-master**: `export DCOS_CONFIG=etc/1_master-config.yaml`
+
+   The path to the config file is relative to the repo dir, because the repo dir will be mounted as `/vagrant` within each VM.
+   Other configurations can be added to the `<repo>/etc/` dir and configured in a similar manner.
+
+   Alternatively, a URL to an online config can be specified (e.g. `export DCOS_CONFIG=http://example.com/5_master-config.json`).
+
 1. Configure the DCOS Machine Types
 
     Copy one of the example VagrantConfig files:
@@ -124,17 +141,9 @@ The following steps will walk through DCOS and DCOS Apps/Service.
 
 ## Deploy DCOS
 
-DCOS can be deployed with 1, 3, or 5 master nodes and any number of public and/or private worker nodes.
+**DCOS can be deployed with 1, 3, or 5 master nodes and any number of public and/or private worker nodes. For more details, see [Configure the DCOS Installer](#configure-the-dcos-installer).**
 
 In order to deploy DCOS, a bootstrap node is also required to facilitate installation configuration, install file distribution, and zookeeper bootstrapping.
-
-**The number of master nodes must be configured explicitly by defining the `DCOS_CONFIG` environment variable. Several example configurations exist in the `<repo>/etc/` directory. CM.4 and earlier require json configuration. CM.5 and later require yaml configuration.**
-
-Single-master mode uses the default configuration, but can be specified explicitly with `export DCOS_CONFIG=etc/1_master-config.json`.
-
-Multi-master mode must be explicitly configured with `export DCOS_CONFIG=etc/3_master-config.json`.
-
-Remote configurations can also be specified by URL with `export DCOS_CONFIG=http://example.com/5_master-config.json`.
 
 ### Minimal Cluster
 
