@@ -38,33 +38,32 @@ end
 Vagrant.configure(2) do |config|
   YAML::load_file("./VagrantConfig.yaml").each do |name,cfg|
     config.vm.define name do |vm_cfg|
-      vm_cfg.vm.hostname = "#{name}.dcos"
-      vm_cfg.vm.network "private_network", ip: cfg["ip"]
       vm_cfg.vm.box = cfg["box"] || BOX_NAME
 
       vm_cfg.vm.provider "virtualbox" do |v|
+        vm_cfg.vm.hostname = "#{name}.dcos"
+        vm_cfg.vm.network "private_network", ip: cfg["ip"]
+
         v.name = vm_cfg.vm.hostname
         v.cpus = cfg["cpus"] || 2
         v.memory = cfg["memory"] || 2048
         v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+
+        if cfg["forwards"]
+          cfg["forwards"].each do |from,to|
+            vm_config.vm.forward_port from, to
+          end
+        end
       end
 
       vm_cfg.vm.provider :aws do |aws, override|
-        if cfg.has_key?("aws_ami") do
-          aws.ami = cfg["aws_ami"]
-          aws.access_key_id = cfg["aws_access_key_id"]
-          aws.secret_access_key = cfg["aws_access_key"]
-          aws.keypair_name = cfg["aws_keypair_name"]
+        aws.ami = cfg["aws_ami"]
+        aws.access_key_id = cfg["aws_access_key_id"] || ENV.fetch("AWS_ACCESS_ID")
+        aws.secret_access_key = cfg["aws_access_key"] || ENV.fetch("AWS_ACCESS_KEY")
+        aws.keypair_name = cfg["aws_access_key"] || ENV.fetch("AWS_KEY_PAIR_NAME")
 
-          override.ssh.username = cfg["ssh_username"]
-          override.ssh.private_key_path = cfg["ssh_private_key_path"]
-        end
-      end
-
-      if cfg["forwards"]
-        cfg["forwards"].each do |from,to|
-          vm_config.vm.forward_port from, to
-        end
+        override.ssh.username = "centos" || cfg["ssh_username"]
+        override.ssh.private_key_path = cfg["ssh_private_key_path"] || ENV.fetch("AWS_KEY_PAIR_NAME")
       end
 
       vm_cfg.vm.provision "shell", name: "Hosts Provision", path: provision_path("hosts")
