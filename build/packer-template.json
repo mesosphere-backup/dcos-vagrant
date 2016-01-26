@@ -11,7 +11,8 @@
             "bin/dcos-deps.sh",
             "bin/vagrant.sh",
             "bin/virtualbox.sh",
-            "bin/cleanup.sh"
+            "bin/cleanup.sh",
+            "bin/zerodisk.sh"
           ]
         }
       }
@@ -20,11 +21,8 @@
   "post-processors": [
     {
       "type": "vagrant",
-      "override": {
-        "virtualbox": {
-          "output": "dcos-centos-virtualbox.box"
-        }
-      }
+      "compression_level": 9,
+      "output": "dcos-centos-virtualbox.box"
     }
   ],
   "builders": [
