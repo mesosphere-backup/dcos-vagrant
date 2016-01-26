@@ -39,6 +39,6 @@ cp -rpv ~/dcos/genconf/serve/* /var/tmp/dcos/
 if [ "${DCOS_JAVA_ENABLED:-false}" == "true" ]; then
   echo ">>> Copying java artifacts to nginx directory (/var/tmp/dcos/java)."
   mkdir -p /var/tmp/dcos/java
-  cp -rp /vagrant/build/gs-spring-boot-0.1.0.jar /var/tmp/dcos/java/
-  cp -rp /vagrant/build/jre-*-linux-x64.* /var/tmp/dcos/java/
+  cp -rp /vagrant/provision/gs-spring-boot-0.1.0.jar /var/tmp/dcos/java/
+  cp -rp /vagrant/provision/jre-*-linux-x64.* /var/tmp/dcos/java/
 fi
