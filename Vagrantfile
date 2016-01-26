@@ -49,6 +49,18 @@ Vagrant.configure(2) do |config|
         v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
       end
 
+      vm_cfg.vm.provider :aws do |aws, override|
+        if cfg.has_key?("aws_ami") do
+          aws.ami = cfg["aws_ami"]
+          aws.access_key_id = cfg["aws_access_key_id"]
+          aws.secret_access_key = cfg["aws_access_key"]
+          aws.keypair_name = cfg["aws_keypair_name"]
+
+          override.ssh.username = cfg["ssh_username"]
+          override.ssh.private_key_path = cfg["ssh_private_key_path"]
+        end
+      end
+
       if cfg["forwards"]
         cfg["forwards"].each do |from,to|
           vm_config.vm.forward_port from, to
