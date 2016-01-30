@@ -4,6 +4,9 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
+echo ">>> Adding vagrant user to docker"
+/usr/sbin/usermod -aG docker vagrant
+
 echo ">>> Installing packages (gcc make gcc-c++ kernel-devel* kernel-headers* dkms)"
 yum install --assumeyes --tolerant gcc make gcc-c++ kernel-devel-$(uname -r) kernel-headers-$(uname -r) dkms
 

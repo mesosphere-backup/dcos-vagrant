@@ -11,7 +11,15 @@ echo ">>> Old Kernel: $(uname -r)"
 echo ">>> Upgrading OS"
 yum upgrade --assumeyes --tolerant
 yum update --assumeyes
-echo ">>> New Kernel: $(uname -r)"
+
+echo ">>> Disabling SELinux and adjusted sudoers"
+sed -i s/SELINUX=enforcing/SELINUX=permissive/g /etc/selinux/config
+sed -i "s/^.*requiretty/#Defaults requiretty/" /etc/sudoers
+
+echo ">>> Disabling IPV6"
+sysctl -w net.ipv6.conf.all.disable_ipv6=1
+sysctl -w net.ipv6.conf.default.disable_ipv6=1
 
 echo ">>> Rebooting to upgrade kernel"
-reboot
+shutdown -r now && sleep 5
+

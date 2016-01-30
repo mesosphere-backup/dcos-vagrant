@@ -4,23 +4,27 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
+echo ">>> New Kernel: $(uname -r)"
+
+echo ">>> Creating docker group"
+/usr/sbin/groupadd -f docker
+
 echo ">>> Installing packages (docker)"
 yum install --assumeyes --tolerant docker
-
-echo ">>> Creating docker group and adding vagrant user to it"
-/usr/sbin/groupadd -f docker
-/usr/sbin/usermod -aG docker vagrant
 
 echo ">>> Enabling docker on boot"
 systemctl enable docker
 
+echo ">>> Disabling firewalld"
+#systemctl stop firewalld
+systemctl disable firewalld
+
 echo ">>> Starting docker"
-service docker restart
+#docker daemon -D -l debug --storage-opt dm.no_warn_on_loop_devices=true 
+service docker start && sleep 30
+while [ `service docker status | grep "active (running)" --count` -lt 1 ]
+do
+	echo ">>> Docker not available ... retrying [" date "]"
+	service docker start && sleep 30
+done
 
-echo ">>> Disabling SELinux and adjusted sudoers"
-sed -i s/SELINUX=enforcing/SELINUX=permissive/g /etc/selinux/config
-sed -i "s/^.*requiretty/#Defaults requiretty/" /etc/sudoers
-
-echo ">>> Disabling IPV6"
-sysctl -w net.ipv6.conf.all.disable_ipv6=1
-sysctl -w net.ipv6.conf.default.disable_ipv6=1

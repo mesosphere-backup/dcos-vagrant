@@ -13,9 +13,5 @@ docker pull jplock/zookeeper
 echo ">>> Caching docker image: nginx"
 docker pull nginx
 
-echo ">>> Disabling firewalld"
-systemctl stop firewalld
-systemctl disable firewalld
-
 echo ">>> Creating ~/dcos"
 mkdir -p ~/dcos && cd ~/dcos
