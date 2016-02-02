@@ -4,8 +4,8 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-echo ">>> Installing packages (perl tar xz unzip curl bind-utils)"
-yum install --assumeyes --tolerant perl tar xz unzip curl bind-utils net-tools
+echo ">>> Installing net-tools (for debugging)"
+yum install --assumeyes --tolerant net-tools
 
 echo ">>> Caching docker image: jplock/zookeeper"
 docker pull jplock/zookeeper
