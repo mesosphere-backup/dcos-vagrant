@@ -9,3 +9,4 @@ packer_cache
 output-virtualbox-iso
 *.box
 /VagrantConfig.yaml
+.config.yaml.TMP

@@ -4,6 +4,9 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
+echo ">>> Adding group [nogroup]"
+/usr/sbin/groupadd -f nogroup
+
 echo ">>> Installing net-tools (for debugging)"
 yum install --assumeyes --tolerant net-tools
 

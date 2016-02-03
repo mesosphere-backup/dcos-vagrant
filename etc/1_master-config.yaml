@@ -9,7 +9,6 @@ cluster_config:
   master_list: 
   - 192.168.65.90
   resolvers: 
-  - 10.0.2.3
   - 8.8.8.8
 ssh_config: #req in master, optional jira DCOS-4455
   log_directory: /genconf/logs #req in CM.5, optional in master
