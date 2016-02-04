@@ -115,7 +115,7 @@ Vagrant.configure(2) do |config|
 
       end
 
-      vm_cfg.vm.provision "clean host file", type: "shell", inline: %q(sed -i "s/^127\.0\.0\.1.*\.dcos/127.0.0.1/" /etc/hosts)
+      vm_cfg.vm.provision "clean host file", type: "shell", inline: %q(sed -i "s/^127\.0\.0\.1.*localhost/127.0.0.1 localhost/" /etc/hosts)
       vm_cfg.vm.provision "#{cfg['type'].capitalize} Provision", type: "shell", path: provision_path(cfg["type"]), env: PROVISION_ENV
 
     end
