@@ -7,7 +7,9 @@ require "yaml"
 ## BASE OS
 ##############################################
 
-BOX_NAME = "karlkfi/dcos-centos-virtualbox"
+DCOS_BOX = ENV.fetch("DCOS_BOX", "mesosphere/dcos-centos-virtualbox")
+DCOS_BOX_URL = ENV.fetch("DCOS_BOX_URL", "https://s3-us-west-1.amazonaws.com/dcos-vagrant/metadata.json")
+DCOS_BOX_VERSION = ENV.fetch("DCOS_BOX_VERSION", nil)
 
 
 ## CLUSTER CONFIG
@@ -66,7 +68,11 @@ Vagrant.configure(2) do |config|
     config.vm.define name do |vm_cfg|
       vm_cfg.vm.hostname = "#{name}.dcos"
       vm_cfg.vm.network "private_network", ip: cfg["ip"]
-      vm_cfg.vm.box = cfg["box"] || BOX_NAME
+
+      # allow explicit nil values in the cfg to override the defaults
+      vm_cfg.vm.box = cfg.fetch("box", DCOS_BOX)
+      vm_cfg.vm.box_url = cfg.fetch("box-url", DCOS_BOX_URL)
+      vm_cfg.vm.box_version = cfg.fetch("box-version", DCOS_BOX_VERSION)
 
       vm_cfg.vm.provider "virtualbox" do |v|
         v.name = vm_cfg.vm.hostname
@@ -89,7 +95,3 @@ Vagrant.configure(2) do |config|
     end
   end
 end
-
-################# END ######################
-
-__END__
