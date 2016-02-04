@@ -141,7 +141,7 @@ Vagrant.configure(2) do |config|
       end
 
       vm_cfg.vm.provision "shell", name: "Certificate Authorities", path: provision_path("ca-certificates")
-      vm_cfg.vm.provision "clean host file", type: "shell", inline: %q(sed -i "s/^127\.0\.0\.1.*\.dcos/127.0.0.1/" /etc/hosts)
+      vm_cfg.vm.provision "clean host file", type: "shell", inline: %q(sed -i "s/^127\.0\.0\.1.*localhost/127.0.0.1 localhost/" /etc/hosts)
       if cfg["type"]
         vm_cfg.vm.provision "shell", name: "DCOS #{cfg['type'].capitalize}", path: provision_path(cfg["type"]), env: PROVISION_ENV
       end
