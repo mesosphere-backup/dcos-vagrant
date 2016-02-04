@@ -5,4 +5,4 @@ set -o nounset
 set -o pipefail
 
 echo ">>> Installing DCOS slave"
-curl -s http://boot.dcos/dcos_install.sh | bash -s -- slave
+curl --fail --location --silent --show-error --verbose http://boot.dcos/dcos_install.sh | bash -s -- slave
