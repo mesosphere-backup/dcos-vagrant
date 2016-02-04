@@ -3,6 +3,8 @@ DCOS Vagrant
 
 Quickly provision a DCOS cluster on a local machine for development, testing, or demonstration.
 
+Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using the [dcos-vagrant-box](https://github.com/mesosphere/dcos-vagrant-box) base image and then installing [DCOS](https://mesosphere.com/learn/).
+
 
 # Table of Contents
 
@@ -12,10 +14,14 @@ Quickly provision a DCOS cluster on a local machine for development, testing, or
 - [Setup](#setup)
 - [Deploy](#deploy)
 - [Appendix: Architecture](#appendix-architecture)
-- [Appendix: Build OS Image](#appendix-build-os-image)
 - [Appendix: Repo Structure](#appendix-repo-structure)
 - [Appendix: Troubleshooting](#appendix-troubleshooting)
 - [License and Author](#license-and-author)
+
+**Other Docs:**
+
+- [Base OS Image](./build)
+- [Examples](./examples)
 
 
 # Audience
@@ -47,14 +53,15 @@ Quickly provision a DCOS cluster on a local machine for development, testing, or
 - [Vagrant](https://www.vagrantup.com/) (>= 1.8.1)
 - [VirtualBox](https://www.virtualbox.org/) (>= 4.3)
 - [Git](https://git-scm.com/)
-- (Optional) [Packer](https://www.packer.io/) - tool for OS image building
 - (Optional) [jq](https://stedolan.github.io/jq/) - json parser used by examples
+
 
 ## Tested On
 
 - MacBook Pro (Retina, 13-inch, Early 2015), 2.7 GHz Intel Core i5, 16GB Memory
-- Deploying single framework(s), cassandra.
-- Deploying applications in the repo - spring.json, stress.json, oinker.json and router.json
+- Deploying [Oinker-Go](https://github.com/mesosphere/oinker-go) on [Kubernetes](https://github.com/mesosphere/kubernetes-mesos), depending on [Cassandra](https://github.com/mesosphere/cassandra-mesos)
+- Deploying example [Marathon](https://mesosphere.github.io/marathon/) applications (e.g spring.json, stress.json, oinker.json and router.json)
+
 
 ## Supported DCOS Versions
 
@@ -216,47 +223,11 @@ For example, see the [Oinker on Kubernetes Example](./examples/kube-oinker/).
 ![Vagrant Diagram](https://github.com/mesosphere/dcos-vagrant-demo/blob/master/docs/dcos_vagrant_setup.png?raw=true)
 
 
-# Appendix: Build OS Image
-
-Packer is used to build a pre-provisioned virtual machine disk image. This significantly speeds up cluster deployment.
-
-By default, vagrant will download the (~900MB) box from vagrant-cloud (https://atlas.hashicorp.com/karlkfi/dcos-centos-virtualbox).
-
-Note that because the build process uses internet repositories with unversioned requirements, it's not **exactly** reproducible. Each built box may be slightly different than the last, but deployments using the same box should be exactly the same.
-
-Use the following commands to build a dcos-centos-virtualbox box:
-
-```bash
-cd <repo>/build
-
-packer build packer-template.json
-
-vagrant box add karlkfi/dcos-centos-virtualbox dcos-centos-virtualbox.box
-```
-
-
 # Appendix: Repo Structure
 
 **NOTE: Take note of the files in [.gitignore](./.gitignore) which will not be committed. These are indicated by angle brackets below. Some of them must be provided for deployment to succeed.**
 
 	.
-	├── build
-	│   │
-	│   ├── bin                        # Base setup scripts
-	│   │   ├── cleanup.sh             # Build script to cleanup build artifacts
-	│   │   ├── dcos-deps.sh           # Build script to install DCOS-specific requirements
-	│   │   ├── docker.sh              # Build script to configure, install, enable, and start docker-engine
-	│   │   ├── os.sh                  # Build script to upgrade CentOS
-	│   │   ├── vagrant.sh             # Build script to install Vagrant-specific VM features
-	│   │   ├── virtualbox.sh          # Build script to install VirtualBox-specific VM features
-	│   │   └── zerodisk.sh            # Build script to improve VirtualBox image compression
-	│   │
-	│   ├── http                       # Artifact repo for packer build process (kickstart, etc.)
-	│   │   └── ks.cfg                 # Kickstart definition for base image provisioning
-	│   │
-	│   ├── Dockerfile                 # Docker file for java-spring applications
-	│   └── packer_template.json       # Template for creating base image using packer
-	│
 	├─── docs                          # Misc images or supporting documentation
 	│
 	├─── etc
