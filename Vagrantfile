@@ -56,6 +56,11 @@ Vagrant.configure(2) do |config|
       end
 
       vm_cfg.vm.provision "shell", name: "Hosts Provision", path: provision_path("hosts")
+
+      if ENV.fetch("DCOS_BOOT_NODE_DOCKER_REGISTRY", false)
+        vm_cfg.vm.provision "shell", name: "Hosts Provision", path: provision_path("insecure-registry")
+      end
+
       if cfg["type"]
         vm_cfg.vm.provision "shell", name: "#{cfg['type'].capitalize} Provision", path: provision_path(cfg["type"]), env: PROVISION_ENV
       end
