@@ -114,7 +114,7 @@ Vagrant.configure(2) do |config|
         override.ssh.private_key_path = cfg["ssh_private_key_path"] || ENV.fetch("AWS_PRIV_KEY_PATH", "")
 
         override.hostmanager.ip_resolver = proc do |vm, resolving_vm|
-          hostname = vm.ssh_info[:host]
+          hostname = nil
           vm.communicate.execute( %q(curl -fsSL http://169.254.169.254/latest/meta-data/public-ipv4) ) do |t, ip|
             hostname = ip
           end
