@@ -7,6 +7,7 @@ This exmaple runs [Oinker-Go](https://github.com/mesosphere/oinker-go) on [Kuber
 
 1. Follow the [dcos-vagrant setup](https://github.com/mesosphere/dcos-vagrant#setup) steps to configure your installation.
 1. Use vagrant to deploy a cluster with 4 worker nodes (requires 10GB free memory):
+
     ```
     vagrant up boot m1 w1 w2 w3 w4
     ```
@@ -17,6 +18,7 @@ This exmaple runs [Oinker-Go](https://github.com/mesosphere/oinker-go) on [Kuber
 ## Install Cassandra
 
 1. Configure Cassandra with lower memory usage than default:
+
     ```
     cat >/tmp/cassandra.json <<EOF
     {
@@ -32,6 +34,7 @@ This exmaple runs [Oinker-Go](https://github.com/mesosphere/oinker-go) on [Kuber
     EOF
     ```
 1. Install cassandra:
+
     ```
     dcos package install --options=/tmp/cassandra.json cassandra --yes
     ```
@@ -41,6 +44,7 @@ This exmaple runs [Oinker-Go](https://github.com/mesosphere/oinker-go) on [Kuber
 ## Install etcd
 
 1. Configure etcd with lower memory usage than default:
+
     ```
     cat >/tmp/etcd.json <<EOF
     {
@@ -52,6 +56,7 @@ This exmaple runs [Oinker-Go](https://github.com/mesosphere/oinker-go) on [Kuber
     EOF
     ```
 1. Install etcd:
+
     ```
     dcos package install --options=/tmp/etcd.json etcd --yes
     ```
@@ -61,6 +66,7 @@ This exmaple runs [Oinker-Go](https://github.com/mesosphere/oinker-go) on [Kuber
 ## Install Kubernetes
 
 1. Configure Kubernetes with lower memory usage than default:
+
     ```
     cat >/tmp/kubernetes.json <<EOF
     {
@@ -72,6 +78,7 @@ This exmaple runs [Oinker-Go](https://github.com/mesosphere/oinker-go) on [Kuber
     EOF
     ```
 1. Install Kubernetes:
+
     ```
     dcos package install --options=/tmp/etcd.json etcd --yes
     ```
@@ -81,11 +88,17 @@ This exmaple runs [Oinker-Go](https://github.com/mesosphere/oinker-go) on [Kuber
 ## Install Oinker
 
 1. Create the Oinker replication controller and service:
+
     ```
     dcos kubectl create -f oinker.yaml
     ```
-1. Wait for Kubernetes to deploy 3 pod instances. Check with `dcos kubectl get pod -l=app=oinker`.
+1. Wait for Kubernetes to deploy 3 pod instances. 
+
+    ```
+    dcos kubectl get pod -l=app=oinker
+    ```
 1. Find the oinker endpoint:
+
     ```
     dcos kubectl get endpoints -l=app=oinker
     ```
