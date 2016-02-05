@@ -83,14 +83,25 @@ Vagrant.configure(2) do |config|
 
       if cfg["forwards"]
         cfg["forwards"].each do |from,to|
-          vm_config.vm.forward_port from, to
+          vm_cfg.vm.forward_port from, to
         end
       end
+
+      vm_cfg.ssh.forward_agent = true
 
       vm_cfg.vm.provision "shell", name: "Hosts", path: provision_path("hosts")
       vm_cfg.vm.provision "shell", name: "Certificate Authorities", path: provision_path("ca-certificates")
       if cfg["type"]
         vm_cfg.vm.provision "shell", name: "DCOS #{cfg['type'].capitalize}", path: provision_path(cfg["type"]), env: PROVISION_ENV
+
+        vm_cfg.vm.provision "shell", name: "SSH Provision", path: provision_path("ssh"), env: PROVISION_ENV
+
+        vm_cfg.vm.provision "shell", name: "Erlang Provision", path: provision_path("erlang"), env: PROVISION_ENV
+
+        if ["master", "worker-private"].member?(cfg["type"])
+          vm_cfg.vm.provision "shell",
+            name: "Minuteman Provision", path: provision_path("minuteman"), env: PROVISION_ENV
+        end
       end
     end
   end
