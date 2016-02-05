@@ -165,7 +165,7 @@ module VagrantPlugins
         cluster_cfg["cluster_config"]["master_list"] = []
         active_machines.each do |name, provider|
           if $vagrant_cfg[name.to_s]["type"] == 'master'
-            ip = Resolv.getaddress(machine.name.to_s)
+            ip = Resolv.getaddress(name.to_s)
               cluster_cfg["cluster_config"]["master_list"].push(ip)
           end
         end
@@ -188,7 +188,6 @@ module VagrantPlugins
           if $vagrant_cfg[name.to_s]["type"] == 'boot'
             machine = env.machine(name, provider)
             machine.communicate.execute( %q(curl -fsSL http://169.254.169.254/latest/meta-data/local-ipv4) ) do |t, ip|
-#              cluster_cfg["cluster_config"]["bootstrap_url"] = "http://#{ip}"
               cluster_cfg["cluster_config"]["exhibitor_zk_hosts"] = "#{ip}:2181"
             end
           end
