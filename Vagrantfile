@@ -20,11 +20,17 @@ def vagrant_path(path)
   return path
 end
 
+DCOS_VM_CONFIG_PATH = ENV.fetch("DCOS_VM_CONFIG_PATH", "VagrantConfig.yaml")
+DCOS_IP_DETECT_PATH = ENV.fetch("IP_DETECT_PATH", "etc/ip-detect")
+DCOS_CONFIG_PATH = ENV.fetch("DCOS_CONFIG_PATH", "etc/1_master-config.json")
+DCOS_GENERATE_CONFIG_PATH = ENV.fetch("DCOS_GENERATE_CONFIG_PATH", "dcos_generate_config.sh")
+DCOS_JAVA_ENABLED = ENV.fetch("DCOS_JAVA_ENABLED", "false")
+
 PROVISION_ENV = {
-  "DCOS_IP_DETECT_PATH" => vagrant_path(ENV.fetch("IP_DETECT_PATH", "etc/ip-detect")),
-  "DCOS_CONFIG_PATH" => vagrant_path(ENV.fetch("DCOS_CONFIG_PATH", "etc/1_master-config.json")),
-  "DCOS_GENERATE_CONFIG_PATH" => vagrant_path(ENV.fetch("DCOS_GENERATE_CONFIG_PATH", "dcos_generate_config.sh")),
-  "DCOS_JAVA_ENABLED" => ENV.fetch("DCOS_JAVA_ENABLED", "false"),
+  "DCOS_IP_DETECT_PATH" => vagrant_path(DCOS_IP_DETECT_PATH),
+  "DCOS_CONFIG_PATH" => vagrant_path(DCOS_CONFIG_PATH),
+  "DCOS_GENERATE_CONFIG_PATH" => vagrant_path(DCOS_GENERATE_CONFIG_PATH),
+  "DCOS_JAVA_ENABLED" => DCOS_JAVA_ENABLED,
 }
 
 def provision_path(type)
@@ -32,11 +38,31 @@ def provision_path(type)
 end
 
 
+#### Validation
+##############################################
+
+if !File.file?(DCOS_VM_CONFIG_PATH)
+  raise "vm config not found: #{DCOS_VM_CONFIG_PATH}"
+end
+
+if !File.file?(DCOS_GENERATE_CONFIG_PATH)
+  raise "dcos installer not found: #{DCOS_GENERATE_CONFIG_PATH}"
+end
+
+if !File.file?(DCOS_CONFIG_PATH)
+  raise "dcos config not found: #{DCOS_CONFIG_PATH}"
+end
+
+if !File.file?(DCOS_IP_DETECT_PATH)
+  raise "ip-detect not found: #{DCOS_IP_DETECT_PATH}"
+end
+
+
 #### Setup & Provisioning
 ##############################################
 
 Vagrant.configure(2) do |config|
-  YAML::load_file("./VagrantConfig.yaml").each do |name,cfg|
+  YAML::load_file(DCOS_VM_CONFIG_PATH).each do |name,cfg|
     config.vm.define name do |vm_cfg|
       vm_cfg.vm.hostname = "#{name}.dcos"
       vm_cfg.vm.network "private_network", ip: cfg["ip"]
