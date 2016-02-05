@@ -1,0 +1,63 @@
+kind: List
+metadata: {}
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    name: oinker-go
+    labels:
+      app: oinker
+  spec:
+    replicas: 1
+    selector:
+      app: oinker
+    template:
+      metadata:
+        labels:
+          app: oinker
+      spec:
+        containers:
+        - name: server
+          image: mesosphere/oinker-go:latest
+          imagePullPolicy: Always
+          command:
+          - "oinker"
+          - "--cassandra-addr=cassandra-dcos-node.cassandra.dcos.mesos"
+          - "--cassandra-repl=3"
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http
+            initialDelaySeconds: 15
+            timeoutSeconds: 1
+          livenessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 15
+            timeoutSeconds: 1
+          ports:
+          - name: http
+            containerPort: 8080
+            hostPort: 8888
+          resources:
+            limits:
+              cpu: 0.1
+              memory: 32Mi 
+          env:
+          - name: OINKER_INSTANCE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: oinker
+    labels:
+      app: oinker
+  spec:
+    selector:
+      app: oinker
+    ports:
+    - port: 80
+      targetPort: http

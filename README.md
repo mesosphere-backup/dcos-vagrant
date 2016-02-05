@@ -141,7 +141,7 @@ Quickly provision a DCOS cluster on a local machine for development, testing, or
 
 The following steps will walk through DCOS and DCOS Apps/Service.
 
-## Deploy DCOS
+## Deploy VMs and Install DCOS
 
 DCOS can be deployed with 1, 3, or 5 master nodes and any number of public and/or private worker nodes, depending on the DCOS installer configuration. See [Configure the DCOS Installer](#configure-the-dcos-installer) for more details.
 
@@ -173,7 +173,7 @@ vagrant up boot m1 m2 m3 w1 w2 w3 w4 lb
 vagrant up boot m1 m2 m3 m4 m5 w1 w2 w3 w4 w5 w6 lb
 ```
 
-## Deploy DCOS Services
+## Install DCOS Services
 
 Once DCOS is installed, services can be installed using the DCOS CLI as a package manager. In order to install the DCOS CLI itself, follow the instructions in the popup when first visiting the DCOS dashboard (http://m1.dcos/). For more information, see the [DCOS CLI Docs](https://docs.mesosphere.com/administration/introcli/).
 
@@ -183,11 +183,18 @@ For example, the following installs cassandra (which requires at least 3 private
 dcos package install cassandra
 ```
 
-## Deploy Marathon Apps
+## Install Marathon Apps
 
 Marathon apps can be installed by using the [dcos cli marathon plugin](https://docs.mesosphere.com/administration/introcli/command-reference/#scrollNav-2).
 
 For example, see the [Java-Spring Example App](./examples/java-spring/).
+
+
+## Install Kubernetes Apps
+
+Kubernetes apps can be installed by using the [dcos cli kubectl plugin](https://github.com/mesosphere/dcos-kubectl).
+
+For example, see the [Oinker on Kubernetes Example](./examples/kube-oinker/).
 
 
 # Appendix: Architecture
