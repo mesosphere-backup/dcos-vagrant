@@ -101,7 +101,7 @@ Vagrant.configure(2) do |config|
         override.vm.box = cfg["aws_box"]
 
         aws.ami = cfg["aws_ami"]
-        aws.security_groups = cfg["aws_security_group"] || %q( default )
+        aws.security_groups = cfg["aws_security_group"] || %w( default )
         aws.region = cfg["aws_region"]
         if cfg["aws_az"]
           aws.availability_zone = cfg["aws_az"]
