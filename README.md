@@ -138,11 +138,8 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
     cd <repo>
     cp VagrantConfig.yaml.example VagrantConfig.yaml
     ```
-
-    Update `VagrantConfig.yaml` to match your requirements (e.g. cpus, memory). Some frameworks (e.g. cassandra) may require more nodes/resources than others.
-
-    **IMPORTANT**: Make sure your local machine has enough memory to launch all your desired VMs, otherwise your machine may lock up as all the memory is consumed.
-
+    
+    Update `VagrantConfig.yaml` to match your requirements (e.g. cpus, memory). Some frameworks (e.g. cassandra) may require more nodes/resources than others. This file just defines the machines available - you don't have to launch all these at once, so the example file is a good start.
 
 # Deploy
 
@@ -153,6 +150,8 @@ The following steps will walk through DCOS and DCOS Apps/Service.
 DCOS can be deployed with 1, 3, or 5 master nodes and any number of public and/or private worker nodes, depending on the DCOS installer configuration. See [Configure the DCOS Installer](#configure-the-dcos-installer) for more details.
 
 In order to deploy DCOS, a bootstrap node is also required to facilitate installation configuration, install file distribution, and zookeeper bootstrapping.
+
+**IMPORTANT**: Make sure your local machine has enough memory to launch all your desired VMs, otherwise your machine may lock up as all the memory is consumed.
 
 ### Minimal Cluster
 
