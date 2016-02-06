@@ -8,7 +8,7 @@ require "yaml"
 ##############################################
 
 DCOS_BOX = ENV.fetch("DCOS_BOX", "mesosphere/dcos-centos-virtualbox")
-DCOS_BOX_URL = ENV.fetch("DCOS_BOX_URL", "https://s3-us-west-1.amazonaws.com/dcos-vagrant/metadata.json")
+DCOS_BOX_URL = ENV.fetch("DCOS_BOX_URL", "https://downloads.mesosphere.com/dcos-vagrant/metadata.json")
 DCOS_BOX_VERSION = ENV.fetch("DCOS_BOX_VERSION", nil)
 
 
