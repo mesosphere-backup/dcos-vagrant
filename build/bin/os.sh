@@ -22,4 +22,3 @@ sysctl -w net.ipv6.conf.default.disable_ipv6=1
 
 echo ">>> Rebooting to upgrade kernel"
 shutdown -r now && sleep 5
-

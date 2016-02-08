@@ -24,7 +24,6 @@
             "bin/os.sh",
             "bin/docker.sh",
             "bin/dcos-deps.sh",
-            "bin/vagrant.sh",
             "bin/cleanup.sh"
           ]
         }
@@ -69,18 +68,10 @@
       "secret_key": "{{user `AWS_SECRET_ACCESS_KEY`}}",
       "region": "us-west-2",
       "source_ami": "ami-d440a6e7",
-      "instance_type": "t2.small",
-      "security_group_id": "sg-27423242",
+      "instance_type": "m3.large",
       "ssh_username": "centos",
-      "ami_name": "dcos-centos {{timestamp}}",
-      "ami_block_device_mappings": [{
-        "device_name": "/dev/sda1",
-        "delete_on_termination": true
-      }],
-      "launch_block_device_mappings": [{
-        "device_name": "/dev/sda1",
-        "delete_on_termination": true
-      }]
+      "ssh_pty": "true",
+      "ami_name": "dcos-centos {{timestamp}}"
     }
   ]
 }
