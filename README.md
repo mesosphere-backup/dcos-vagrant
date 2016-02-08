@@ -271,11 +271,11 @@ Common errors when bringing up the cluster, and their solutions.
 
 - **Problem:** `The following settings shouldn't exist: env`
 
-    **Solution**: [Upgrade Vagrant](https://www.vagrantup.com/downloads.html) to >= 1.8.1
+    **Solution**: [Upgrade Vagrant](https://www.vagrantup.com/downloads.html) to >= 1.8.1 (Ubuntu's package manager repos are out of date, install manually).
 
 - **Problem:** `Specified config file '/genconf/config.yaml' does not exist`
 
-    **Solution**: DCOS 1.5 needs a different config path. Add the following to the host machine's environment before running vagrant:
+    **Solution**: DCOS >= 1.5 requires a yaml config file, not json (used by prior versions of DCOS). Make sure the `DCOS_CONFIG_PATH` environment variable points to a file with the correct format for your DCOS version before running vagrant:
 
     ```
     export DCOS_CONFIG_PATH=etc/1_master-config.yaml
