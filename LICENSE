@@ -1,7 +1,7 @@
 This file is © 2016 Mesosphere, Inc. (“Mesosphere”). Mesosphere
-licenses this file to you solely pursuant to the following terms
-(and you may not use this file except in compliance with such
-terms):
+licenses the contents of this repository (“file”) to you solely
+pursuant to the following terms (and you may not use this file
+except in compliance with such terms):
 
 1) Subject to your compliance with the following terms, Mesosphere
 hereby grants you a nonexclusive, limited, personal,
@@ -37,3 +37,7 @@ damages for loss of goodwill, work stoppage, computer failure or
 malfunction, or any and all other commercial damages or losses),
 even if Mesosphere has been advised of the possibility of such
 damages.
+
+5) This file, its existence, and its contents are “Proprietary
+Information” or “Confidential Information” under the terms of the
+nondisclosure agreement between you and Mesosphere.
