@@ -14,6 +14,7 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
 - [Setup](#setup)
 - [Deploy](#deploy)
 - [Appendix: Architecture](#appendix-architecture)
+- [Appendix: Installation](#appendix-installation)
 - [Appendix: Repo Structure](#appendix-repo-structure)
 - [Appendix: Troubleshooting](#appendix-troubleshooting)
 - [License and Author](#license-and-author)
@@ -61,7 +62,6 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
 - MacBook Pro (Retina, 13-inch, Early 2015), 2.7 GHz Intel Core i5, 16GB Memory
 - Deploying [Oinker-Go](https://github.com/mesosphere/oinker-go) on [Kubernetes](https://github.com/mesosphere/kubernetes-mesos), depending on [Cassandra](https://github.com/mesosphere/cassandra-mesos)
 - Deploying example [Marathon](https://mesosphere.github.io/marathon/) applications (e.g spring.json, stress.json, oinker.json and router.json)
-
 
 ## Supported DCOS Versions
 
@@ -141,6 +141,7 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
     
     Update `VagrantConfig.yaml` to match your requirements (e.g. cpus, memory). Some frameworks (e.g. cassandra) may require more nodes/resources than others. This file just defines the machines available - you don't have to launch all these at once, so the example file is a good start.
 
+
 # Deploy
 
 The following steps will walk through DCOS and DCOS Apps/Service.
@@ -152,6 +153,8 @@ DCOS can be deployed with 1, 3, or 5 master nodes and any number of public and/o
 In order to deploy DCOS, a bootstrap node is also required to facilitate installation configuration, install file distribution, and zookeeper bootstrapping.
 
 **IMPORTANT**: Make sure your local machine has enough memory to launch all your desired VMs, otherwise your machine may lock up as all the memory is consumed.
+
+For more details about how DCOS is installed and how to debug deployment/installation failure, see [Appendix: Installation](#appendix-installation).
 
 ### Minimal Cluster
 
@@ -195,7 +198,6 @@ Marathon apps can be installed by using the [dcos cli marathon plugin](https://d
 
 For example, see the [Java-Spring Example App](./examples/java-spring/).
 
-
 ## Install Kubernetes Apps
 
 Kubernetes apps can be installed by using the [dcos cli kubectl plugin](https://github.com/mesosphere/dcos-kubectl).
@@ -220,6 +222,29 @@ For example, see the [Oinker on Kubernetes Example](./examples/kube-oinker/).
 ## Architecture Diagram
 
 ![Vagrant Diagram](https://github.com/mesosphere/dcos-vagrant-demo/blob/master/docs/dcos_vagrant_setup.png?raw=true)
+
+
+# Appendix: Installation
+
+The DCOS installation is multi-stage with many moving parts. 
+
+## High Level Stages
+
+1. Boot node unpacks `dcos_generate_config.sh`, creates `dcos_install.sh`, starts an nginx on `boot.dcos` to distribute the installer, and a bootstrap zookeeper required by Exibitor
+1. Master nodes are provisioned using `dcos_install.sh master`
+    1. Exibitor starts, brings up Zookeeper
+    1. Mesos Master starts up and registers with Zookeeper
+    1. Mesos DNS detects Mesos Master using Zookeeper and initializes `leader.mesos` 
+    1. Root Marathon detects `leader.mesos` and comes up
+    1. AdminRouter (nginx) starts routing subpaths of `leader.mesos` to various components
+1. Agent nodes are provisioned using `dcos_install.sh slave` or `dcos_install.sh slave_public`
+    1. Mesos Slave finds the leading Mesos Master using Zookeeper and Mesos DNS
+
+## System Logs
+
+Ideally deployment and installation failures will be visible in the vagrant output, but sometimes failures occur in the background. This is especially true for systemd components that come up concurrently and wait for dependencies to come up.
+
+To interrogate the system, it's possible to ssh into the machines using `vagrant ssh <machine>` and view the logs of all system components with `joutnalctl -f`. 
 
 
 # Appendix: Repo Structure
