@@ -1,6 +1,6 @@
 {
     "id": "/oinker",
-    "instances": 1,
+    "instances": 3,
     "labels": {
         "HAPROXY_GROUP": "external",
         "HAPROXY_0_VHOST": "oinker.acme.org"

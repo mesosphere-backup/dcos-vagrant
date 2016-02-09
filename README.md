@@ -196,7 +196,7 @@ dcos package install cassandra
 
 Marathon apps can be installed by using the [dcos cli marathon plugin](https://docs.mesosphere.com/administration/introcli/command-reference/#scrollNav-2).
 
-For example, see the [Java-Spring Example App](./examples/java-spring/).
+For example, see [Oinker on Marathon](./examples/oinker/) or the [Java-Spring Example App](./examples/java-spring/).
 
 ## Install Kubernetes Apps
 
@@ -263,12 +263,9 @@ To interrogate the system, it's possible to ssh into the machines using `vagrant
 	│
 	├─── examples                      # Example app/service definitions
 	│   ├── java-spring                # Example java-spring Marathon application
-	│   │   ├── Dockerfile                 # Docker file for java-spring applications
-	│   │   ├── java-spring.json           # Marathon descriptor for standalone java spring application
-	│   │   ├── java-spring-docker.json    # Marathon descriptor for docker based java spring application
-	│   │   ├── README.md                  # Walk-through about how to deploy the java-spring app
+	│   ├── kube-oinker                # Example twitter clone on Kubernetes
+	│   ├── oinker                     # Example twitter clone on Marathon
 	│   ├── jenkins.json               # Marathon descriptor for standalone jenkins, not currently functioning
-	│   ├── oinker.json                # Marathon descriptor for functioning twitter clone, use with cassandra
 	│   └── stress.json                # Marathon descriptor for standalone commandline which uses CPU
 	│
 	├── provision
