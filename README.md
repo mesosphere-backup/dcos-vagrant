@@ -259,7 +259,7 @@ To interrogate the system, it's possible to ssh into the machines using `vagrant
 	│   ├── 1_master-config.yaml       # DCOS config for 1 master (CM.5)
 	│   ├── 3_master-config.json       # DCOS config for 3 masters (CM.4)
 	│   ├── hosts.file                 # Resolve instance hosts to IPs
-	│   └── ip-detect                  # Script for pulling appropriate ip. Be sure to confirm interface (enp0s8)
+	│   └── ip-detect.sh               # Script for pulling appropriate ip. Be sure to confirm interface (enp0s8)
 	│
 	├─── examples                      # Example app/service definitions
 	│   ├── java-spring                # Example java-spring Marathon application
