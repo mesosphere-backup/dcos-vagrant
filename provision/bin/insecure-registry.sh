@@ -4,6 +4,6 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-echo ">>> Adding boot.dcos:5000 as an insecure docker registry."
+echo ">>> Registering private docker registry: boot.dcos:5000"
 sed -i -e "s/OPTIONS='/OPTIONS='--insecure-registry boot.dcos:5000 /" /etc/sysconfig/docker
 systemctl restart docker
