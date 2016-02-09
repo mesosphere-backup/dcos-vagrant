@@ -3,11 +3,6 @@ boot:
   cpus: 2
   memory: 256
   type: boot
-lb:
-  ip: 192.168.65.60
-  cpus: 2
-  memory: 1024
-  type: worker-public
 m1:
   ip: 192.168.65.90
   cpus: 2
@@ -23,33 +18,48 @@ m3:
   cpus: 2
   memory: 1024
   type: master
-w1:
+a1:
   ip: 192.168.65.111
   cpus: 4
   memory: 3328
-  type: worker-private
-w2:
+  type: agent-private
+a2:
   ip: 192.168.65.121
   cpus: 4
   memory: 1536
-  type: worker-private
-w3:
+  type: agent-private
+a3:
   ip: 192.168.65.131
   cpus: 4
   memory: 1536
-  type: worker-private
-w4:
+  type: agent-private
+a4:
   ip: 192.168.65.141
   cpus: 4
   memory: 1536
-  type: worker-private
-w5:
+  type: agent-private
+a5:
   ip: 192.168.65.151
   cpus: 4
   memory: 1536
-  type: worker-private
-w6:
+  type: agent-private
+a6:
   ip: 192.168.65.161
   cpus: 4
   memory: 1536
-  type: worker-private
+  type: agent-private
+p1:
+  ip: 192.168.65.60
+  cpus: 2
+  memory: 1024
+  type: agent-public
+p2:
+  ip: 192.168.65.70
+  cpus: 2
+  memory: 1024
+  type: agent-public
+p3:
+  ip: 192.168.65.80
+  cpus: 2
+  memory: 1024
+  type: agent-public

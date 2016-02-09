@@ -148,7 +148,7 @@ The following steps will walk through DCOS and DCOS Apps/Service.
 
 ## Deploy VMs and Install DCOS
 
-DCOS can be deployed with 1, 3, or 5 master nodes and any number of public and/or private worker nodes, depending on the DCOS installer configuration. See [Configure the DCOS Installer](#configure-the-dcos-installer) for more details.
+DCOS can be deployed with 1, 3, or 5 master nodes and any number of public and/or private agent nodes, depending on the DCOS installer configuration. See [Configure the DCOS Installer](#configure-the-dcos-installer) for more details.
 
 In order to deploy DCOS, a bootstrap node is also required to facilitate installation configuration, install file distribution, and zookeeper bootstrapping.
 
@@ -161,32 +161,32 @@ For more details about how DCOS is installed and how to debug deployment/install
 This is a minimal configuration and will not support robust demos or deployments. Sample applications should work but not most frameworks.
 
 ```bash
-vagrant up boot m1 w1
+vagrant up boot m1 a1
 ```
 
 ### Small Cluster
 
 ```bash
-vagrant up boot m1 w1 w2 lb
+vagrant up boot m1 a1 a2 p1
 ```
 
 ### Medium Cluster
 
 ```bash
-vagrant up boot m1 m2 m3 w1 w2 w3 w4 lb
+vagrant up boot m1 m2 m3 a1 a2 a3 a4 p1
 ```
 
 ### Large Cluster
 
 ```bash
-vagrant up boot m1 m2 m3 m4 m5 w1 w2 w3 w4 w5 w6 lb
+vagrant up boot m1 m2 m3 m4 m5 a1 a2 a3 a4 a5 a6 p1
 ```
 
 ## Install DCOS Services
 
 Once DCOS is installed, services can be installed using the DCOS CLI as a package manager. In order to install the DCOS CLI itself, follow the instructions in the popup when first visiting the DCOS dashboard (http://m1.dcos/). For more information, see the [DCOS CLI Docs](https://docs.mesosphere.com/administration/introcli/).
 
-For example, the following installs cassandra (which requires at least 3 private worker nodes):
+For example, the following installs cassandra (which requires at least 3 private agent nodes):
 
 ```bash
 dcos package install cassandra
@@ -277,8 +277,8 @@ To interrogate the system, it's possible to ssh into the machines using `vagrant
 	│   │   ├── boot.sh                # Provision script for "boot" type machines
 	│   │   ├── hosts.sh               # Base provision script to synchronize /etc/hosts
 	│   │   ├── master.sh              # Provision script for "master" type machines
-	│   │   ├── worker-private.sh      # Provision script for "worker-private" type machines
-	│   │   └── worker-public.sh       # Provision script for "worker-public" type machines
+	│   │   ├── agent-private.sh       # Provision script for "agent-private" type machines
+	│   │   └── agent-public.sh        # Provision script for "agent-public" type machines
 	│   │
 	│   ├── gs-spring-boot-0.1.0.jar   # (Optional) standalone java application (requires jre 8.1)
 	│   └── <jre-8u66-linux-x64.tgz>   # (Optional) Java Runtime Environment (Download from Oracle)
@@ -286,8 +286,8 @@ To interrogate the system, it's possible to ssh into the machines using `vagrant
 	├── <dcos_generate_config.sh>      # (Required) DCOS installer from Mesosphere
 	├── README.md
 	├── <VagrantConfig.yaml>           # (Required) Machine resource definitions
-	├── VagrantConfig.yaml.example     # Used to define vagrant instances. Copy to VagrantConfig.yaml
-	└── VagrantFile                    # Used to deploy various nodes (boot, masters and workers)
+	├── VagrantConfig.yaml.example     # Used to define node types. Copy to VagrantConfig.yaml
+	└── VagrantFile                    # Used to deploy nodes and install DCOS
 
 
 # Appendix: Troubleshooting

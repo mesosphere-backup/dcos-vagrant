@@ -29,7 +29,7 @@ curl http://${APP_ADDRESS}
 
 **Scale**
 
-Since the app is configured to be unique per node, one private worker node is required for each app instance.
+Since the app is configured to be unique per node, one private agent node is required for each app instance.
 
 ```bash
 dcos marathon app update java-spring-docker instances=3
@@ -38,7 +38,7 @@ dcos marathon app update java-spring-docker instances=3
 
 ## Native
 
-Running a native java app requires that the application jar and the Java JRE be installed on the worker nodes. Use `DCOS_JAVA_ENABLED=true` when deploying the worker nodes to install both automatically (requires the JRE to be downloaded to `<repo>/build/jre-*-linux-x64.tgz`).
+Running a native java app requires that the application jar and the Java JRE be installed on the agent nodes. Use `DCOS_JAVA_ENABLED=true` when deploying the agent nodes to install both automatically (requires the JRE to be downloaded to `<repo>/build/jre-*-linux-x64.tgz`).
 
 **Deploy**
 
@@ -56,7 +56,7 @@ curl http://${APP_ADDRESS}
 
 **Scale**
 
-Since the app is configured to be unique per node, one private worker node is required for each app instance.
+Since the app is configured to be unique per node, one private agent node is required for each app instance.
 
 ```bash
 dcos marathon app update java-spring instances=3
@@ -65,7 +65,7 @@ dcos marathon app update java-spring instances=3
 
 ## Load Balancer
 
-On production deployments of DCOS, the private worker nodes are not usually externally accessible. So a load balancer (reverse proxy) is required in order to be able to access apps. One way to do that is with [Marathon-LB](https://github.com/mesosphere/marathon-lb).
+On production deployments of DCOS, the private agent nodes are not usually externally accessible. So a load balancer (reverse proxy) is required in order to be able to access apps. One way to do that is with [Marathon-LB](https://github.com/mesosphere/marathon-lb).
 
 **Add Multiverse Package Repo to DCOS CLI Config**
 
@@ -84,7 +84,7 @@ dcos package install marathon-lb --yes
 
 **Access Java-Spring App**
 
-Hit the load balanced endpoint multiple times to be proxied to different workers.
+Hit the load balanced endpoint multiple times to be proxied to different agent nodes.
 
 
 ```bash
@@ -96,5 +96,5 @@ curl http://spring.acme.org/
 ```bash
 LB_PORT=$(curl -s http://m1.dcos/marathon/v2/apps/java-spring-docker | \
   jq '.app.ports[0]' -r)
-curl http://lb.dcos:${LB_PORT}/
+curl http://p1.dcos:${LB_PORT}/
 ```

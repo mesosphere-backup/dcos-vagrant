@@ -7,14 +7,16 @@
 127.0.0.1	localhost
 ::1             localhost 
 
-192.168.65.50    boot.dcos boot 
-192.168.65.60    lb.dcos lb spring.acme.org oinker.acme.org
-192.168.65.90    m1.dcos m1
-192.168.65.95    m2.dcos m2
-192.168.65.101   m3.dcos m3
-192.168.65.111   w1.dcos w1 
-192.168.65.121   w2.dcos w2 
-192.168.65.131   w3.dcos w3 
-192.168.65.141   w4.dcos w4
-192.168.65.151   w5.dcos w5
-192.168.65.161   w6.dcos w6
+192.168.65.50    boot.dcos
+192.168.65.60    p1.dcos spring.acme.org oinker.acme.org
+192.168.65.70    p2.dcos
+192.168.65.80    p3.dcos
+192.168.65.90    m1.dcos
+192.168.65.95    m2.dcos
+192.168.65.101   m3.dcos
+192.168.65.111   a1.dcos
+192.168.65.121   a2.dcos
+192.168.65.131   a3.dcos
+192.168.65.141   a4.dcos
+192.168.65.151   a5.dcos
+192.168.65.161   a6.dcos
