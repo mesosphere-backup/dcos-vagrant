@@ -89,7 +89,7 @@ Vagrant.configure(2) do |config|
 
       vm_cfg.vm.provision "shell", name: "Hosts", path: provision_path("hosts")
       vm_cfg.vm.provision "shell", name: "Certificate Authorities", path: provision_path("ca-certificates")
-      if ENV.fetch("DCOS_BOOT_NODE_DOCKER_REGISTRY", false)
+      if ENV.fetch("DCOS_PRIVATE_REGISTRY", false)
         vm_cfg.vm.provision "shell", name: "Private Docker Registry", path: provision_path("insecure-registry")
       end
       if cfg["type"]

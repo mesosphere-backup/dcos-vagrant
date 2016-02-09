@@ -28,7 +28,7 @@ bash ./dcos_generate_config.sh
 
 # Provide a local docker registry for testing purposes. Agents will also get
 # the boot node allowed as an insecure registry.
-if [ ! -z "DCOS_BOOT_NODE_DOCKER_REGISTRY" ]; then
+if [ ! -z "DCOS_PRIVATE_REGISTRY" ]; then
   echo ">>> Starting private docker registry"
   docker run -d -p 5000:5000 --restart=always registry:2
 fi
