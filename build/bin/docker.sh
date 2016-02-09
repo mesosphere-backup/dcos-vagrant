@@ -15,7 +15,7 @@ rm -rf /var/lib/docker
 echo ">>> Configuring docker (OverlayFS)"
 echo "STORAGE_DRIVER=overlay" >> /etc/sysconfig/docker-storage-setup
 
-echo ">>> Creating docker group and adding vagrant user to it"
+echo ">>> Creating docker group"
 /usr/sbin/groupadd -f docker
 
 echo ">>> Installing packages (docker)"

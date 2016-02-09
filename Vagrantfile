@@ -71,6 +71,7 @@ Vagrant.configure(2) do |config|
 
   $vagrant_cfg.each do |name, cfg|
     config.vm.box = cfg["box"] || BOX_NAME
+
   
     config.vm.define name, autostart: cfg["autostart"] || false do |vm_cfg|
       vm_cfg.vm.hostname = "#{name}.dcos"
@@ -147,6 +148,7 @@ Vagrant.configure(2) do |config|
       vm_cfg.vm.provision "clean host file", type: "shell", inline: %q(sed -i "s/^127\.0\.0\.1.*localhost/127.0.0.1 localhost/" /etc/hosts)
       if cfg["type"]
         vm_cfg.vm.provision "shell", name: "DCOS #{cfg['type'].capitalize}", path: provision_path(cfg["type"]), env: PROVISION_ENV
+
       end
 
     end
