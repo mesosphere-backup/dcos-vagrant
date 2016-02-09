@@ -20,18 +20,20 @@ def vagrant_path(path)
 end
 
 DCOS_VM_CONFIG_PATH = ENV.fetch("DCOS_VM_CONFIG_PATH", "VagrantConfig.yaml")
-DCOS_IP_DETECT_PATH = ENV.fetch("IP_DETECT_PATH", "etc/ip-detect")
-DCOS_CONFIG_PATH = ENV.fetch("DCOS_CONFIG_PATH", "etc/1_master-config.json")
+DCOS_IP_DETECT_PATH = ENV.fetch("IP_DETECT_PATH", "provision/bin/ip-detect.sh")
+DCOS_IP_DETECT_AWS_PATH = ENV.fetch("IP_DETECT_PATH", "provision/bin/ip-detect-aws.sh")
+DCOS_CONFIG_PATH = ENV.fetch("DCOS_CONFIG_PATH", "etc/1_master-config.yaml")
 DCOS_GENERATE_CONFIG_PATH = ENV.fetch("DCOS_GENERATE_CONFIG_PATH", "dcos_generate_config.sh")
 DCOS_JAVA_ENABLED = ENV.fetch("DCOS_JAVA_ENABLED", "false")
 
+$vagrant_cfg = YAML::load_file("./VagrantConfig.yaml")
 PROVISION_ENV = {
   "DCOS_IP_DETECT_PATH" => vagrant_path(DCOS_IP_DETECT_PATH),
   "DCOS_CONFIG_PATH" => vagrant_path(DCOS_CONFIG_PATH),
   "DCOS_GENERATE_CONFIG_PATH" => vagrant_path(DCOS_GENERATE_CONFIG_PATH),
   "DCOS_JAVA_ENABLED" => DCOS_JAVA_ENABLED,
+  "MASTER_IP" => $vagrant_cfg["m1"]["ip"]
 }
-$vagrant_cfg = YAML::load_file("./VagrantConfig.yaml")
 
 
 def provision_path(type)
@@ -66,9 +68,9 @@ Vagrant.configure(2) do |config|
   config.hostmanager.enabled = true
   config.hostmanager.manage_host = true
   config.hostmanager.ignore_private_ip = false
-  config.vm.box = cfg["box"] || BOX_NAME
 
   $vagrant_cfg.each do |name, cfg|
+    config.vm.box = cfg["box"] || BOX_NAME
   
     config.vm.define name, autostart: cfg["autostart"] || false do |vm_cfg|
       vm_cfg.vm.hostname = "#{name}.dcos"
@@ -77,10 +79,10 @@ Vagrant.configure(2) do |config|
 
       if cfg["type"] == "boot"
         vm_cfg.vm.provision "ip-detect",
-          type: "shell", path: './provision/bin/ip-detect.sh', env: PROVISION_ENV, preserve_order: true
+          type: "shell", path: DCOS_IP_DETECT_PATH, env: PROVISION_ENV, preserve_order: true
 
         vm_cfg.vm.provision "dcos-config",
-          type: "dcos_config", template: './etc/1_master-config.yaml', resolvers: %w( 10.0.2.3 8.8.8.8 ), preserve_order: true
+          type: "dcos_config", template: DCOS_CONFIG_PATH, resolvers: %w( 10.0.2.3 8.8.8.8 ), preserve_order: true
 
         vm_cfg.vm.provision "docker" do |d|
           d.run "jplock/zookeeper", daemonize: true, restart: 'no', args: "-p 2181:2181 -p 2888:2888 -p 3888:3888"
@@ -133,10 +135,10 @@ Vagrant.configure(2) do |config|
         if cfg["type"] == "boot"
 
           override.vm.provision "ip-detect",
-            type: "shell", path: './provision/bin/ip-detect-aws.sh', env: PROVISION_ENV, preserve_order: true
+            type: "shell", path: DCOS_IP_DETECT_AWS_PATH, env: PROVISION_ENV, preserve_order: true
 
           override.vm.provision "dcos-config",
-            type: "dcos_config_aws", template: './etc/1_master-config.yaml', resolvers: %w( 169.254.169.253 ), preserve_order: true
+            type: "dcos_config_aws", template: DCOS_CONFIG_PATH, resolvers: %w( 169.254.169.253 ), preserve_order: true
         end
 
       end
