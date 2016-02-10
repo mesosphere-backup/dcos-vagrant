@@ -5,7 +5,7 @@ set -o nounset
 set -o pipefail
 
 echo ">>> Installing required packages..."
-sudo yum install --assumeyes --tolerant git
+yum install --assumeyes --tolerant git
 
 echo ">>> Configuring ssh..."
 # Taken from https://github.com/mitchellh/vagrant/issues/1735.
