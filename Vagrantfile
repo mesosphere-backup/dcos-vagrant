@@ -109,10 +109,14 @@ Vagrant.configure(2) do |config|
         if cfg["aws_az"]
           aws.availability_zone = cfg["aws_az"]
         end
+        if cfg["aws_subnet_id"]
+          aws.subnet_id = cfg["aws_subnet_id"]
+        end
         aws.instance_type = cfg["aws_instance_type"]
         aws.access_key_id = cfg["aws_access_key_id"] || ENV.fetch("AWS_ACCESS_KEY_ID", "")
         aws.secret_access_key = cfg["aws_access_key"] || ENV.fetch("AWS_SECRET_ACCESS_KEY", "")
         aws.keypair_name = cfg["aws_access_key"] || ENV.fetch("AWS_KEY_PAIR_NAME", "")
+        aws.tags = { "name" => "dcos" }
 
         override.ssh.username = "centos" || cfg["ssh_username"]
         override.ssh.private_key_path = cfg["ssh_private_key_path"] || ENV.fetch("AWS_PRIV_KEY_PATH", "")

@@ -68,13 +68,18 @@
       "access_key": "{{user `AWS_ACCESS_KEY_ID`}}",
       "secret_key": "{{user `AWS_SECRET_ACCESS_KEY`}}",
       "region": "us-west-2",
-      "source_ami": "ami-d440a6e7",
+      "source_ami": "ami-77e00617",
       "instance_type": "t2.small",
       "security_group_id": "sg-27423242",
-      "ssh_username": "centos",
+      "ssh_username": "vagrant",
+      "ssh_keypair_name": "aws-key",
+      "ssh_private_key_file": "/Users/stathy/.ssh/st-demo.pem",
       "ami_name": "dcos-centos {{timestamp}}",
       "ami_block_device_mappings": [{
+        "snapshot_id": "snap-9e1055c0",
+        "volume_size": 10,
         "device_name": "/dev/sda1",
+        "no_device": true,
         "delete_on_termination": true
       }],
       "launch_block_device_mappings": [{
