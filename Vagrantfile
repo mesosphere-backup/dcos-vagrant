@@ -90,7 +90,7 @@ Vagrant.configure(2) do |config|
       vm_cfg.vm.provision "shell", name: "Hosts", path: provision_path("hosts")
       vm_cfg.vm.provision "shell", name: "Certificate Authorities", path: provision_path("ca-certificates")
       if cfg["type"]
-        vm_cfg.vm.provision "shell", name: "DCOS #{cfg['type'].capitalize}", path: provision_path(cfg["type"]), env: PROVISION_ENV
+        vm_cfg.vm.provision "shell", name: "DCOS #{cfg['type'].capitalize}", path: provision_path("type-#{cfg["type"]}"), env: PROVISION_ENV
       end
     end
   end
