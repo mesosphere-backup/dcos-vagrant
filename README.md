@@ -107,7 +107,9 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
 
 1. Download the DCOS Installer
 
-    Download dcos_generate_config.sh to the root of the repo (the repo will be mounted into the vagrant machines as `/vagrant`).
+    Download `dcos_generate_config.sh` to the root of the repo (the repo will be mounted into the vagrant machines as `/vagrant`).
+
+    If you have multiple `dcos_generate_config.sh` files downloaded you can name them differently and specify which to use with `DCOS_GENERATE_CONFIG_PATH` (e.g. `export DCOS_GENERATE_CONFIG_PATH=dcos_generate_config-1.5-EA.sh`).
 
     **Important**: Contact your sales representative or <sales@mesosphere.com> to obtain the DCOS setup file.
 
@@ -117,18 +119,18 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
 
    DCOS versions <= 1.4 require a json config. DCOS versions >= 1.5 require a yaml config.
 
-   **If you're using DCOS 1.5 or higher, or want a multiple-master cluster, the `DCOS_CONFIG` environment variable must be set.**
+   **If you're using DCOS 1.5 or higher, or want a multiple-master cluster, the `DCOS_CONFIG_PATH` environment variable must be set.**
 
    Included config files (select one):
 
-   - DCOS 1.4 1-master: `export DCOS_CONFIG=etc/1_master-config.json` (default)
-   - DCOS 1.4 3-master: `export DCOS_CONFIG=etc/3_master-config.json`
-   - DCOS 1.5 1-master: `export DCOS_CONFIG=etc/1_master-config.yaml`
+   - DCOS 1.4 1-master: `export DCOS_CONFIG_PATH=etc/1_master-config.json` (default)
+   - DCOS 1.4 3-master: `export DCOS_CONFIG_PATH=etc/3_master-config.json`
+   - DCOS 1.5 1-master: `export DCOS_CONFIG_PATH=etc/1_master-config.yaml`
 
    The path to the config file is relative to the repo dir, because the repo dir will be mounted as `/vagrant` within each VM.
    Other configurations can be added to the `<repo>/etc/` dir and configured in a similar manner.
 
-   Alternatively, a URL to an online config can be specified (e.g. `export DCOS_CONFIG=http://example.com/5_master-config.json`).
+   Alternatively, a URL to an online config can be specified (e.g. `export DCOS_CONFIG_PATH=http://example.com/5_master-config.json`).
 
 1. Configure the DCOS Machine Types
 
