@@ -13,7 +13,7 @@ yum install --assumeyes --tolerant ipset
 
 echo ">>> Cloning minuteman"
 cd /tmp
-git clone git@github.com:mesosphere/minuteman.git -b rebar3
+git clone git@github.com:mesosphere/minuteman.git
 
 echo ">>> Compiling and building release of minuteman"
 cd /tmp/minuteman
