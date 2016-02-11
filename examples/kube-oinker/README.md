@@ -1,6 +1,6 @@
 # Oinker on Kubernetes on DCOS
 
-This exmaple runs [Oinker-Go](https://github.com/mesosphere/oinker-go) on [Kubernete-Mesos](https://github.com/mesosphere/kubernetes-mesos) on [DCOS-Vagrant](https://github.com/mesosphere/dcos-vagrant) with [Cassandra-Mesos](https://github.com/mesosphere/cassandra-mesos).
+This example runs [Oinker-Go](https://github.com/mesosphere/oinker-go) on [Kubernete-Mesos](https://github.com/mesosphere/kubernetes-mesos) on [DCOS-Vagrant](https://github.com/mesosphere/dcos-vagrant) with [Cassandra-Mesos](https://github.com/mesosphere/cassandra-mesos).
 
 
 ## Install DCOS
