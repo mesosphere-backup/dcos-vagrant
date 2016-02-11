@@ -48,19 +48,19 @@ end
 ##############################################
 
 if !File.file?($USER_CONFIG[:vm_config_path])
-  raise "vm config not found: #{$USER_CONFIG[:vm_config_path]}"
+  raise "vm config not found: DCOS_VM_CONFIG_PATH=#{$USER_CONFIG[:vm_config_path]}"
 end
 
 if !File.file?($USER_CONFIG[:generate_config_path])
-  raise "dcos installer not found: #{$USER_CONFIG[:generate_config_path]}"
+  raise "dcos installer not found: DCOS_GENERATE_CONFIG_PATH=#{$USER_CONFIG[:generate_config_path]}"
 end
 
 if !File.file?($USER_CONFIG[:config_path])
-  raise "dcos config not found: #{$USER_CONFIG[:config_path]}"
+  raise "dcos config not found: DCOS_CONFIG_PATH=#{$USER_CONFIG[:config_path]}"
 end
 
 if !File.file?($USER_CONFIG[:ip_detect_path])
-  raise "ip-detect not found: #{$USER_CONFIG[:ip_detect_path]}"
+  raise "ip-detect not found: IP_DETECT_PATH=#{$USER_CONFIG[:ip_detect_path]}"
 end
 
 
