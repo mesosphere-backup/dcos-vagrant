@@ -27,12 +27,14 @@ DCOS_IP_DETECT_PATH = ENV.fetch("IP_DETECT_PATH", "etc/ip-detect.sh")
 DCOS_CONFIG_PATH = ENV.fetch("DCOS_CONFIG_PATH", "etc/1_master-config.json")
 DCOS_GENERATE_CONFIG_PATH = ENV.fetch("DCOS_GENERATE_CONFIG_PATH", "dcos_generate_config.sh")
 DCOS_JAVA_ENABLED = ENV.fetch("DCOS_JAVA_ENABLED", "false")
+DCOS_PRIVATE_REGISTRY = ENV.fetch("DCOS_PRIVATE_REGISTRY", "false")
 
 PROVISION_ENV = {
   "DCOS_IP_DETECT_PATH" => vagrant_path(DCOS_IP_DETECT_PATH),
   "DCOS_CONFIG_PATH" => vagrant_path(DCOS_CONFIG_PATH),
   "DCOS_GENERATE_CONFIG_PATH" => vagrant_path(DCOS_GENERATE_CONFIG_PATH),
   "DCOS_JAVA_ENABLED" => DCOS_JAVA_ENABLED,
+  "DCOS_PRIVATE_REGISTRY" => DCOS_PRIVATE_REGISTRY,
 }
 
 def provision_path(type)
@@ -89,6 +91,9 @@ Vagrant.configure(2) do |config|
 
       vm_cfg.vm.provision "shell", name: "Hosts", path: provision_path("hosts")
       vm_cfg.vm.provision "shell", name: "Certificate Authorities", path: provision_path("ca-certificates")
+      if DCOS_PRIVATE_REGISTRY == "true"
+        vm_cfg.vm.provision "shell", name: "Private Docker Registry", path: provision_path("insecure-registry")
+      end
       if cfg["type"]
         vm_cfg.vm.provision "shell", name: "DCOS #{cfg['type'].capitalize}", path: provision_path("type-#{cfg["type"]}"), env: PROVISION_ENV
       end

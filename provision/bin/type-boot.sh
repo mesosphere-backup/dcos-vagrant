@@ -26,6 +26,13 @@ cd ~/dcos
 echo ">>> Building bootstrap artifacts ($(pwd)/genconf/serve)"
 bash ./dcos_generate_config.sh
 
+# Provide a local docker registry for testing purposes. Agents will also get
+# the boot node allowed as an insecure registry.
+if [ "${DCOS_PRIVATE_REGISTRY}" == "true" ]; then
+  echo ">>> Starting private docker registry"
+  docker run -d -p 5000:5000 --restart=always registry:2
+fi
+
 # TODO: sleeping seems to be necessary for DCOS 1.5... bug?
 SLEPT=0
 while [ ! -d ~/dcos/genconf/serve ] && [ ${SLEPT} -lt 10 ]; do
