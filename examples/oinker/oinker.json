@@ -31,7 +31,7 @@
             "ignoreHttp1xx": false
         }
     ],
-    "cmd": "oinker --cassandra-addr=cassandra-dcos-node.cassandra.dcos.mesos --cassandra-repl=3",
+    "cmd": "export OINKER_INSTANCE_NAME=${MESOS_TASK_ID} && oinker --cassandra-addr=cassandra-dcos-node.cassandra.dcos.mesos --cassandra-repl=3",
     "ports": [0],
     "cpus": 0.25,
     "mem": 128.0
