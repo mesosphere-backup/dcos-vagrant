@@ -80,6 +80,6 @@ This example runs [Oinker-Go](https://github.com/mesosphere/oinker-go) on [Marat
 1. Wait for Marathon to deploy 3 app instances.
 
     ```
-    dcos marathon app show oinker | jq '.tasksHealthy'
+    dcos marathon app show oinker | jq -r '"\(.tasksHealthy)/\(.tasksRunning)"'
     ```
 1. Visit the load-balanced endpoint in a browser: <http://oinker.acme.org/>
