@@ -97,13 +97,17 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
 
     ![Vagrant Network Settings](https://github.com/mesosphere/dcos-vagrant-demo/blob/master/docs/vbox_network.png?raw=true)
 
-1. Update Routable Hosts
+1. Install Vagrant Host Manager Plugin
 
-    Copy etc/hosts.file to your local hosts file (/etc/hosts)
+    The [Host Manager Plugin](https://github.com/smdahlen/vagrant-hostmanager) manages the `/etc/hosts` on the VMs and host to allow access by hostname.
 
     ```bash
-    cp <repo>/etc/hosts.file /etc/hosts
+    vagrant plugin install vagrant-hostmanager
     ```
+
+    This will update `/etc/hosts` every time VMs are created or destroyed.
+
+    To avoid entering your password on `vagrant up` & `vagrant destroy` you may enable [passwordless sudo](https://github.com/smdahlen/vagrant-hostmanager#passwordless-sudo).
 
 1. Download the DCOS Installer
 
@@ -260,7 +264,6 @@ To interrogate the system, it's possible to ssh into the machines using `vagrant
 	│   ├── 1_master-config.json       # DCOS config for 1 master (CM.4)
 	│   ├── 1_master-config.yaml       # DCOS config for 1 master (CM.5)
 	│   ├── 3_master-config.json       # DCOS config for 3 masters (CM.4)
-	│   ├── hosts.file                 # Resolve instance hosts to IPs
 	│   └── ip-detect.sh               # Script for pulling appropriate ip. Be sure to confirm interface (enp0s8)
 	│
 	├─── examples                      # Example app/service definitions
@@ -273,11 +276,12 @@ To interrogate the system, it's possible to ssh into the machines using `vagrant
 	├── provision
 	│   │
 	│   ├── bin
+	│   │   ├── ca-certificates.sh     # Provision certificate authorities
+	│   │   ├── insecure-registry.sh   # Provision docker daemon to accept the private registry
+	│   │   ├── type-agent-private.sh  # Provision script for "agent-private" type machines
+	│   │   ├── type-agent-public.sh   # Provision script for "agent-public" type machines
 	│   │   ├── boot.sh                # Provision script for "boot" type machines
-	│   │   ├── hosts.sh               # Base provision script to synchronize /etc/hosts
-	│   │   ├── master.sh              # Provision script for "master" type machines
-	│   │   ├── agent-private.sh       # Provision script for "agent-private" type machines
-	│   │   └── agent-public.sh        # Provision script for "agent-public" type machines
+	│   │   └── type-master.sh         # Provision script for "master" type machines
 	│   │
 	│   ├── gs-spring-boot-0.1.0.jar   # (Optional) standalone java application (requires jre 8.1)
 	│   └── <jre-8u66-linux-x64.tgz>   # (Optional) Java Runtime Environment (Download from Oracle)

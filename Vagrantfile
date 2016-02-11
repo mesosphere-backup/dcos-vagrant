@@ -68,10 +68,19 @@ end
 ##############################################
 
 Vagrant.configure(2) do |config|
+  config.hostmanager.enabled = true
+  config.hostmanager.manage_host = true
+  config.hostmanager.ignore_private_ip = false
+
   YAML::load_file($USER_CONFIG[:vm_config_path]).each do |name,cfg|
     config.vm.define name do |vm_cfg|
       vm_cfg.vm.hostname = "#{name}.dcos"
       vm_cfg.vm.network "private_network", ip: cfg["ip"]
+
+      # custom hostname aliases
+      if cfg["aliases"]
+        vm_cfg.hostmanager.aliases = %Q(#{cfg["aliases"].join(" ")})
+      end
 
       # allow explicit nil values in the cfg to override the defaults
       vm_cfg.vm.box = cfg.fetch("box", $USER_CONFIG[:box])
@@ -91,7 +100,6 @@ Vagrant.configure(2) do |config|
         end
       end
 
-      vm_cfg.vm.provision "shell", name: "Hosts", path: provision_path("hosts")
       vm_cfg.vm.provision "shell", name: "Certificate Authorities", path: provision_path("ca-certificates")
       if $USER_CONFIG[:private_registry] == "true"
         vm_cfg.vm.provision "shell", name: "Private Docker Registry", path: provision_path("insecure-registry")
