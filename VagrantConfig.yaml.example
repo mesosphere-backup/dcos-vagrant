@@ -8,9 +8,6 @@ m1:
   cpus: 2
   memory: 1024
   type: master
-  aliases:
-  - spring.acme.org
-  - oinker.acme.org
 m2:
   ip: 192.168.65.95
   cpus: 2
@@ -56,6 +53,9 @@ p1:
   cpus: 2
   memory: 1024
   type: agent-public
+  aliases:
+  - spring.acme.org
+  - oinker.acme.org
 p2:
   ip: 192.168.65.70
   cpus: 2

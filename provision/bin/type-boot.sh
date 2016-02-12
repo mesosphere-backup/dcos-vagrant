@@ -13,7 +13,15 @@ docker run -d -v /var/tmp/dcos:/usr/share/nginx/html -p 80:80 nginx
 mkdir -p ~/dcos/genconf
 
 echo ">>> Installing ip-detect (for detecting the current node IP)"
-curl "${DCOS_IP_DETECT_PATH}" > ~/dcos/genconf/ip-detect
+cat > ~/dcos/genconf/ip-detect << EOF
+#!/usr/bin/env bash
+set -o errexit
+set -o nounset
+set -o pipefail
+
+echo \$(/usr/sbin/ip route show to match ${DCOS_MASTER_IPS%% *} | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | tail -1)
+
+EOF
 
 echo ">>> Configuring DCOS bootstrap"
 # support json or yaml config files
