@@ -6,7 +6,7 @@ This example runs [Oinker-Go](https://github.com/mesosphere/oinker-go) on [Marat
 ## Install DCOS
 
 1. Follow the [dcos-vagrant setup](https://github.com/mesosphere/dcos-vagrant#setup) steps to configure your installation.
-1. Use vagrant to deploy a cluster with 3 private agent nodes and 1 public agent node (requires 10GB free memory):
+1. Use vagrant to deploy a cluster with 4 private agent nodes and 1 public agent node (requires 10GB free memory):
 
     ```
     vagrant up boot m1 a1 a2 a3 a4 p1
