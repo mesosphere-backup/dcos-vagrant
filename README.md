@@ -53,6 +53,8 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
 
 - [Vagrant](https://www.vagrantup.com/) (>= 1.8.1)
 - [VirtualBox](https://www.virtualbox.org/) (>= 4.3)
+  - [Host Manager Plugin](https://github.com/smdahlen/vagrant-hostmanager)
+  - [VBGuest Plugin](https://github.com/dotless-de/vagrant-vbguest)
 - [Git](https://git-scm.com/)
 - (Optional) [jq](https://stedolan.github.io/jq/) - json parser used by examples
 
@@ -108,6 +110,16 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
     This will update `/etc/hosts` every time VMs are created or destroyed.
 
     To avoid entering your password on `vagrant up` & `vagrant destroy` you may enable [passwordless sudo](https://github.com/smdahlen/vagrant-hostmanager#passwordless-sudo).
+
+1. Install Vagrant VBGuest Plugin
+
+    The [VBGuest Plugin](https://github.com/dotless-de/vagrant-vbguest) manages automatically installing VirtualBox Guest Additions appropriate to your local Vagrant version on each new VirtualBox VM as it is created.
+
+    ```bash
+    vagrant plugin install vagrant-vbguest
+    ```
+
+    This allows the pre-built vagrant box image to work on multiple (and future) versions of VirtualBox.
 
 1. Download the DCOS Installer
 
@@ -279,7 +291,7 @@ To interrogate the system, it's possible to ssh into the machines using `vagrant
 	│   │   ├── insecure-registry.sh   # Provision docker daemon to accept the private registry
 	│   │   ├── type-agent-private.sh  # Provision script for "agent-private" type machines
 	│   │   ├── type-agent-public.sh   # Provision script for "agent-public" type machines
-	│   │   ├── boot.sh                # Provision script for "boot" type machines
+	│   │   ├── type-boot.sh           # Provision script for "boot" type machines
 	│   │   └── type-master.sh         # Provision script for "master" type machines
 	│   │
 	│   ├── gs-spring-boot-0.1.0.jar   # (Optional) standalone java application (requires jre 8.1)

@@ -81,9 +81,14 @@ end
 ##############################################
 
 Vagrant.configure(2) do |config|
+
+  # configure the vagrant-hostmanager plugin
   config.hostmanager.enabled = true
   config.hostmanager.manage_host = true
   config.hostmanager.ignore_private_ip = false
+
+  # configure the vagrant-vbguest plugin
+  config.vbguest.auto_update = true
 
   $vagrant_config.each do |name,cfg|
     config.vm.define name do |vm_cfg|
