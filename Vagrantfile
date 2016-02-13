@@ -10,7 +10,7 @@ require "yaml"
 $user_config = {
   box:            ENV.fetch("DCOS_BOX", "mesosphere/dcos-centos-virtualbox"),
   box_url:        ENV.fetch("DCOS_BOX_URL", "https://downloads.mesosphere.com/dcos-vagrant/metadata.json"),
-  box_version:    ENV.fetch("DCOS_BOX_VERSION", nil),
+  box_version:    ENV.fetch("DCOS_BOX_VERSION", "~> 0.3"),
 
   vm_config_path:       ENV.fetch("DCOS_VM_CONFIG_PATH", "VagrantConfig.yaml"),
   config_path:          ENV.fetch("DCOS_CONFIG_PATH", "etc/1_master-config.json"),
