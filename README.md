@@ -67,10 +67,14 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
 
 ## Supported DCOS Versions
 
+- 1.6
+  - Requires dcos-vagrant >= 0.4.0
+  - Requires flattened yaml config (e.g. <./etc/1_master-config-1.6.yaml>)
+- 1.5.x
+  - Requires dcos-vagrant >= 0.3.0
+  - Requires yaml config (e.g. <./etc/1_master-config-1.5.yaml>)
 - CM.4
-  - requires json config
-- CM.5 (1.5)
-  - requires yaml config
+  - Requires [dcos-vagrant v0.3.0](https://github.com/mesosphere/dcos-vagrant/tree/v0.3.0)
 
 
 # Setup
@@ -139,9 +143,10 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
 
    Included config files (select one):
 
-   - DCOS 1.4 1-master: `export DCOS_CONFIG_PATH=etc/1_master-config.json` (default)
-   - DCOS 1.4 3-master: `export DCOS_CONFIG_PATH=etc/3_master-config.json`
-   - DCOS 1.5 1-master: `export DCOS_CONFIG_PATH=etc/1_master-config.yaml`
+   - DCOS 1.6 1-master: `export DCOS_CONFIG_PATH=etc/1_master-config-1.6.yaml`
+   - DCOS 1.5 1-master: `export DCOS_CONFIG_PATH=etc/1_master-config-1.5.yaml` (default)
+   - DCOS 1.4 1-master: `export DCOS_CONFIG_PATH=etc/1_master-config-1.4.json`
+   - DCOS 1.4 3-master: `export DCOS_CONFIG_PATH=etc/3_master-config-1.4.json`
 
    The path to the config file is relative to the repo dir, because the repo dir will be mounted as `/vagrant` within each VM.
    Other configurations can be added to the `<repo>/etc/` dir and configured in a similar manner.
@@ -273,9 +278,10 @@ To interrogate the system, it's possible to ssh into the machines using `vagrant
 	├─── docs                          # Misc images or supporting documentation
 	│
 	├─── etc
-	│   ├── 1_master-config.json       # DCOS config for 1 master (CM.4)
-	│   ├── 1_master-config.yaml       # DCOS config for 1 master (CM.5)
-	│   └── 3_master-config.json       # DCOS config for 3 masters (CM.4)
+	│   ├── 1_master-config-1.4.json   # DCOS config for 1 master (CM.4)
+	│   ├── 1_master-config-1.5.yaml   # DCOS config for 1 master (1.5)
+	│   ├── 1_master-config-1.6.yaml   # DCOS config for 1 master (1.6)
+	│   └── 3_master-config-1.4.json   # DCOS config for 3 masters (1.4)
 	│
 	├─── examples                      # Example app/service definitions
 	│   ├── java-spring                # Example java-spring Marathon application
@@ -317,7 +323,20 @@ Common errors when bringing up the cluster, and their solutions.
     **Solution**: DCOS >= 1.5 requires a yaml config file, not json (used by prior versions of DCOS). Make sure the `DCOS_CONFIG_PATH` environment variable points to a file with the correct format for your DCOS version before running vagrant:
 
     ```
-    export DCOS_CONFIG_PATH=etc/1_master-config.yaml
+    export DCOS_CONFIG_PATH=etc/1_master-config-1.5.yaml
+    ```
+
+- **Problem**
+    ```
+    Configuration generation (--genconf) requires the following errors to be fixed:
+    dcos_installer:: exhibitor_zk_hosts
+    dcos_installer:: master_list
+    ```
+
+    **Solution**: DCOS >= 1.6 requires a flattened yaml config file. Make sure the `DCOS_CONFIG_PATH` environment variable points to a file with the correct schema for your DCOS version before running vagrant:
+
+    ```
+    export DCOS_CONFIG_PATH=etc/1_master-config-1.6.yaml
     ```
 
 

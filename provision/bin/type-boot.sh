@@ -32,7 +32,7 @@ curl "${DCOS_GENERATE_CONFIG_PATH}" > ~/dcos/dcos_generate_config.sh
 
 cd ~/dcos
 echo ">>> Building bootstrap artifacts ($(pwd)/genconf/serve)"
-bash ./dcos_generate_config.sh
+bash ./dcos_generate_config.sh --genconf
 
 # Provide a local docker registry for testing purposes. Agents will also get
 # the boot node allowed as an insecure registry.

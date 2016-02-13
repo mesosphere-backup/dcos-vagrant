@@ -13,7 +13,7 @@ $user_config = {
   box_version:    ENV.fetch("DCOS_BOX_VERSION", "~> 0.3"),
 
   vm_config_path:       ENV.fetch("DCOS_VM_CONFIG_PATH", "VagrantConfig.yaml"),
-  config_path:          ENV.fetch("DCOS_CONFIG_PATH", "etc/1_master-config.json"),
+  config_path:          ENV.fetch("DCOS_CONFIG_PATH", "etc/1_master-config-1.5.yaml"),
   generate_config_path: ENV.fetch("DCOS_GENERATE_CONFIG_PATH", "dcos_generate_config.sh"),
   java_enabled:         ENV.fetch("DCOS_JAVA_ENABLED", "false"),
   private_registry:     ENV.fetch("DCOS_PRIVATE_REGISTRY", "false"),
