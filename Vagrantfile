@@ -80,6 +80,18 @@ end
 #### Setup & Provisioning
 ##############################################
 
+missing_plugins = []
+unless Vagrant.has_plugin?("vagrant-hostmanager")
+  missing_plugins << "The 'hostmanager' plugin is required. Install it with 'vagrant plugin install vagrant-hostmanager'"
+end
+unless Vagrant.has_plugin?("vagrant-vbguest")
+  missing_plugins << "The 'vbguest' plugin is required. Install it with 'vagrant plugin install vagrant-vbguest'"
+end
+unless missing_plugins.empty?
+  missing_plugins.each{ |x| puts x }
+  exit
+end
+
 Vagrant.configure(2) do |config|
 
   # configure the vagrant-hostmanager plugin
