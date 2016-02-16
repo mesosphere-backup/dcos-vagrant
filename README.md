@@ -15,6 +15,7 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
 - [Deploy](#deploy)
 - [Appendix: Architecture](#appendix-architecture)
 - [Appendix: Installation](#appendix-installation)
+- [Appendix: Install Ruby](#install-ruby)
 - [Appendix: Repo Structure](#appendix-repo-structure)
 - [Appendix: Troubleshooting](#appendix-troubleshooting)
 - [License and Author](#license-and-author)
@@ -270,6 +271,38 @@ Ideally deployment and installation failures will be visible in the vagrant outp
 To interrogate the system, it's possible to ssh into the machines using `vagrant ssh <machine>` and view the logs of all system components with `joutnalctl -f`. 
 
 
+# Appendix: Install Ruby
+
+Installing vagrant plugins may require having an modern version of ruby installed on the host. 
+
+There are several ways to install ruby. One way is to use ruby-install, using chruby to manage your ruby installations:
+
+1. Install ruby-install via homebrew:
+
+    ```
+    brew install ruby-install
+    ```
+
+1. Install ruby 2.2 via ruby-install:
+
+    ```
+    ruby-install ruby 2.2
+    ```
+
+1. Install chruby via homebrew:
+
+    ```
+    brew install chruby
+    ```
+
+1. Configure your shell (and `~/.bash_profile`) to source chruby:
+
+    ```
+    source '/usr/local/share/chruby/chruby.sh'
+    chruby 2.2
+    ```
+
+
 # Appendix: Repo Structure
 
 **NOTE: Take note of the files in [.gitignore](./.gitignore) which will not be committed. These are indicated by angle brackets below. Some of them must be provided for deployment to succeed.**
@@ -355,6 +388,10 @@ Common errors when bringing up the cluster, and their solutions.
     Interface 'vboxnet0' was successfully created
     $ vboxmanage hostonlyif ipconfig vboxnet0 --ip 192.168.65.1
     ```
+
+- **Problem**: One or more Vagrant plugins fail to install.
+
+    **Solution**: Upgrade Ruby to >= 2.2. See [Appendix: Install Ruby](#install-ruby) for instructions.
 
 
 # License and Author
