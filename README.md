@@ -338,6 +338,23 @@ Common errors when bringing up the cluster, and their solutions.
     ```
     export DCOS_CONFIG_PATH=etc/1_master-config-1.6.yaml
     ```
+    
+- **Problem**: `Could not find interface 'vboxnet0'`
+    ```
+    $ vboxmanage hostonlyif ipconfig vboxnet0 --ip 192.168.65.1
+    VBoxManage: error: The host network interface with the given name could not be found
+    VBoxManage: error: Details: code NS_ERROR_INVALID_ARG (0x80070057), component Host, interface IHost, callee nsISupports
+    VBoxManage: error: Context: "FindHostNetworkInterfaceByName(name.raw(), hif.asOutParam())" at line 218 of file     VBoxManageHostonly.cpp
+    VBoxManage: error: Could not find interface 'vboxnet0'
+    ```
+    
+    **Solution**: The `vboxnet0` host-only network must exist before it can be configured: 
+    ```
+    $ vboxmanage hostonlyif create
+    0%...10%...20%...30%...40%...50%...60%...70%...80%...90%...100%
+    Interface 'vboxnet0' was successfully created
+    $ vboxmanage hostonlyif ipconfig vboxnet0 --ip 192.168.65.1
+    ```
 
 
 # License and Author
