@@ -94,13 +94,21 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
 
 1. Configure VirtualBox Networking
 
-    Ensure the internal private network for the cluster is configured to the 192.168.65.0/24 subnet.
+    Configure the host-only `vboxnet0` network to use the 192.168.65.0/24 subnet.
+    
+    1. Create the `vboxnet0` network if it does not exist:
+    
+        ```bash
+        $ VBoxManage list hostonlyifs | grep vboxnet0 -q || VBoxManage hostonlyif create
+        0%...10%...20%...30%...40%...50%...60%...70%...80%...90%...100%
+        Interface 'vboxnet0' was successfully created
+        ```
 
-    Use the following command to create it on the vboxnet0 interface.
+    1. Set the `vboxnet0` subnet:
 
-    ```bash
-    VBoxManage hostonlyif ipconfig vboxnet0 --ip 192.168.65.1
-    ```
+        ```
+        VBoxManage hostonlyif ipconfig vboxnet0 --ip 192.168.65.1
+        ```
 
     ![Vagrant Network Settings](https://github.com/mesosphere/dcos-vagrant-demo/blob/master/docs/vbox_network.png?raw=true)
 
