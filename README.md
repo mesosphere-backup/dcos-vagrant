@@ -110,8 +110,6 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
         VBoxManage hostonlyif ipconfig vboxnet0 --ip 192.168.65.1
         ```
 
-    ![Vagrant Network Settings](https://github.com/mesosphere/dcos-vagrant-demo/blob/master/docs/vbox_network.png?raw=true)
-
 1. Install Vagrant Host Manager Plugin
 
     The [Host Manager Plugin](https://github.com/smdahlen/vagrant-hostmanager) manages the `/etc/hosts` on the VMs and host to allow access by hostname.
