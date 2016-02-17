@@ -188,7 +188,9 @@ For more details about how DCOS is installed and how to debug deployment/install
 
 ### Minimal Cluster
 
-This is a minimal configuration and will not support robust demos or deployments. Sample applications should work but not most frameworks.
+A minimal cluster supports launching small Marathon apps. Most other frameworks will fail to install, because they require more than one agent node.
+
+Requires > 4.5GB free memory (using the example [VagrantConfig](./Vagrantconfig.yaml)).
 
 ```bash
 vagrant up boot m1 a1
@@ -196,20 +198,32 @@ vagrant up boot m1 a1
 
 ### Small Cluster
 
+A small cluster supports running tasks on multiple nodes.
+
+Requires > 7.25GB free memory (using the example [VagrantConfig](./Vagrantconfig.yaml)).
+
 ```bash
 vagrant up boot m1 a1 a2 p1
 ```
 
 ### Medium Cluster
 
+A medium cluster supports the installation of a [minimally configured Cassandra](./examples/oinker#install-cassandra).
+
+Requires > 10GB free memory (using the example [VagrantConfig](./Vagrantconfig.yaml)).
+
 ```bash
-vagrant up boot m1 m2 m3 a1 a2 a3 a4 p1
+vagrant up boot m1 a1 a2 a3 a4 p1
 ```
 
 ### Large Cluster
 
+Requires > 17GB free memory (using the example [VagrantConfig](./Vagrantconfig.yaml)).
+
+A large cluster supports master node fail over, multiple framework installs, and multiple public load balancers.
+
 ```bash
-vagrant up boot m1 m2 m3 m4 m5 a1 a2 a3 a4 a5 a6 p1
+vagrant up boot m1 m2 m3 a1 a2 a3 a4 a5 a6 p1 p2 p3
 ```
 
 ## Install DCOS Services
