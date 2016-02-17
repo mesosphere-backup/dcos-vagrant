@@ -25,8 +25,8 @@
             "portIndex": 0,
             "protocol": "HTTP",
             "gracePeriodSeconds": 300,
-            "intervalSeconds": 10,
-            "timeoutSeconds": 5,
+            "intervalSeconds": 30,
+            "timeoutSeconds": 10,
             "maxConsecutiveFailures": 3,
             "ignoreHttp1xx": false
         }
