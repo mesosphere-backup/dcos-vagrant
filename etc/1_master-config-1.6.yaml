@@ -8,7 +8,6 @@ master_discovery: static
 master_list:
 - 192.168.65.90
 resolvers:
-- 10.0.2.3
 - 8.8.8.8
 ssh_user: vagrant
 superuser_username: admin
