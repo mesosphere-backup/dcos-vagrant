@@ -1,7 +1,7 @@
 --- 
 cluster_config: 
+  cluster_name: dcos-vagrant
   bootstrap_url: http://boot.dcos
-  cluster_name: dcos-demo
   exhibitor_storage_backend: zookeeper
   exhibitor_zk_hosts: boot.dcos:2181
   exhibitor_zk_path: /zk-shared
