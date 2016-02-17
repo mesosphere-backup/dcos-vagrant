@@ -197,16 +197,20 @@ module VagrantPlugins
         env = @machine.env
         active_machines = env.active_machines()
 
-        cluster_cfg["cluster_config"]["bootstrap_url"] = "http://#{@config.boot_host}"
-        cluster_cfg["cluster_config"]["exhibitor_zk_hosts"] = "#{@config.boot_host}:2181"
-        cluster_cfg["cluster_config"]["master_list"] = []
+        cluster_cfg["bootstrap_url"] = "http://#{@config.boot_host}"
+        cluster_cfg["master_list"] = []
         active_machines.each do |name, provider|
+          if $vagrant_cfg[name.to_s]["type"] == 'boot'
+            ip = Resolv.getaddress(name.to_s)
+            cluster_cfg["exhibitor_zk_hosts"] = "#{ip}:2181"
+          end
+
           if $vagrant_cfg[name.to_s]["type"] == 'master'
             ip = Resolv.getaddress(name.to_s)
-              cluster_cfg["cluster_config"]["master_list"].push(ip)
+            cluster_cfg["master_list"].push(ip)
           end
         end
-        cluster_cfg["cluster_config"]["resolvers"] = @config.resolvers
+        cluster_cfg["resolvers"] = @config.resolvers
         command = %Q(cat << EOF > ~/dcos/genconf/config.yaml\n#{cluster_cfg.to_yaml}\nEOF)
 
         @machine.communicate.sudo(command)
@@ -220,23 +224,23 @@ module VagrantPlugins
         env = @machine.env
         active_machines = env.active_machines()
 
-        cluster_cfg["cluster_config"]["master_list"] = []
+        cluster_cfg["master_list"] = []
         active_machines.each do |name, provider|
           if $vagrant_cfg[name.to_s]["type"] == 'boot'
             machine = env.machine(name, provider)
             machine.communicate.execute( %q(curl -fsSL http://169.254.169.254/latest/meta-data/local-ipv4) ) do |t, ip|
-              cluster_cfg["cluster_config"]["exhibitor_zk_hosts"] = "#{ip}:2181"
+              cluster_cfg["exhibitor_zk_hosts"] = "#{ip}:2181"
             end
           end
 
           if $vagrant_cfg[name.to_s]["type"] == 'master'
             machine = env.machine(name, provider)
             machine.communicate.execute( %q(curl -fsSL http://169.254.169.254/latest/meta-data/local-ipv4) ) do |t, ip|
-              cluster_cfg["cluster_config"]["master_list"].push(ip)
+              cluster_cfg["master_list"].push(ip)
             end
           end
         end
-        cluster_cfg["cluster_config"]["resolvers"] = @config.resolvers
+        cluster_cfg["resolvers"] = @config.resolvers
         command = %Q(cat << EOF > ~/dcos/genconf/config.yaml\n#{cluster_cfg.to_yaml}\nEOF)
 
         @machine.communicate.sudo(command)

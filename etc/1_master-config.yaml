@@ -1,14 +1,16 @@
---- 
-cluster_config: 
-  bootstrap_url: http://boot.dcos
-  cluster_name: dcos-demo
-  exhibitor_storage_backend: zookeeper
-  exhibitor_zk_hosts: boot.dcos:2181
-  exhibitor_zk_path: /zk-shared
-  master_discovery: static
-  master_list: 
-  - 192.168.65.90
-  resolvers: 
-  - 8.8.8.8
+---
+bootstrap_url: http://boot.dcos
+cluster_name: dcos-demo
+exhibitor_storage_backend: zookeeper
+exhibitor_zk_hosts: boot.dcos:2181
+exhibitor_zk_path: /dcos-ee
+master_discovery: static
+master_list: 
+- 192.168.65.90
+resolvers: 
+- 8.8.8.8
+ssh_user: vagrant
 ssh_config: #req in master, optional jira DCOS-4455
-  log_directory: /genconf/logs #req in CM.5, optional in master
+log_directory: /genconf/logs #req in CM.5, optional in master
+superuser_username: bill
+superuser_password: password

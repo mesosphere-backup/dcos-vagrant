@@ -17,12 +17,11 @@ set -o pipefail
 # support json or yaml config files
 #curl "${DCOS_CONFIG_PATH}" > ~/dcos/genconf/config.${DCOS_CONFIG_PATH##*.}
 
-cd ~/dcos
 #echo ">>> Downloading dcos_generate_config.sh (for building bootstrap image for system)"
 #curl "${DCOS_GENERATE_CONFIG_PATH}" > ~/dcos/dcos_generate_config.sh
 
 echo ">>> Building bootstrap artifacts ($(pwd)/genconf/serve)"
-bash /vagrant/dcos_generate_config.sh
+cd ~/dcos && bash /vagrant/dcos_generate_config.sh
 
 # TODO: sleeping seems to be necessary for DCOS 1.5... bug?
 SLEPT=0
