@@ -20,20 +20,32 @@ $user_config = {
 }
 
 
-## Config Validation
+## Config File Validation
 ##############################################
 
-if !File.file?($user_config[:vm_config_path])
-  raise "vm config not found: DCOS_VM_CONFIG_PATH=#{$user_config[:vm_config_path]}"
+def validate_config_files()
+  required_files = {
+    "DCOS_VM_CONFIG_PATH" => $user_config[:vm_config_path],
+    "DCOS_GENERATE_CONFIG_PATH" => $user_config[:generate_config_path],
+    "DCOS_CONFIG_PATH" => $user_config[:config_path],
+  }
+  missing_files = []
+
+  required_files.each do |env_var, file_path|
+    unless File.file?(file_path)
+      missing_files << "File not found: '#{file_path}'. Ensure that the file exists or reconfigure its location with 'export #{env_var}=<path>'"
+    end
+  end
+
+  unless missing_files.empty?
+    missing_files.each{ |x| STDERR.puts x }
+    return false
+  end
+
+  return true
 end
 
-if !File.file?($user_config[:generate_config_path])
-  raise "dcos installer not found: DCOS_GENERATE_CONFIG_PATH=#{$user_config[:generate_config_path]}"
-end
-
-if !File.file?($user_config[:config_path])
-  raise "dcos config not found: DCOS_CONFIG_PATH=#{$user_config[:config_path]}"
-end
+validate_config_files || exit
 
 
 ## VM Config
@@ -49,9 +61,16 @@ def master_ips()
   $vagrant_config.select{ |_, cfg| cfg["type"] == "master" }.map{ |_, cfg| cfg["ip"] }
 end
 
-if master_ips.empty?
-  raise "vm config must contain at least one vm of type master"
+def validate_vm_config()
+  if master_ips.empty?
+    STDERR.puts "vm config must contain at least one vm of type master"
+    return false
+  end
+
+  return true
 end
+
+validate_vm_config || exit
 
 
 ## Provision Environment
@@ -77,20 +96,35 @@ def provision_path(type)
 end
 
 
-#### Setup & Provisioning
+## Plugin Validation
 ##############################################
 
-missing_plugins = []
-unless Vagrant.has_plugin?("vagrant-hostmanager")
-  missing_plugins << "The 'hostmanager' plugin is required. Install it with 'vagrant plugin install vagrant-hostmanager'"
+def validate_plugins()
+  required_plugins = [
+    "vagrant-hostmanager",
+    "vagrant-vbguest",
+  ]
+  missing_plugins = []
+
+  required_plugins.each do |plugin|
+    unless Vagrant.has_plugin?(plugin)
+      missing_plugins << "The '#{plugin}' plugin is required. Install it with 'vagrant plugin install #{plugin}'"
+    end
+  end
+
+  unless missing_plugins.empty?
+    missing_plugins.each{ |x| STDERR.puts x }
+    return false
+  end
+
+  return true
 end
-unless Vagrant.has_plugin?("vagrant-vbguest")
-  missing_plugins << "The 'vbguest' plugin is required. Install it with 'vagrant plugin install vagrant-vbguest'"
-end
-unless missing_plugins.empty?
-  missing_plugins.each{ |x| puts x }
-  exit
-end
+
+validate_plugins || exit
+
+
+## VM Creation & Provisioning
+##############################################
 
 Vagrant.configure(2) do |config|
 
