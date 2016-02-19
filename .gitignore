@@ -1,11 +1,10 @@
 .DS_Store
 .idea
-dcos_generate_config*.sh
-exhibitor.properties
 .vagrant
+exhibitor.properties
 dcos
 provision/jre-*-linux-x64.tgz
-packer_cache
-output-virtualbox-iso
-*.box
+
+dcos_generate_config*.sh
+/etc/config.yaml
 /VagrantConfig.yaml
