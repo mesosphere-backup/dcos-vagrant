@@ -147,6 +147,9 @@ Vagrant.configure(2) do |config|
         vm_cfg.hostmanager.aliases = %Q(#{cfg["aliases"].join(" ")})
       end
 
+      # Use NFS for shared folders for better performance
+      config.vm.synced_folder '.', '/vagrant', nfs: true
+
       # allow explicit nil values in the cfg to override the defaults
       vm_cfg.vm.box = cfg.fetch("box", $user_config[:box])
       vm_cfg.vm.box_url = cfg.fetch("box-url", $user_config[:box_url])
