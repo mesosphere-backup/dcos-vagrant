@@ -18,13 +18,14 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
 - [Appendix: Installation](#appendix-installation)
 - [Appendix: Install Ruby](#install-ruby)
 - [Appendix: Repo Structure](#appendix-repo-structure)
-- [Appendix: Troubleshooting](#appendix-troubleshooting)
+- [Appendix: VirtualBox Guest Additions](#appendix-virtualbox-guest-additions)
 - [License and Author](#license-and-author)
 
 **Other Docs:**
 
 - [Base OS Image](./build)
 - [Examples](./examples)
+- [Troubleshooting](./docs/troubleshooting.md)
 
 
 # Audience
@@ -53,11 +54,11 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
 
 # Requirements
 
-- [Vagrant](https://www.vagrantup.com/) (>= 1.8.1)
-- [VirtualBox](https://www.virtualbox.org/) (>= 4.3)
-  - [Host Manager Plugin](https://github.com/smdahlen/vagrant-hostmanager)
-  - [VBGuest Plugin](https://github.com/dotless-de/vagrant-vbguest)
-- [Git](https://git-scm.com/)
+- [Git](https://git-scm.com/) - clone repo
+- [Vagrant](https://www.vagrantup.com/) (>= 1.8.1) - virtualization orchestration
+- [VirtualBox](https://www.virtualbox.org/) (>= 4.3) - virtualization engine
+  - [Host Manager Plugin](https://github.com/smdahlen/vagrant-hostmanager) - manage /etc/hosts
+  - (Optional) [VBGuest Plugin](https://github.com/dotless-de/vagrant-vbguest) - manage vbox guest additions
 - (Optional) [jq](https://stedolan.github.io/jq/) - json parser used by examples
 
 
@@ -83,7 +84,7 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
 
 1. Install & Configure Vagrant & VirtualBox
 
-    This repo assumes vagrant and virtualbox are installed and configured to work together.
+    This repo assumes Vagrant and VirtualBox are installed and configured to work together.
 
     See [Appendix: Architecture](#appendix-architecture) for details about the DCOS-Vagrant cluster architecture.
 
@@ -100,9 +101,7 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
     1. Create the `vboxnet0` network if it does not exist:
     
         ```bash
-        $ VBoxManage list hostonlyifs | grep vboxnet0 -q || VBoxManage hostonlyif create
-        0%...10%...20%...30%...40%...50%...60%...70%...80%...90%...100%
-        Interface 'vboxnet0' was successfully created
+        VBoxManage list hostonlyifs | grep vboxnet0 -q || VBoxManage hostonlyif create
         ```
 
     1. Set the `vboxnet0` subnet:
@@ -122,16 +121,6 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
     This will update `/etc/hosts` every time VMs are created or destroyed.
 
     To avoid entering your password on `vagrant up` & `vagrant destroy` you may enable [passwordless sudo](https://github.com/smdahlen/vagrant-hostmanager#passwordless-sudo).
-
-1. Install Vagrant VBGuest Plugin
-
-    The [VBGuest Plugin](https://github.com/dotless-de/vagrant-vbguest) manages automatically installing VirtualBox Guest Additions appropriate to your local Vagrant version on each new VirtualBox VM as it is created.
-
-    ```bash
-    vagrant plugin install vagrant-vbguest
-    ```
-
-    This allows the pre-built vagrant box image to work on multiple (and future) versions of VirtualBox.
 
 1. Download the DCOS Installer
 
@@ -371,55 +360,19 @@ There are several ways to install ruby. One way is to use ruby-install, using ch
 	└── VagrantFile                    # Used to deploy nodes and install DCOS
 
 
-# Appendix: Troubleshooting
+# Appendix: VirtualBox Guest Additions
 
-Common errors when bringing up the cluster, and their solutions.
+Ideally, the vagrant box image used by dcos-vagrant includes VirtualBox Guest Additions compatible with the latest versions of VirtualBox. It should "just work".
 
-- **Problem:** `The following settings shouldn't exist: env`
+However, if they are out of date or incompatible with your installed version of VirtualBox you may want to install the [VBGuest Vagrant Plugin](https://github.com/dotless-de/vagrant-vbguest) to automatically install VirtualBox Guest Additions appropriate to your local VirtualBox version on each new VM after it is created.
 
-    **Solution**: [Upgrade Vagrant](https://www.vagrantup.com/downloads.html) to >= 1.8.1 (Ubuntu's package manager repos are out of date, install manually).
+## Install
 
-- **Problem:** `Specified config file '/genconf/config.yaml' does not exist`
+```bash
+vagrant plugin install vagrant-vbguest
+```
 
-    **Solution**: DCOS >= 1.5 requires a yaml config file, not json (used by prior versions of DCOS). Make sure the `DCOS_CONFIG_PATH` environment variable points to a file with the correct format for your DCOS version before running vagrant:
-
-    ```
-    export DCOS_CONFIG_PATH=etc/1_master-config-1.5.yaml
-    ```
-
-- **Problem**
-    ```
-    Configuration generation (--genconf) requires the following errors to be fixed:
-    dcos_installer:: exhibitor_zk_hosts
-    dcos_installer:: master_list
-    ```
-
-    **Solution**: DCOS >= 1.6 requires a flattened yaml config file. Make sure the `DCOS_CONFIG_PATH` environment variable points to a file with the correct schema for your DCOS version before running vagrant:
-
-    ```
-    export DCOS_CONFIG_PATH=etc/1_master-config-1.6.yaml
-    ```
-    
-- **Problem**: `Could not find interface 'vboxnet0'`
-    ```
-    $ vboxmanage hostonlyif ipconfig vboxnet0 --ip 192.168.65.1
-    VBoxManage: error: The host network interface with the given name could not be found
-    VBoxManage: error: Details: code NS_ERROR_INVALID_ARG (0x80070057), component Host, interface IHost, callee nsISupports
-    VBoxManage: error: Context: "FindHostNetworkInterfaceByName(name.raw(), hif.asOutParam())" at line 218 of file     VBoxManageHostonly.cpp
-    VBoxManage: error: Could not find interface 'vboxnet0'
-    ```
-    
-    **Solution**: The `vboxnet0` host-only network must exist before it can be configured: 
-    ```
-    $ vboxmanage hostonlyif create
-    0%...10%...20%...30%...40%...50%...60%...70%...80%...90%...100%
-    Interface 'vboxnet0' was successfully created
-    $ vboxmanage hostonlyif ipconfig vboxnet0 --ip 192.168.65.1
-    ```
-
-- **Problem**: One or more Vagrant plugins fail to install.
-
-    **Solution**: Upgrade Ruby to >= 2.2. See [Appendix: Install Ruby](#install-ruby) for instructions.
+This allows the pre-built vagrant box image to work on multiple (past and future) versions of VirtualBox.
 
 
 # License and Author

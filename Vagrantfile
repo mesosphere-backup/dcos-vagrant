@@ -10,13 +10,13 @@ require "yaml"
 $user_config = {
   box:            ENV.fetch("DCOS_BOX", "mesosphere/dcos-centos-virtualbox"),
   box_url:        ENV.fetch("DCOS_BOX_URL", "https://downloads.mesosphere.com/dcos-vagrant/metadata.json"),
-  box_version:    ENV.fetch("DCOS_BOX_VERSION", "~> 0.3"),
+  box_version:    ENV.fetch("DCOS_BOX_VERSION", "~> 0.4.1"),
 
   vm_config_path:       ENV.fetch("DCOS_VM_CONFIG_PATH", "VagrantConfig.yaml"),
   config_path:          ENV.fetch("DCOS_CONFIG_PATH", "etc/config.yaml"),
   generate_config_path: ENV.fetch("DCOS_GENERATE_CONFIG_PATH", "dcos_generate_config.sh"),
-  java_enabled:         ENV.fetch("DCOS_JAVA_ENABLED", "false"),
-  private_registry:     ENV.fetch("DCOS_PRIVATE_REGISTRY", "false"),
+  java_enabled:         (ENV.fetch("DCOS_JAVA_ENABLED", "false") == 'true'),
+  private_registry:     (ENV.fetch("DCOS_PRIVATE_REGISTRY", "false") == 'true'),
 }
 
 
@@ -86,8 +86,8 @@ end
 $provision_environment = {
   "DCOS_CONFIG_PATH" => vagrant_path($user_config[:config_path]),
   "DCOS_GENERATE_CONFIG_PATH" => vagrant_path($user_config[:generate_config_path]),
-  "DCOS_JAVA_ENABLED" => $user_config[:java_enabled],
-  "DCOS_PRIVATE_REGISTRY" => $user_config[:private_registry],
+  "DCOS_JAVA_ENABLED" => $user_config[:java_enabled] ? 'true' : 'false',
+  "DCOS_PRIVATE_REGISTRY" => $user_config[:private_registry] ? 'true' : 'false',
   "DCOS_MASTER_IPS" => master_ips.join(" "),
 }
 
@@ -101,8 +101,7 @@ end
 
 def validate_plugins()
   required_plugins = [
-    "vagrant-hostmanager",
-    "vagrant-vbguest",
+    'vagrant-hostmanager',
   ]
   missing_plugins = []
 
@@ -134,7 +133,9 @@ Vagrant.configure(2) do |config|
   config.hostmanager.ignore_private_ip = false
 
   # configure the vagrant-vbguest plugin
-  config.vbguest.auto_update = true
+  if Vagrant.has_plugin?('vagrant-vbguest')
+    config.vbguest.auto_update = true
+  end
 
   $vagrant_config.each do |name,cfg|
     config.vm.define name do |vm_cfg|
