@@ -4,17 +4,20 @@
 module VagrantPlugins
   module DCOS
     class Config < Vagrant.plugin(2, :config)
+      attr_accessor :parallel
       attr_accessor :machine_types
       attr_accessor :config_template_path
 
       def initialize()
         super
+        @parallel = UNSET_VALUE
         @machine_types = UNSET_VALUE
         @config_template_path = UNSET_VALUE
       end
 
       def finalize!
         # defaults after merging
+        @parallel = false if @parallel == UNSET_VALUE
         @machine_types = {} if @machine_types == UNSET_VALUE
         @config_template_path = 'etc/config-1.6.yaml' if @config_template_path == UNSET_VALUE
       end
@@ -22,6 +25,10 @@ module VagrantPlugins
       # The validation method is given a machine object, since validation is done for each machine that Vagrant is managing
       def validate(machine)
         errors = _detected_errors
+
+        unless [true, false].include?(@parallel)
+          errors << "Field must be a boolean: config.dcos_install.parallel"
+        end
 
         # Validate required fields
         required_fields = [

@@ -11,7 +11,11 @@ module VagrantPlugins
       end
 
       def provision
-        install(@config.machine_types, @config.config_template_path)
+        install(
+          @config.machine_types,
+          @config.config_template_path,
+          @config.parallel,
+        )
       end
 
       def cleanup()
@@ -19,23 +23,28 @@ module VagrantPlugins
 
       protected
 
-      # execute command as root
+      # execute remote command as root
       # print command, stdout, and stderr (indented)
-      def sudo(command)
+      def remote_sudo(machine, command)
         prefix = '      '
-        @machine.ui.output("sudo: #{command.chomp.gsub(/\n/,"\n#{prefix}")}")
-        @machine.communicate.sudo(command) do |type, data|
+        machine.ui.output("sudo: #{command.chomp.gsub(/\n/,"\n#{prefix}")}")
+        machine.communicate.sudo(command) do |type, data|
           output = prefix + data.chomp.gsub(/\n/,"\n#{prefix}")
           case type
           when :stdout
-            @machine.ui.output(output)
+            machine.ui.output(output)
           when :stderr
-            @machine.ui.error(output)
+            machine.ui.error(output)
           end
         end
       end
 
-      def install(machine_types, config_template_path)
+      # execute remote command as root on machine being provisioned
+      def sudo(command)
+        remote_sudo(@machine, command)
+      end
+
+      def install(machine_types, config_template_path, parallel)
         @machine.ui.info "Reading #{config_template_path}"
         installer_config = YAML::load_file(Pathname.new(config_template_path).realpath)
 
@@ -68,35 +77,49 @@ module VagrantPlugins
 
         sudo('cd ~/dcos && bash ~/dcos/dcos_generate_config.sh --genconf && cp -rpv ~/dcos/genconf/serve/* /var/tmp/dcos/')
 
-        #install_manual(active_machines, machine_types)
-        install_auto()
+        sudo('cd ~/dcos && bash ~/dcos/dcos_generate_config.sh --preflight')
+
+        if parallel
+          install_parallel
+        else
+          install_serial(active_machines, machine_types)
+        end
+
+        sudo('cd ~/dcos && bash ~/dcos/dcos_generate_config.sh --postflight')
 
         0
       end
 
-      def install_auto
-        sudo('cd ~/dcos && bash ~/dcos/dcos_generate_config.sh --preflight')
+      def install_parallel
         sudo('cd ~/dcos && bash ~/dcos/dcos_generate_config.sh --deploy')
-        sudo('cd ~/dcos && bash ~/dcos/dcos_generate_config.sh --postflight')
       end
 
-      def install_manual(active_machines, machine_types)
+      def install_serial(active_machines, machine_types)
+
+        # masters first
         active_machines.each do |name, provider|
           case machine_types[name.to_s]['type']
           when 'master'
             machine = @machine.env.machine(name, provider)
-            @machine.ui.info 'Installing DCOS master on #{name}'
-            sudo(%Q(bash -c "curl --fail --location --silent --show-error --verbose http://boot.dcos/dcos_install.sh | bash -s -- master"))
-          when 'agent-private'
-            machine = @machine.env.machine(name, provider)
-            @machine.ui.info 'Installing DCOS agent on #{name}'
-            sudo(%Q(bash -c "curl --fail --location --silent --show-error --verbose http://boot.dcos/dcos_install.sh | bash -s -- slave"))
-          when 'agent-public'
-            machine = @machine.env.machine(name, provider)
-            @machine.ui.info 'Installing DCOS agent-public on #{name}'
-            sudo(%Q(bash -c "curl --fail --location --silent --show-error --verbose http://boot.dcos/dcos_install.sh | bash -s -- slave_public"))
+            machine.ui.info 'Installing DCOS master on #{name}'
+            remote_sudo(machine, %Q(bash -c "curl --fail --location --silent --show-error --verbose http://boot.dcos/dcos_install.sh | bash -s -- master"))
           end
         end
+
+        # then slaves
+        active_machines.each do |name, provider|
+          case machine_types[name.to_s]['type']
+          when 'agent-private'
+            machine = @machine.env.machine(name, provider)
+            machine.ui.info 'Installing DCOS agent on #{name}'
+            remote_sudo(machine, %Q(bash -c "curl --fail --location --silent --show-error --verbose http://boot.dcos/dcos_install.sh | bash -s -- slave"))
+          when 'agent-public'
+            machine = @machine.env.machine(name, provider)
+            machine.ui.info 'Installing DCOS agent-public on #{name}'
+            remote_sudo(machine, %Q(bash -c "curl --fail --location --silent --show-error --verbose http://boot.dcos/dcos_install.sh | bash -s -- slave_public"))
+          end
+        end
+
       end
 
       # update installer_config with public addresses from the active machines

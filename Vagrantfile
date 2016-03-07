@@ -17,6 +17,7 @@ class UserConfig
   attr_accessor :generate_config_path
   attr_accessor :java_enabled
   attr_accessor :private_registry
+  attr_accessor :parallel
 
   def self.from_env
     c = self.new
@@ -28,6 +29,7 @@ class UserConfig
     c.generate_config_path = ENV.fetch('DCOS_GENERATE_CONFIG_PATH', 'dcos_generate_config.sh')
     c.java_enabled         = (ENV.fetch('DCOS_JAVA_ENABLED', 'false') == 'true')
     c.private_registry     = (ENV.fetch('DCOS_PRIVATE_REGISTRY', 'false') == 'true')
+    c.parallel             = (ENV.fetch('DCOS_PARALLEL_INSTALL', 'false') == 'true')
     c
   end
 
@@ -128,6 +130,12 @@ def validate_machine_types(machine_types)
   master_types = machine_types.select{ |_, cfg| cfg['type'] == 'master' }
   if master_types.empty?
     STDERR.puts 'Must have at least one machine of type master'
+    exit 2
+  end
+
+  agent_types = machine_types.select{ |_, cfg| cfg['type'] == 'agent' || cfg['type'] == 'agent-public' }
+  if agent_types.empty?
+    STDERR.puts 'Must have at least one machine of type agent or agent-public'
     exit 2
   end
 end
@@ -246,6 +254,7 @@ Vagrant.configure(2) do |config|
 
         machine.vm.provision(
           :dcos_install,
+          parallel: user_config.parallel,
           machine_types: machine_types,
           config_template_path: user_config.config_path,
           preserve_order: true
