@@ -17,6 +17,7 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
 - [Appendix: Architecture](#appendix-architecture)
 - [Appendix: Installation](#appendix-installation)
 - [Appendix: Install Ruby](#install-ruby)
+- [Appendix: Options](#appendix-options)
 - [Appendix: Repo Structure](#appendix-repo-structure)
 - [Appendix: VirtualBox Guest Additions](#appendix-virtualbox-guest-additions)
 - [License and Author](#license-and-author)
@@ -314,6 +315,25 @@ There are several ways to install ruby. One way is to use ruby-install, using ch
     source '/usr/local/share/chruby/chruby.sh'
     chruby 2.2
     ```
+
+
+# Appendix: Options
+
+There are several configurable options when deploying a cluster and installing DCOS on it. Most of them are configurable via environment variables:
+
+- `DCOS_BOX` - VirtualBox box image name (default: `mesosphere/dcos-centos-virtualbox`)
+- `DCOS_BOX_URL` - VirtualBox box image url or vagrant-cloud style image repo (default: `https://downloads.mesosphere.com/dcos-vagrant/metadata.json')
+- `DCOS_BOX_VERSION` - VirtualBox box image version (default: `~> 0.4.1')
+- `DCOS_MACHINE_CONFIG_PATH` - Path to virtual machine configuration manifest (default: `VagrantConfig.yaml')
+    - Must contain at least one `boot` type machine, one `master` type machine, and one `agent` or `agent-public` type machine.
+- `DCOS_CONFIG_PATH` - Path to DCOS configuration template (default: `etc/config.yaml')
+    - `master_list`, `agent_list`, `exhibitor_zk_hosts`, and `bootstrap_url` will be overridden.
+- `DCOS_GENERATE_CONFIG_PATH` - Path to DCOS configuration generation script (default: `dcos_generate_config.sh')
+- `DCOS_JAVA_ENABLED` - Boolean to install java on each agent (default: `false`)
+- `DCOS_PRIVATE_REGISTRY` - Boolean to install an insecure private Docker registry on the boot machine and configure the agents to allow it (default: `false`)
+- `DCOS_PARALLEL_INSTALL` - Boolean to execute `dcos_generate_config.sh --deploy` on the boot machine instead of executing `dcos_install.sh` on each master and agent machine (default: `false`)
+
+Additional advanced configuration may be possible by modifying the Vagrantfile directly, but is not encouraged because the internal APIs may change at any time.
 
 
 # Appendix: Repo Structure
