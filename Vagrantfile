@@ -15,9 +15,9 @@ class UserConfig
   attr_accessor :machine_config_path
   attr_accessor :config_path
   attr_accessor :generate_config_path
+  attr_accessor :install_method
   attr_accessor :java_enabled
   attr_accessor :private_registry
-  attr_accessor :parallel
 
   def self.from_env
     c = self.new
@@ -27,9 +27,9 @@ class UserConfig
     c.machine_config_path  = ENV.fetch('DCOS_MACHINE_CONFIG_PATH', 'VagrantConfig.yaml')
     c.config_path          = ENV.fetch('DCOS_CONFIG_PATH', 'etc/config.yaml')
     c.generate_config_path = ENV.fetch('DCOS_GENERATE_CONFIG_PATH', 'dcos_generate_config.sh')
+    c.install_method       = ENV.fetch('DCOS_INSTALL_METHOD', 'ssh_pull')
     c.java_enabled         = (ENV.fetch('DCOS_JAVA_ENABLED', 'false') == 'true')
     c.private_registry     = (ENV.fetch('DCOS_PRIVATE_REGISTRY', 'false') == 'true')
-    c.parallel             = (ENV.fetch('DCOS_PARALLEL_INSTALL', 'false') == 'true')
     c
   end
 
@@ -45,6 +45,7 @@ class UserConfig
       :machine_config_path,
       :config_path,
       :generate_config_path,
+      :install_method,
     ]
     required_fields.each do |field_name|
       field_value = send(field_name.to_sym)
@@ -254,7 +255,7 @@ Vagrant.configure(2) do |config|
 
         machine.vm.provision(
           :dcos_install,
-          parallel: user_config.parallel,
+          install_method: user_config.install_method,
           machine_types: machine_types,
           config_template_path: user_config.config_path,
           preserve_order: true

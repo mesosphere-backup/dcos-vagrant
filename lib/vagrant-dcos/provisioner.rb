@@ -2,6 +2,8 @@
 # vi: set ft=ruby :
 
 require_relative 'gen_conf_config'
+require_relative 'executor'
+require 'thread'
 require 'yaml'
 
 module VagrantPlugins
@@ -15,7 +17,8 @@ module VagrantPlugins
         install(
           @config.machine_types,
           @config.config_template_path,
-          @config.parallel,
+          @config.install_method.to_sym,
+          @config.max_install_threads,
         )
       end
 
@@ -45,9 +48,9 @@ module VagrantPlugins
         remote_sudo(@machine, command)
       end
 
-      def install(machine_types, config_template_path, parallel)
+      def install(machine_types, config_template_path, install_method, max_install_threads)
         @machine.ui.info "Reading #{config_template_path}"
-        gen_conf_config = GenConfConfigLoader.load_file(Pathname.new(config_template_path).realpath)
+        gen_conf_config = GenConfConfigLoader.load_file(config_template_path)
 
         @machine.ui.info 'Analyzing machines'
         gen_conf_config.master_list = []
@@ -61,7 +64,7 @@ module VagrantPlugins
         update_gen_conf_config(gen_conf_config, active_machines, machine_types)
 
         # required config for SSH deploy
-        if parallel
+        if install_method == :ssh_push
           # "cluster_config.bootstrap_url must be set to 'file:///opt/dcos_install_tmp' to use the SSH deploy utilities."
           gen_conf_config.bootstrap_url = 'file:///opt/dcos_install_tmp'
         end
@@ -77,68 +80,84 @@ module VagrantPlugins
 
         sudo('cd ~/dcos && bash ~/dcos/dcos_generate_config.sh --genconf && cp -rpv ~/dcos/genconf/serve/* /var/tmp/dcos/')
 
-        if parallel
-          install_parallel
+        case install_method
+        when :ssh_push
+          install_push
+        when :ssh_pull
+          install_pull(active_machines, machine_types, max_install_threads)
         else
-          install_serial(active_machines, machine_types)
+          raise StandardError.new("install_method not supported: #{install_method}")
         end
-
-        0
       end
 
       def filter_machines(active_machines, machine_types, type)
         active_machines.select{ |name, _provider| machine_types[name.to_s]['type'] == type }
       end
 
-      def install_parallel
+      def install_push
         sudo('cd ~/dcos && bash ~/dcos/dcos_generate_config.sh --preflight')
         sudo('cd ~/dcos && bash ~/dcos/dcos_generate_config.sh --deploy')
         sudo('cd ~/dcos && bash ~/dcos/dcos_generate_config.sh --postflight')
       end
 
-      def install_serial(active_machines, machine_types)
+      def install_pull(active_machines, machine_types, max_install_threads)
 
+        # install masters in parallel
+        queue = Queue.new
         filter_machines(active_machines, machine_types, 'master').each do |name, provider|
           machine = @machine.env.machine(name, provider)
-          machine.ui.info 'Installing DCOS (master)'
-          remote_sudo(machine, %Q(bash -c "curl --fail --location --silent --show-error --verbose http://boot.dcos/dcos_install.sh | bash -s -- master"))
+          queue.push(Proc.new do
+            machine.ui.info 'Installing DCOS (master)'
+            remote_sudo(machine, %Q(bash -c "curl --fail --location --silent --show-error --verbose http://boot.dcos/dcos_install.sh | bash -s -- master"))
+          end)
         end
+        Executor.exec(queue, max_install_threads)
 
+        # install agents (public and private) in parallel
+        queue = Queue.new
         filter_machines(active_machines, machine_types, 'agent-private').each do |name, provider|
           machine = @machine.env.machine(name, provider)
-          machine.ui.info 'Installing DCOS (agent)'
-          remote_sudo(machine, %Q(bash -c "curl --fail --location --silent --show-error --verbose http://boot.dcos/dcos_install.sh | bash -s -- slave"))
+          queue.push(Proc.new do
+            machine.ui.info 'Installing DCOS (agent)'
+            remote_sudo(machine, %Q(bash -c "curl --fail --location --silent --show-error --verbose http://boot.dcos/dcos_install.sh | bash -s -- slave"))
+          end)
         end
-
         filter_machines(active_machines, machine_types, 'agent-public').each do |name, provider|
           machine = @machine.env.machine(name, provider)
-          machine.ui.info 'Installing DCOS (agent-public)'
-          remote_sudo(machine, %Q(bash -c "curl --fail --location --silent --show-error --verbose http://boot.dcos/dcos_install.sh | bash -s -- slave_public"))
+          queue.push(Proc.new do
+            machine.ui.info 'Installing DCOS (agent-public)'
+            remote_sudo(machine, %Q(bash -c "curl --fail --location --silent --show-error --verbose http://boot.dcos/dcos_install.sh | bash -s -- slave_public"))
+          end)
         end
+        Executor.exec(queue, max_install_threads)
 
-        # postflight masters
+        # postflight all nodes in parallel
+        queue = Queue.new
         filter_machines(active_machines, machine_types, 'master').each do |name, provider|
           machine = @machine.env.machine(name, provider)
-          machine.ui.info 'DCOS Postflight'
-          write_postflight(machine)
-          remote_sudo(machine, '/opt/mesosphere/bin/postflight.sh')
+          queue.push(Proc.new do
+            machine.ui.info 'DCOS Postflight'
+            write_postflight(machine)
+            remote_sudo(machine, '/opt/mesosphere/bin/postflight.sh')
+          end)
         end
-
-        # postflight agent-private
         filter_machines(active_machines, machine_types, 'agent-private').each do |name, provider|
           machine = @machine.env.machine(name, provider)
-          machine.ui.info 'DCOS Postflight'
-          write_postflight(machine)
-          remote_sudo(machine, '/opt/mesosphere/bin/postflight.sh')
+          queue.push(Proc.new do
+            machine.ui.info 'DCOS Postflight'
+            write_postflight(machine)
+            remote_sudo(machine, '/opt/mesosphere/bin/postflight.sh')
+          end)
         end
-
-        # postflight agent-public
         filter_machines(active_machines, machine_types, 'agent-public').each do |name, provider|
           machine = @machine.env.machine(name, provider)
-          machine.ui.info 'DCOS Postflight'
-          write_postflight(machine)
-          remote_sudo(machine, '/opt/mesosphere/bin/postflight.sh')
+          queue.push(Proc.new do
+            machine.ui.info 'DCOS Postflight'
+            write_postflight(machine)
+            remote_sudo(machine, '/opt/mesosphere/bin/postflight.sh')
+          end)
         end
+        Executor.exec(queue, max_install_threads)
 
       end
 

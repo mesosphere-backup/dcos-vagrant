@@ -329,10 +329,11 @@ There are several configurable options when deploying a cluster and installing D
 - `DCOS_CONFIG_PATH` - Path to DCOS configuration template (default: `etc/config.yaml`)
     - `master_list`, `agent_list`, `exhibitor_zk_hosts`, and `bootstrap_url` will be overridden.
 - `DCOS_GENERATE_CONFIG_PATH` - Path to DCOS configuration generation script (default: `dcos_generate_config.sh`)
+- `DCOS_INSTALL_METHOD` - One of the following methods (default: `ssh_pull`):
+    - `ssh_pull` - Use the "manual" DCOS installation method (`dcos_install.sh`) with a pool of thread workers performing remote SHH installation.
+    - `ssh_push` - Use the "automated" DCOS installation method (`dcos_generate_config.sh --deploy`). WARNING: Does not (yet) support agent-public nodes!
 - `DCOS_JAVA_ENABLED` - Boolean to install java on each agent (default: `false`)
 - `DCOS_PRIVATE_REGISTRY` - Boolean to install an insecure private Docker registry on the boot machine and configure the agents to allow it (default: `false`)
-- `DCOS_PARALLEL_INSTALL` - Boolean to execute `dcos_generate_config.sh --deploy` on the boot machine instead of executing `dcos_install.sh` on each master and agent machine (default: `false`)
-    - WARNING: Parallel installation currently does not support agent-public nodes!
 
 Additional advanced configuration may be possible by modifying the Vagrantfile directly, but is not encouraged because the internal APIs may change at any time.
 

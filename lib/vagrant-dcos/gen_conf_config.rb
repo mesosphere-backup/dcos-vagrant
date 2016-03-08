@@ -139,7 +139,7 @@ module VagrantPlugins
 
     class GenConfConfigLoader
       def self.load_file(config_template_path)
-        config_hash = YAML::load_file(config_template_path)
+        config_hash = YAML::load_file(Pathname.new(config_template_path).realpath)
         if config_hash['cluster_config']
           # 1.5 config detected
           return GenConfConfig_1_5.new.update(config_hash)
