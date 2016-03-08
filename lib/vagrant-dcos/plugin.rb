@@ -9,8 +9,8 @@ module VagrantPlugins
       name "dcos"
 
       config :dcos_install, :provisioner do
-        require_relative 'config'
-        Config
+        require_relative 'provisioner_config'
+        ProvisionerConfig
       end
 
       provisioner :dcos_install do

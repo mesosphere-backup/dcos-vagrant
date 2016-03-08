@@ -3,7 +3,7 @@
 
 module VagrantPlugins
   module DCOS
-    class Config < Vagrant.plugin(2, :config)
+    class ProvisionerConfig < Vagrant.plugin(2, :config)
       attr_accessor :parallel
       attr_accessor :machine_types
       attr_accessor :config_template_path
