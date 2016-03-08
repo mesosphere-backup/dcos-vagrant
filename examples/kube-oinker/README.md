@@ -40,14 +40,11 @@ This example runs [Oinker-Go](https://github.com/mesosphere/oinker-go) on [Kuber
     ```
 1. Wait for the cassandra framework to deploy 3 executors and 3 servers (takes 5m+). Check the Mesos UI: <http://m1.dcos/mesos>.
 
-## Add Multiverse Repository
+## Add Multiverse Package Repository
 
-    Kubernetes and etcd are in the Multiverse repo. So the Multiverse must be added to the dcos-cli config.
+Kubernetes and etcd are in the Multiverse repo. So the Multiverse must be added to the dcos-cli config.
 
-    ```
-    dcos config prepend package.sources https://github.com/mesosphere/multiverse/archive/version-1.x.zip
-    dcos package update --validate
-    ```
+See the [dcos-cli docs](../../docs.dcos-cli.md#multiverse) on how to add the multiverse repo.
 
 ## Install etcd
 

@@ -26,6 +26,7 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
 
 - [Base OS Image](./build)
 - [Examples](./examples)
+- [DCOS CLI](./docs/dcos-cli.md)
 - [Troubleshooting](./docs/troubleshooting.md)
 
 

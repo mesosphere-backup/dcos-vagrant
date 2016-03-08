@@ -40,14 +40,13 @@ This example runs [Oinker-Go](https://github.com/mesosphere/oinker-go) on [Marat
     ```
 1. Wait for the cassandra framework to deploy 3 executors and 3 servers (takes 5m+). Check the Mesos UI: <http://m1.dcos/mesos>.
 
-## Add Multiverse Repository
 
-    Marathon-LB is in the Multiverse repo. So the Multiverse must be added to the dcos-cli config.
+## Add Multiverse Package Repository
 
-    ```
-    dcos config prepend package.sources https://github.com/mesosphere/multiverse/archive/version-1.x.zip
-    dcos package update --validate
-    ```
+Marathon-LB is in the Multiverse repo. So the Multiverse must be added to the dcos-cli config.
+
+See the [dcos-cli docs](../../docs.dcos-cli.md#multiverse) on how to add the multiverse repo.
+
 
 ## Install Marathon-LB
 
