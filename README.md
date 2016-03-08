@@ -332,6 +332,7 @@ There are several configurable options when deploying a cluster and installing D
 - `DCOS_JAVA_ENABLED` - Boolean to install java on each agent (default: `false`)
 - `DCOS_PRIVATE_REGISTRY` - Boolean to install an insecure private Docker registry on the boot machine and configure the agents to allow it (default: `false`)
 - `DCOS_PARALLEL_INSTALL` - Boolean to execute `dcos_generate_config.sh --deploy` on the boot machine instead of executing `dcos_install.sh` on each master and agent machine (default: `false`)
+    - WARNING: Parallel installation currently does not support agent-public nodes!
 
 Additional advanced configuration may be possible by modifying the Vagrantfile directly, but is not encouraged because the internal APIs may change at any time.
 
