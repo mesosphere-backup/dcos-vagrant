@@ -34,7 +34,7 @@ dcos_installer:: master_list
 **Solution**: DCOS >= 1.6 requires a flattened yaml config file. Make sure the `DCOS_CONFIG_PATH` environment variable points to a file with the correct schema for your DCOS version before running vagrant:
 
 ```
-export DCOS_CONFIG_PATH=etc/1_master-config-1.6.yaml
+export DCOS_CONFIG_PATH=etc/config-1.6.yaml
 ```
 
 

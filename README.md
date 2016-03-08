@@ -17,6 +17,7 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
 - [Appendix: Architecture](#appendix-architecture)
 - [Appendix: Installation](#appendix-installation)
 - [Appendix: Install Ruby](#install-ruby)
+- [Appendix: Options](#appendix-options)
 - [Appendix: Repo Structure](#appendix-repo-structure)
 - [Appendix: VirtualBox Guest Additions](#appendix-virtualbox-guest-additions)
 - [License and Author](#license-and-author)
@@ -72,10 +73,10 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
 
 - 1.6
   - Requires dcos-vagrant >= 0.4.0
-  - Requires flattened yaml config (e.g. <./etc/1_master-config-1.6.yaml>)
+  - Requires flattened yaml config (e.g. <./etc/config-1.6.yaml>)
 - 1.5.x
   - Requires dcos-vagrant >= 0.3.0
-  - Requires yaml config (e.g. <./etc/1_master-config-1.5.yaml>)
+  - Requires yaml config (e.g. <./etc/config-1.5.yaml>)
 - CM.4
   - Requires [dcos-vagrant v0.3.0](https://github.com/mesosphere/dcos-vagrant/tree/v0.3.0)
 
@@ -132,23 +133,19 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
 
 1. <a name="configure-the-dcos-installer"></a>Configure the DCOS Installer
 
-   By default, the single-master json (DCOS 1.4) DCOS installer configuration is used.
+   By default, the DCOS 1.5 installer configuration is used.
 
-   DCOS versions <= 1.4 require a json config. DCOS versions >= 1.5 require a yaml config.
-
-   **If you're using DCOS 1.5 or higher, or want a multiple-master cluster, the `DCOS_CONFIG_PATH` environment variable must be set.**
+   **If you're using DCOS 1.6 or higher, the `DCOS_CONFIG_PATH` environment variable must be set.**
 
    Included config files (select one):
 
-   - DCOS 1.6 1-master: `export DCOS_CONFIG_PATH=etc/1_master-config-1.6.yaml`
-   - DCOS 1.5 1-master: `export DCOS_CONFIG_PATH=etc/1_master-config-1.5.yaml` (default)
-   - DCOS 1.4 1-master: `export DCOS_CONFIG_PATH=etc/1_master-config-1.4.json`
-   - DCOS 1.4 3-master: `export DCOS_CONFIG_PATH=etc/3_master-config-1.4.json`
+   - DCOS 1.6: `export DCOS_CONFIG_PATH=etc/config-1.6.yaml`
+   - DCOS 1.5: `export DCOS_CONFIG_PATH=etc/config-1.5.yaml` (default)
 
    The path to the config file is relative to the repo dir, because the repo dir will be mounted as `/vagrant` within each VM.
    Other configurations can be added to the `<repo>/etc/` dir and configured in a similar manner.
 
-   Alternatively, a URL to an online config can be specified (e.g. `export DCOS_CONFIG_PATH=http://example.com/5_master-config.json`).
+   Alternatively, a URL to an online config can be specified (e.g. `export DCOS_CONFIG_PATH=http://example.com/config.yaml`).
 
 1. Configure the DCOS Machine Types
 
@@ -183,7 +180,7 @@ A minimal cluster supports launching small Marathon apps. Most other frameworks 
 Requires > 4.5GB free memory (using the example [VagrantConfig](./Vagrantconfig.yaml)).
 
 ```bash
-vagrant up boot m1 a1
+vagrant up m1 a1 boot
 ```
 
 ### Small Cluster
@@ -193,7 +190,7 @@ A small cluster supports running tasks on multiple nodes.
 Requires > 7.25GB free memory (using the example [VagrantConfig](./Vagrantconfig.yaml)).
 
 ```bash
-vagrant up boot m1 a1 a2 p1
+vagrant up m1 a1 a2 p1 boot
 ```
 
 ### Medium Cluster
@@ -203,7 +200,7 @@ A medium cluster supports the installation of a [minimally configured Cassandra]
 Requires > 10GB free memory (using the example [VagrantConfig](./Vagrantconfig.yaml)).
 
 ```bash
-vagrant up boot m1 a1 a2 a3 a4 p1
+vagrant up m1 a1 a2 a3 a4 p1 boot
 ```
 
 ### Large Cluster
@@ -213,7 +210,7 @@ Requires > 17GB free memory (using the example [VagrantConfig](./Vagrantconfig.y
 A large cluster supports master node fail over, multiple framework installs, and multiple public load balancers.
 
 ```bash
-vagrant up boot m1 m2 m3 a1 a2 a3 a4 a5 a6 p1 p2 p3
+vagrant up m1 m2 m3 a1 a2 a3 a4 a5 a6 p1 p2 p3 boot
 ```
 
 ## Install DCOS Services
@@ -243,7 +240,7 @@ For example, see the [Oinker on Kubernetes Example](./examples/kube-oinker/).
 
 When installing the Enterprise Edition of DCOS (>= 1.6) on dcos-vagrant, the cluster will prompt for a username and password when using the dcos-cli or the web dashboard.
 
-If you're using the provided 1.6 installer config file ([etc/1_master-config-1.6.yaml](./etc/1_master-config-1.6.yaml)) then the superuser credentials are by default `admin`/`admin`. For a local deployment, this is probably fine, but for a production deployment these should be more securely configured.
+If you're using the provided 1.6 installer config file ([etc/config-1.6.yaml](./etc/config-1.6.yaml)) then the superuser credentials are by default `admin`/`admin`. For a local deployment, this is probably fine, but for a production deployment these should be more securely configured.
 
 
 # Appendix: Architecture
@@ -320,6 +317,27 @@ There are several ways to install ruby. One way is to use ruby-install, using ch
     ```
 
 
+# Appendix: Options
+
+There are several configurable options when deploying a cluster and installing DCOS on it. Most of them are configurable via environment variables:
+
+- `DCOS_BOX` - VirtualBox box image name (default: `mesosphere/dcos-centos-virtualbox`)
+- `DCOS_BOX_URL` - VirtualBox box image url or vagrant-cloud style image repo (default: `https://downloads.mesosphere.com/dcos-vagrant/metadata.json`)
+- `DCOS_BOX_VERSION` - VirtualBox box image version (default: `~> 0.4.1`)
+- `DCOS_MACHINE_CONFIG_PATH` - Path to virtual machine configuration manifest (default: `VagrantConfig.yaml`)
+    - Must contain at least one `boot` type machine, one `master` type machine, and one `agent` or `agent-public` type machine.
+- `DCOS_CONFIG_PATH` - Path to DCOS configuration template (default: `etc/config.yaml`)
+    - `master_list`, `agent_list`, `exhibitor_zk_hosts`, and `bootstrap_url` will be overridden.
+- `DCOS_GENERATE_CONFIG_PATH` - Path to DCOS configuration generation script (default: `dcos_generate_config.sh`)
+- `DCOS_INSTALL_METHOD` - One of the following methods (default: `ssh_pull`):
+    - `ssh_pull` - Use the "manual" DCOS installation method (`dcos_install.sh`) with a pool of thread workers performing remote SHH installation.
+    - `ssh_push` - Use the "automated" DCOS installation method (`dcos_generate_config.sh --deploy`). WARNING: Does not (yet) support agent-public nodes!
+- `DCOS_JAVA_ENABLED` - Boolean to install java on each agent (default: `false`)
+- `DCOS_PRIVATE_REGISTRY` - Boolean to install an insecure private Docker registry on the boot machine and configure the agents to allow it (default: `false`)
+
+Additional advanced configuration may be possible by modifying the Vagrantfile directly, but is not encouraged because the internal APIs may change at any time.
+
+
 # Appendix: Repo Structure
 
 **NOTE: Take note of the files in [.gitignore](./.gitignore) which will not be committed. These are indicated by angle brackets below. Some of them must be provided for deployment to succeed.**
@@ -328,10 +346,8 @@ There are several ways to install ruby. One way is to use ruby-install, using ch
 	├─── docs                          # Misc images or supporting documentation
 	│
 	├─── etc
-	│   ├── 1_master-config-1.4.json   # DCOS config for 1 master (CM.4)
-	│   ├── 1_master-config-1.5.yaml   # DCOS config for 1 master (1.5)
-	│   ├── 1_master-config-1.6.yaml   # DCOS config for 1 master (1.6)
-	│   └── 3_master-config-1.4.json   # DCOS config for 3 masters (1.4)
+	│   ├── config-1.5.yaml            # DCOS config template (1.5)
+	│   └── config-1.6.yaml            # DCOS config template (1.6)
 	│
 	├─── examples                      # Example app/service definitions
 	│   ├── java-spring                # Example java-spring Marathon application
