@@ -71,7 +71,7 @@ On production deployments of DCOS, the private agent nodes are not usually exter
 
 Marathon-LB is in the Multiverse repo. So the Multiverse must be added to the dcos-cli config.
 
-See the [dcos-cli docs](../../docs.dcos-cli.md#multiverse) on how to add the multiverse repo.
+See the [dcos-cli docs](../../docs/dcos-cli.md#multiverse) on how to add the multiverse repo.
 
 **Deploy Marathon-LB**
 

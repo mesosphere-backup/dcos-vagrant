@@ -44,7 +44,7 @@ This example runs [Oinker-Go](https://github.com/mesosphere/oinker-go) on [Kuber
 
 Kubernetes and etcd are in the Multiverse repo. So the Multiverse must be added to the dcos-cli config.
 
-See the [dcos-cli docs](../../docs.dcos-cli.md#multiverse) on how to add the multiverse repo.
+See the [dcos-cli docs](../../docs/dcos-cli.md#multiverse) on how to add the multiverse repo.
 
 ## Install etcd
 
