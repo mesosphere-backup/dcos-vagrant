@@ -16,6 +16,7 @@ class UserConfig
   attr_accessor :config_path
   attr_accessor :generate_config_path
   attr_accessor :install_method
+  attr_accessor :vagrant_mount_method
   attr_accessor :java_enabled
   attr_accessor :private_registry
 
@@ -28,6 +29,7 @@ class UserConfig
     c.config_path          = ENV.fetch('DCOS_CONFIG_PATH', 'etc/config.yaml')
     c.generate_config_path = ENV.fetch('DCOS_GENERATE_CONFIG_PATH', 'dcos_generate_config.sh')
     c.install_method       = ENV.fetch('DCOS_INSTALL_METHOD', 'ssh_pull')
+    c.vagrant_mount_method = ENV.fetch('DCOS_VAGRANT_MOUNT_METHOD', 'virtualbox')
     c.java_enabled         = (ENV.fetch('DCOS_JAVA_ENABLED', 'false') == 'true')
     c.private_registry     = (ENV.fetch('DCOS_PRIVATE_REGISTRY', 'false') == 'true')
     c
@@ -46,6 +48,7 @@ class UserConfig
       :config_path,
       :generate_config_path,
       :install_method,
+      :vagrant_mount_method,
     ]
     required_fields.each do |field_name|
       field_value = send(field_name.to_sym)
@@ -195,9 +198,8 @@ Vagrant.configure(2) do |config|
         machine.hostmanager.aliases = %Q(#{machine_type['aliases'].join(' ')})
       end
 
-      # Use NFS for shared folders for better performance
-      #TODO NFS client install is soooo sloooow...
-      #machine.vm.synced_folder '.', '/vagrant', nfs: true
+      # custom mount type
+      machine.vm.synced_folder '.', '/vagrant', type: user_config.vagrant_mount_method
 
       # allow explicit nil values in the machine_type to override the defaults
       machine.vm.box = machine_type.fetch('box', user_config.box)
