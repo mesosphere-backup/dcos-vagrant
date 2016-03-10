@@ -134,17 +134,13 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
 
 1. <a name="configure-the-dcos-installer"></a>Configure the DCOS Installer
 
-   By default, the DCOS 1.5 installer configuration is used.
-
-   **If you're using DCOS 1.6 or higher, the `DCOS_CONFIG_PATH` environment variable must be set.**
-
-   Included config files (select one):
+   Select a config file template based on the downloaded version of DCOS (select one):
 
    - DCOS 1.6: `export DCOS_CONFIG_PATH=etc/config-1.6.yaml`
    - DCOS 1.5: `export DCOS_CONFIG_PATH=etc/config-1.5.yaml` (default)
 
    The path to the config file is relative to the repo dir, because the repo dir will be mounted as `/vagrant` within each VM.
-   Other configurations can be added to the `<repo>/etc/` dir and configured in a similar manner.
+   Alternate configurations may be added to the `<repo>/etc/` dir and configured in a similar manner.
 
    Alternatively, a URL to an online config can be specified (e.g. `export DCOS_CONFIG_PATH=http://example.com/config.yaml`).
 
@@ -166,9 +162,9 @@ The following steps will walk through DCOS and DCOS Apps/Service.
 
 ## Deploy VMs and Install DCOS
 
-DCOS can be deployed with 1, 3, or 5 master nodes and any number of public and/or private agent nodes, depending on the DCOS installer configuration. See [Configure the DCOS Installer](#configure-the-dcos-installer) for more details.
+DCOS can be deployed with 1, 3, or 5 master nodes and any number of public and/or private agent nodes.
 
-In order to deploy DCOS, a bootstrap node is also required to facilitate installation configuration, install file distribution, and zookeeper bootstrapping.
+A bootstrap node is also required, and must be provisioned after all other master and agent nodes.
 
 **IMPORTANT**: Make sure your local machine has enough memory to launch all your desired VMs, otherwise your machine may lock up as all the memory is consumed.
 
@@ -241,7 +237,7 @@ For example, see the [Oinker on Kubernetes Example](./examples/kube-oinker/).
 
 When installing the Enterprise Edition of DCOS (>= 1.6) on dcos-vagrant, the cluster will prompt for a username and password when using the dcos-cli or the web dashboard.
 
-If you're using the provided 1.6 installer config file ([etc/config-1.6.yaml](./etc/config-1.6.yaml)) then the superuser credentials are by default `admin`/`admin`. For a local deployment, this is probably fine, but for a production deployment these should be more securely configured.
+If you're using the provided 1.6 installer config file ([etc/config-1.6.yaml](./etc/config-1.6.yaml)) then the superuser credentials are by default `admin`/`admin`.
 
 
 # Appendix: Architecture
