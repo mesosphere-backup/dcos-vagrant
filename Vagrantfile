@@ -188,16 +188,6 @@ Vagrant.configure(2) do |config|
   machine_types.each do |name, machine_type|
     config.vm.define name do |machine|
 
-      provision_env = user_config.provision_env
-
-      # configure DNS
-      machine.vm.provider 'virtualbox' do
-        provision_env['DCOS_DNS_IPS'] = %w( 8.8.8.8 ).join(' ')
-      end
-      machine.vm.provider 'aws' do
-        provision_env['DCOS_DNS_IPS'] = %w( 169.254.169.253 ).join(' ')
-      end
-
       machine.vm.hostname = "#{name}.dcos"
 
       # custom hostname aliases
@@ -250,7 +240,7 @@ Vagrant.configure(2) do |config|
           :shell,
           name: "DCOS #{machine_type['type'].capitalize}",
           path: provision_script_path("type-#{machine_type['type']}"),
-          env: provision_env
+          env: user_config.provision_env
         )
 
         machine.vm.provision(

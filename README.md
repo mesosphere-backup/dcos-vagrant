@@ -72,7 +72,7 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
 
 ## Supported DCOS Versions
 
-- 1.6
+- 1.6.x
   - Requires dcos-vagrant >= 0.4.0
   - Requires flattened yaml config (e.g. <./etc/config-1.6.yaml>)
 - 1.5.x
@@ -269,15 +269,34 @@ The DCOS installation is multi-stage with many moving parts.
 
 ## High Level Stages
 
-1. Boot node unpacks `dcos_generate_config.sh`, creates `dcos_install.sh`, starts an nginx on `boot.dcos` to distribute the installer, and a bootstrap zookeeper required by Exibitor
-1. Master nodes are provisioned using `dcos_install.sh master`
-    1. Exibitor starts, brings up Zookeeper
+1. Node machines are created and provisioned (master, agent-private, agent-public)
+    1. Nodes are given IPs and added to a shared network
+    1. SSH keys are updated
+    1. SSL certificate authorities are updated
+    1. Docker is configured to allow insecure registries (if configured)
+1. Boot machine is created and provisioned
+    1. Bootstrap Exhibitor (Zookeeper) is started
+    1. Nginx is started to host generated node config artifacts
+    1. Private Docker registry is started (if configured)
+    1. Java runtime is copied from host and installed (if configured)
+    1. DCOS release (`dcos_generate_config.sh`) is copied from host
+1. DCOS pre-install
+    1. DCOS release config (`config.yaml` & `ip-detect`) is generated from list of active nodes
+    1. DCOS node config artifacts (`dcos_install.sh` & tarballs) are generated from the release and release config
+1. DCOS install
+    1. Node config artifacts are distributed to the nodes and installed (based on node type)
+    1. DCOS systemd services are started on the nodes
+1. DCOS post-install
+    1. Exhibitor starts, brings up Zookeeper
     1. Mesos Master starts up and registers with Zookeeper
-    1. Mesos DNS detects Mesos Master using Zookeeper and initializes `leader.mesos` 
-    1. Root Marathon detects `leader.mesos` and comes up
-    1. AdminRouter (nginx) starts routing subpaths of `leader.mesos` to various components
-1. Agent nodes are provisioned using `dcos_install.sh slave` or `dcos_install.sh slave_public`
-    1. Mesos Slave finds the leading Mesos Master using Zookeeper and Mesos DNS
+    1. Mesos DNS detects Mesos Master using Zookeeper and initializes `leader.mesos`
+    1. Root Marathon detects `leader.mesos` and starts up
+        1. Root Marathon registers with the leading Mesos Master
+    1. AdminRouter (nginx) detects `leader.mesos` starts up
+        1. DCOS, Mesos, Marathon, and Exhibitor UIs become externally accessible
+    1. Mesos Slaves detect `leader.mesos` and start up
+        1. Mesos Slaves register with the leading Mesos Master
+        1. DCOS Nodes become visible in the DCOS UI
 
 ## System Logs
 

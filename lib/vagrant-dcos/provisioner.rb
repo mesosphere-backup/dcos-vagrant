@@ -61,12 +61,28 @@ module VagrantPlugins
         # 1.7 adds --version
         #sudo('bash ~/dcos/dcos_generate_config.sh --version')
 
-        update_gen_conf_config(gen_conf_config, active_machines, machine_types)
+        # configure how to access the nodes from the boot machine
+        gen_conf_config.master_list = machine_ips(active_machines, machine_types, 'master')
+        gen_conf_config.agent_list = machine_ips(active_machines, machine_types, 'agent-private') + machine_ips(active_machines, machine_types, 'agent-public')
 
-        # required config for SSH deploy
-        if install_method == :ssh_push
-          # "cluster_config.bootstrap_url must be set to 'file:///opt/dcos_install_tmp' to use the SSH deploy utilities."
+        # configure how to access the boot machine from the nodes
+        boot_public_address = @machine.provider.capability(:public_address)
+        gen_conf_config.exhibitor_zk_hosts = "#{boot_public_address}:2181"
+        case install_method
+        when :ssh_push
+          #TODO: in the future this may not be required by genconf, since it's really an internal concern
           gen_conf_config.bootstrap_url = 'file:///opt/dcos_install_tmp'
+        when :ssh_pull
+          # url to the nginx server that will host the output of genconf
+          gen_conf_config.bootstrap_url = "http://#{boot_public_address}"
+        end
+
+        # configure how the nodes will resolve domains
+        case @machine.provider_name
+        when :aws
+          gen_conf_config.resolvers = [ '169.254.169.253' ]
+        else # :virtualbox
+          gen_conf_config.resolvers = [ '8.8.8.8' ]
         end
 
         write_gen_conf_config(gen_conf_config)
@@ -85,8 +101,6 @@ module VagrantPlugins
           install_push
         when :ssh_pull
           install_pull(active_machines, machine_types, max_install_threads)
-        else
-          raise StandardError.new("install_method not supported: #{install_method}")
         end
       end
 
@@ -161,36 +175,14 @@ module VagrantPlugins
 
       end
 
-      # update gen_conf_config with public addresses from the active machines
-      def update_gen_conf_config(gen_conf_config, active_machines, machine_types)
-        master_list = []
-        agent_list = []
-
-        active_machines.each do |name, provider|
-          case machine_types[name.to_s]['type']
-          when 'boot'
-            machine = @machine.env.machine(name, provider)
-            public_address = machine.provider.capability(:public_address)
-            gen_conf_config.exhibitor_zk_hosts = "#{public_address}:2181"
-            gen_conf_config.bootstrap_url = "http://#{public_address}"
-          when 'master'
-            machine = @machine.env.machine(name, provider)
-            public_address = machine.provider.capability(:public_address)
-            master_list.push(public_address)
-          when 'agent-private'
-            machine = @machine.env.machine(name, provider)
-            public_address = machine.provider.capability(:public_address)
-            agent_list.push(public_address)
-          when 'agent-public'
-            machine = @machine.env.machine(name, provider)
-            public_address = machine.provider.capability(:public_address)
-            agent_list.push(public_address)
-          end
+      def machine_ips(active_machines, machine_types, type)
+        ip_list = []
+        filter_machines(active_machines, machine_types, type).each do |name, provider|
+          machine = @machine.env.machine(name, provider)
+          public_address = machine.provider.capability(:public_address)
+          ip_list.push(public_address)
         end
-
-        # push all at once to simplify gen_conf_config impl (pushing onto a generated array won't work)
-        gen_conf_config.master_list = master_list
-        gen_conf_config.agent_list = agent_list
+        ip_list
       end
 
       # write config.yaml to the boot machine

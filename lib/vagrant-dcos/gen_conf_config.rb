@@ -53,6 +53,14 @@ module VagrantPlugins
       def exhibitor_zk_hosts=(value)
         raise NoMethodError
       end
+
+      def resolvers
+        raise NoMethodError
+      end
+
+      def resolvers=(value)
+        raise NoMethodError
+      end
     end
 
     class GenConfConfig_1_5 < GenConfConfig
@@ -95,6 +103,14 @@ module VagrantPlugins
       def bootstrap_url=(value)
         self['cluster_config']['bootstrap_url'] = value
       end
+
+      def resolvers
+        self['cluster_config']['resolvers']
+      end
+
+      def resolvers=(value)
+        self['cluster_config']['resolvers'] = value
+      end
     end
 
     class GenConfConfig_1_6 < GenConfConfig
@@ -134,6 +150,14 @@ module VagrantPlugins
 
       def bootstrap_url=(value)
         self['bootstrap_url'] = value
+      end
+
+      def resolvers
+        self['resolvers']
+      end
+
+      def resolvers=(value)
+        self['resolvers'] = value
       end
     end
 
