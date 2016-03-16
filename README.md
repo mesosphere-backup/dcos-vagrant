@@ -74,10 +74,10 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
 
 - 1.6.x
   - Requires dcos-vagrant >= 0.4.0
-  - Requires flattened yaml config (e.g. <./etc/config-1.6.yaml>)
+  - Requires flattened yaml config (e.g. [config-1.6.yaml](etc/config-1.6.yaml))
 - 1.5.x
   - Requires dcos-vagrant >= 0.3.0
-  - Requires yaml config (e.g. <./etc/config-1.5.yaml>)
+  - Requires yaml config (e.g. [config-1.5.yaml](etc/config-1.5.yaml))
 - CM.4
   - Requires [dcos-vagrant v0.3.0](https://github.com/mesosphere/dcos-vagrant/tree/v0.3.0)
 
