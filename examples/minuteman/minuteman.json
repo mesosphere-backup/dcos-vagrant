@@ -1,0 +1,27 @@
+{
+    "cmd": "chmod +x linux-amd64 && ./linux-amd64 -listener=:${PORT0} -say-string=imok",
+    "cpus": 0.1,
+    "healthChecks": [
+        {
+            "gracePeriodSeconds": 5,
+            "intervalSeconds": 10,
+            "maxConsecutiveFailures": 3,
+            "path": "/",
+            "portIndex": 0,
+            "protocol": "HTTP",
+            "timeoutSeconds": 10
+        }
+    ],
+    "id": "/minuteman",
+    "instances": 3,
+    "labels": {
+        "vip_PORT0": "tcp://1.2.3.4:5000"
+    },
+    "mem": 128,
+    "ports": [
+        10000
+    ],
+    "uris": [
+        "https://s3.amazonaws.com/sargun-mesosphere/linux-amd64"
+    ]
+}
