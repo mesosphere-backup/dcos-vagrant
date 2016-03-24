@@ -137,7 +137,7 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
    Select a config file template based on the downloaded version of DCOS (select one):
 
    - DCOS 1.6: `export DCOS_CONFIG_PATH=etc/config-1.6.yaml`
-   - DCOS 1.5: `export DCOS_CONFIG_PATH=etc/config-1.5.yaml` (default)
+   - DCOS 1.5: `export DCOS_CONFIG_PATH=etc/config-1.5.yaml`
 
    The path to the config file is relative to the repo dir, because the repo dir will be mounted as `/vagrant` within each VM.
    Alternate configurations may be added to the `<repo>/etc/` dir and configured in a similar manner.
