@@ -19,6 +19,7 @@ module VagrantPlugins
           @config.config_template_path,
           @config.install_method.to_sym,
           @config.max_install_threads,
+          @config.postflight_timeout_seconds,
         )
       end
 
@@ -48,7 +49,7 @@ module VagrantPlugins
         remote_sudo(@machine, command)
       end
 
-      def install(machine_types, config_template_path, install_method, max_install_threads)
+      def install(machine_types, config_template_path, install_method, max_install_threads, postflight_timeout_seconds)
         @machine.ui.info "Reading #{config_template_path}"
         gen_conf_config = GenConfConfigLoader.load_file(config_template_path)
 
@@ -100,7 +101,7 @@ module VagrantPlugins
         when :ssh_push
           install_push
         when :ssh_pull
-          install_pull(active_machines, machine_types, max_install_threads)
+          install_pull(active_machines, machine_types, max_install_threads, postflight_timeout_seconds)
         end
       end
 
@@ -114,7 +115,7 @@ module VagrantPlugins
         sudo('cd ~/dcos && bash ~/dcos/dcos_generate_config.sh --postflight')
       end
 
-      def install_pull(active_machines, machine_types, max_install_threads)
+      def install_pull(active_machines, machine_types, max_install_threads, postflight_timeout_seconds)
 
         # install masters in parallel
         queue = Queue.new
@@ -151,7 +152,7 @@ module VagrantPlugins
           machine = @machine.env.machine(name, provider)
           queue.push(Proc.new do
             machine.ui.info 'DCOS Postflight'
-            write_postflight(machine)
+            write_postflight(machine, postflight_timeout_seconds)
             remote_sudo(machine, '/opt/mesosphere/bin/postflight.sh')
           end)
         end
@@ -159,7 +160,7 @@ module VagrantPlugins
           machine = @machine.env.machine(name, provider)
           queue.push(Proc.new do
             machine.ui.info 'DCOS Postflight'
-            write_postflight(machine)
+            write_postflight(machine, postflight_timeout_seconds)
             remote_sudo(machine, '/opt/mesosphere/bin/postflight.sh')
           end)
         end
@@ -167,7 +168,7 @@ module VagrantPlugins
           machine = @machine.env.machine(name, provider)
           queue.push(Proc.new do
             machine.ui.info 'DCOS Postflight'
-            write_postflight(machine)
+            write_postflight(machine, postflight_timeout_seconds)
             remote_sudo(machine, '/opt/mesosphere/bin/postflight.sh')
           end)
         end
@@ -210,21 +211,31 @@ EOF
 
       # from https://github.com/mesosphere/dcos-installer/blob/master/dcos_installer/action_lib/__init__.py#L250
       # TODO: hopefully this goes away at some point so we dont have to write a looping postflight check
-      def write_postflight(machine)
+      def write_postflight(machine, postflight_timeout_seconds)
         postflight = <<-EOF
 #!/usr/bin/env bash
-# Run the DCOS diagnostic script for up to 15 minutes (900 seconds) to ensure
+# Run the DCOS diagnostic script for up to #{postflight_timeout_seconds} seconds to ensure
 # we do not return ERROR on a cluster that hasn't fully achieved quorum.
-T=900
-until OUT=$(/opt/mesosphere/bin/dcos-diagnostics.py) || [[ T -eq 0 ]]; do
-    sleep 1
-    let T=T-1
+if [[ -e "/opt/mesosphere/bin/3dt" ]]; then
+    # DCOS >= 1.7
+    CMD="/opt/mesosphere/bin/3dt -diag"
+elif [[ -e "/opt/mesosphere/bin/dcos-diagnostics.py" ]]; then
+    # DCOS <= 1.6
+    CMD="/opt/mesosphere/bin/dcos-diagnostics.py"
+else
+    echo "Postflight Failure: either 3dt or dcos-diagnostics.py must be present"
+    exit 1
+fi
+T=#{postflight_timeout_seconds}
+until OUT=$(${CMD} 2>&1) || [[ T -eq 0 ]]; do
+    sleep 5
+    let T=T-5
 done
 RETCODE=$?
-for value in $OUT; do
-    echo $value
-done
-exit $RETCODE
+if [[ -n "${OUT}" ]]; then
+    echo "${OUT}" >&2
+fi
+exit ${RETCODE}
 EOF
 
         escaped_postflight = postflight.gsub('$', '\$')
