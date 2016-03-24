@@ -65,3 +65,17 @@ $ vboxmanage hostonlyif ipconfig vboxnet0 --ip 192.168.65.1
 **Problem**: One or more Vagrant plugins fail to install.
 
 **Solution**: Upgrade Ruby to >= 2.2. See [Appendix: Install Ruby](#install-ruby) for instructions.
+
+
+## Package Install Failure
+
+**Problem**: `dcos package install <package-name>` fails with the message `Unable to complete request due to downstream service [marathon] unavailability`.
+
+**Solution**: SSH into the master nodes and restart the dcos-cosmos service.
+
+```
+vagrant ssh m1
+service dcos-cosmos restart
+```
+
+This happens because Cosmos doesn't always pick up DNS changes that happen during bootstrap. Known bug in 1.6.1. Should be fixed in 1.7.0.
