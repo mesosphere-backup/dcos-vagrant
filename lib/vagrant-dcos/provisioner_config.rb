@@ -32,7 +32,7 @@ module VagrantPlugins
       def validate(_machine)
         errors = _detected_errors
 
-        install_methods = [:ssh_pull, :ssh_push]
+        install_methods = [:web, :ssh_pull, :ssh_push]
         unless install_methods.include?(@install_method.to_sym)
           errors << "Invalid config: install_method must be one of #{install_methods}"
         end

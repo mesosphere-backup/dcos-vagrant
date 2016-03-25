@@ -69,7 +69,7 @@ module VagrantPlugins
         boot_address = find_address(@machine)
         gen_conf_config.exhibitor_zk_hosts = "#{boot_address}:2181"
         case install_method
-        when :ssh_push
+        when :ssh_push, :web
           # TODO: in the future this may not be required by genconf, since it's really an internal concern
           gen_conf_config.bootstrap_url = 'file:///opt/dcos_install_tmp'
         when :ssh_pull
@@ -94,7 +94,15 @@ module VagrantPlugins
 
         @machine.ui.success 'Importing Private SSH Key: ~/dcos/genconf/ssh_key'
         sudo('cp /vagrant/.vagrant/dcos/private_key_vagrant ~/dcos/genconf/ssh_key')
-        # sudo('cat ~/dcos/genconf/ssh_key')
+
+        if install_method == :web
+          # Move config files to the /vagrant mount so the user can reference/upload them to the web ui
+          sudo('mv ~/dcos/genconf/config.yaml /vagrant/config.yaml')
+          sudo('mv ~/dcos/genconf/ip-detect /vagrant/ip-detect')
+          @machine.ui.success "Starting Web Installer: http://#{@machine.config.hostname}:9000"
+          install_web
+          return
+        end
 
         @machine.ui.success 'Generating DC/OS Installer Files: ~/dcos/genconf/serve/'
         sudo('cd ~/dcos && bash ~/dcos/dcos_generate_config.sh --genconf && cp -rpv ~/dcos/genconf/serve/* /var/tmp/dcos/')
@@ -111,6 +119,10 @@ module VagrantPlugins
 
       def filter_machines(active_machines, machine_types, type)
         active_machines.select { |name, _provider| machine_types[name.to_s]['type'] == type }
+      end
+
+      def install_web
+        sudo('cd ~/dcos && bash ~/dcos/dcos_generate_config.sh --web -v')
       end
 
       def install_push
