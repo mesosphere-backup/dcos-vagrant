@@ -24,7 +24,6 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
 
 **Other Docs:**
 
-- [Base OS Image](./build)
 - [Examples](./examples)
 - [DCOS CLI](./docs/dcos-cli.md)
 - [Troubleshooting](./docs/troubleshooting.md)
@@ -58,9 +57,9 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
 
 - [Git](https://git-scm.com/) - clone repo
 - [Vagrant](https://www.vagrantup.com/) (>= 1.8.1) - virtualization orchestration
-- [VirtualBox](https://www.virtualbox.org/) (>= 4.3) - virtualization engine
   - [Host Manager Plugin](https://github.com/smdahlen/vagrant-hostmanager) - manage /etc/hosts
   - (Optional) [VBGuest Plugin](https://github.com/dotless-de/vagrant-vbguest) - manage vbox guest additions
+- [VirtualBox](https://www.virtualbox.org/) (>= 4.3) - virtualization engine
 - (Optional) [jq](https://stedolan.github.io/jq/) - json parser used by examples
 
 
@@ -174,7 +173,7 @@ For more details about how DCOS is installed and how to debug deployment/install
 
 A minimal cluster supports launching small Marathon apps. Most other frameworks will fail to install, because they require more than one agent node.
 
-Requires > 4.5GB free memory (using the example [VagrantConfig](./Vagrantconfig.yaml)).
+Requires > 4.5GB free memory (using the example [VagrantConfig](./VagrantConfig.yaml.example)).
 
 ```bash
 vagrant up m1 a1 boot
@@ -184,7 +183,7 @@ vagrant up m1 a1 boot
 
 A small cluster supports running tasks on multiple nodes.
 
-Requires > 7.25GB free memory (using the example [VagrantConfig](./Vagrantconfig.yaml)).
+Requires > 7.25GB free memory (using the example [VagrantConfig](./VagrantConfig.yaml.example)).
 
 ```bash
 vagrant up m1 a1 a2 p1 boot
@@ -194,7 +193,7 @@ vagrant up m1 a1 a2 p1 boot
 
 A medium cluster supports the installation of a [minimally configured Cassandra](./examples/oinker#install-cassandra).
 
-Requires > 10GB free memory (using the example [VagrantConfig](./Vagrantconfig.yaml)).
+Requires > 10GB free memory (using the example [VagrantConfig](./VagrantConfig.yaml.example)).
 
 ```bash
 vagrant up m1 a1 a2 a3 a4 p1 boot
@@ -202,7 +201,7 @@ vagrant up m1 a1 a2 a3 a4 p1 boot
 
 ### Large Cluster
 
-Requires > 17GB free memory (using the example [VagrantConfig](./Vagrantconfig.yaml)).
+Requires > 17GB free memory (using the example [VagrantConfig](./VagrantConfig.yaml.example)).
 
 A large cluster supports master node fail over, multiple framework installs, and multiple public load balancers.
 
