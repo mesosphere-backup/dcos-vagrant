@@ -16,6 +16,9 @@ echo ">>> Disabling SELinux and adjusted sudoers"
 sed -i s/SELINUX=enforcing/SELINUX=permissive/g /etc/selinux/config
 sed -i "s/^.*requiretty/#Defaults requiretty/" /etc/sudoers
 
+echo ">>> Adding /mnt fstab entry"
+echo "LABEL=/mnt  /mnt  ext4  defaults,nofail   0 0" >> /etc/fstab
+
 echo ">>> Disabling IPV6"
 sysctl -w net.ipv6.conf.all.disable_ipv6=1
 sysctl -w net.ipv6.conf.default.disable_ipv6=1
