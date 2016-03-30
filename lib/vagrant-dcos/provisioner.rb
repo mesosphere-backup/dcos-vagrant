@@ -123,7 +123,7 @@ module VagrantPlugins
           machine = @machine.env.machine(name, provider)
           queue.push(Proc.new do
             machine.ui.info 'Installing DCOS (master)'
-            remote_sudo(machine, %Q(bash -c "curl --fail --location --silent --show-error --verbose http://boot.dcos/dcos_install.sh | bash -s -- master"))
+            remote_sudo(machine, %Q(bash -c "curl --fail --location --silent --show-error --verbose http://boot.dcos/dcos_install.sh | bash -s -- --no-block-dcos-setup master"))
           end)
         end
         Executor.exec(queue, max_install_threads)
@@ -134,14 +134,14 @@ module VagrantPlugins
           machine = @machine.env.machine(name, provider)
           queue.push(Proc.new do
             machine.ui.info 'Installing DCOS (agent)'
-            remote_sudo(machine, %Q(bash -c "curl --fail --location --silent --show-error --verbose http://boot.dcos/dcos_install.sh | bash -s -- slave"))
+            remote_sudo(machine, %Q(bash -c "curl --fail --location --silent --show-error --verbose http://boot.dcos/dcos_install.sh | bash -s -- --no-block-dcos-setup slave"))
           end)
         end
         filter_machines(active_machines, machine_types, 'agent-public').each do |name, provider|
           machine = @machine.env.machine(name, provider)
           queue.push(Proc.new do
             machine.ui.info 'Installing DCOS (agent-public)'
-            remote_sudo(machine, %Q(bash -c "curl --fail --location --silent --show-error --verbose http://boot.dcos/dcos_install.sh | bash -s -- slave_public"))
+            remote_sudo(machine, %Q(bash -c "curl --fail --location --silent --show-error --verbose http://boot.dcos/dcos_install.sh | bash -s -- --no-block-dcos-setup slave_public"))
           end)
         end
         Executor.exec(queue, max_install_threads)
