@@ -137,9 +137,9 @@ def validate_machine_types(machine_types)
     exit 2
   end
 
-  agent_types = machine_types.select{ |_, cfg| cfg['type'] == 'agent' || cfg['type'] == 'agent-public' }
+  agent_types = machine_types.select{ |_, cfg| cfg['type'] == 'agent-private' || cfg['type'] == 'agent-public' }
   if agent_types.empty?
-    STDERR.puts 'Must have at least one machine of type agent or agent-public'
+    STDERR.puts 'Must have at least one machine of type agent-private or agent-public'
     exit 2
   end
 end
