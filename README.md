@@ -154,6 +154,18 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
     
     Update `VagrantConfig.yaml` to match your requirements (e.g. cpus, memory). Some frameworks (e.g. cassandra) may require more nodes/resources than others. This file just defines the machines available - you don't have to launch all these at once, so the example file is a good start.
 
+1. (Optional) Download the VM Base Image
+
+    By default, Vagrant will automatically download the latest VM Base Image (virtualbox box) when you run `vagrant up <machines>`, but since downloading the image takes a while the first time, you may want to trigger the download manually.
+
+    ```
+    vagrant box add https://downloads.mesosphere.com/dcos-vagrant/metadata.json
+    ```
+
+    If you already have the latest version downloaded, the above command will fail.
+
+    **Known Issue**: Vagrant's box downloader is [known to be slow](https://github.com/mitchellh/vagrant/issues/5319). If your download is super slow (100-300k/s range), then cancelling the download (Ctrl+C) and restarting it *sometimes* makes it download faster.
+
 
 # Deploy
 
