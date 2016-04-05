@@ -11,8 +11,10 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
 - [Audience](#audience)
 - [Goals](#goals)
 - [Requirements](#requirements)
-- [Setup](#setup)
 - [Deploy](#deploy)
+- [Configure](#configure)
+- [Example Clusters](#example-clusters)
+- [Install DCOS Services](#install-dcos-services)
 - [Appendix: Authentication](#appendix-authentication)
 - [Appendix: Architecture](#appendix-architecture)
 - [Appendix: Installation](#appendix-installation)
@@ -81,7 +83,7 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
   - Requires [dcos-vagrant v0.3.0](https://github.com/mesosphere/dcos-vagrant/tree/v0.3.0)
 
 
-# Setup
+# Deploy
 
 1. Install & Configure Vagrant & VirtualBox
 
@@ -145,14 +147,14 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
 
 1. Configure the DCOS Machine Types
 
-    Copy one of the example VagrantConfig files:
+    Copy the example VagrantConfig file:
 
     ```bash
     cd <repo>
     cp VagrantConfig.yaml.example VagrantConfig.yaml
     ```
     
-    Update `VagrantConfig.yaml` to match your requirements (e.g. cpus, memory). Some frameworks (e.g. cassandra) may require more nodes/resources than others. This file just defines the machines available - you don't have to launch all these at once, so the example file is a good start.
+    See [Configure](#configure) for more details on customizing your cluster.
 
 1. (Optional) Download the VM Base Image
 
@@ -166,24 +168,74 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
 
     **Known Issue**: Vagrant's box downloader is [known to be slow](https://github.com/mitchellh/vagrant/issues/5319). If your download is super slow (100-300k/s range), then cancelling the download (Ctrl+C) and restarting it *sometimes* makes it download faster.
 
+1. Deploy DCOS
 
-# Deploy
+   Specify which machines to deploy:
 
-The following steps will walk through DCOS and DCOS Apps/Service.
+   ```bash
+   vagrant up m1 a1 p1 boot
+   ```
 
-## Deploy VMs and Install DCOS
+   Many permutations of machines are possible. See [Example Clusters](#example-clusters) for more options.
 
-DCOS can be deployed with 1, 3, or 5 master nodes and any number of public and/or private agent nodes.
+   Once the the machines are created and provisioned, DCOS will be installed. Once complete, the Web Interface will be available at <http://m1.dcos/>.
 
-A bootstrap node is also required, and must be provisioned after all other master and agent nodes.
+   See [Install DCOS Services](#install-dcos-services) for more information on how to use you new DCOS cluster.
+
+
+# Configure
+
+The number of machines and their resources is configurable, depending on your needs and hardware constraints.
+
+The [VagrantConfig.yaml.example](VagrantConfig.yaml.example) includes some preset machine configurations that have been chosen to allow the widest possible use cases within a constrained memory environment (e.g. a laptop with 16GB memory). These presets may or may not fit your use case. If they don't, just modify your `VagrantConfig.yaml` file to fit your needs.
+
+Deploying multiple VMs takes a lot of memory and Mesos reserves more for overhead on each node. So don't expect to be able to install every DCOS service or use production-grade configurations. Most services will require reduced configurations in order to fit within the allocated memory. Some services (e.g. Cassandra) may require more nodes/resources than others.
+
+For more information about how the DCOS installation works and how to debug deployment/installation failure, see [Appendix: Installation](#appendix-installation).
+
+## Node Types
+
+Each machine in `VagrantConfig.yaml` must specify one of the following node types that governs how that machine will be provisioned:
+
+- `master` - Master node that runs the DCOS core components (e.g. `m1`)
+- `agent-private` - Agent node that runs the Mesos agent with the `*` role (e.g. `a1`)
+- `agent-public` - Agent node that runs the Mesos agent with the `slave_public` role (e.g. `p1`)
+- `boot` - Bootstrap node that runs the installer (e.g. `boot`)
+
+## Cluster Constraints
+
+Which exact machines are created and provisioned can be specified in one of two ways:
+
+1. Specify the machines by name when deploying (e.g. `vagrant up m1 a1 p1 boot`)
+1. Remove the unwanted machines from the `VagrantConfig.yaml` file and deploy them all with `vagrant up`
+
+Generally option 1 is recommended to avoid having to modify the `VagrantConfig.yaml` file.
+
+When selecting which machines to deploy, the following constraints must be observed:
+
+- An odd number of master nodes is required (usually 1, 3, or 5)
+- Any number of public and/or private agent nodes is allowed
+- Exactly one bootstrap node is required
+- The bootstrap node must be provisioned last
+
+## Resource Constraints
+
+Mesos agent nodes are where DCOS services will be installed. Mesos will auto-detect the amount of resources available on these machines, with the following constraint:
+
+- Mesos reserves half or 1 GB of each machine's memory for overhead (whichever is least)
+
+For example, `m1` has 3328 MB memory by default. Some of that memory will be taken by OS and DCOS component processes (~ MB). 1 GB will be reserved by Mesos as overhead. The rest will be offered to Mesos frameworks for launching tasks (~ MB).
 
 **IMPORTANT**: Make sure your local machine has enough memory to launch all your desired VMs, otherwise your machine may lock up as all the memory is consumed.
 
-For more details about how DCOS is installed and how to debug deployment/installation failure, see [Appendix: Installation](#appendix-installation).
 
-### Minimal Cluster
+# Example Clusters
 
-A minimal cluster supports launching small Marathon apps. Most other frameworks will fail to install, because they require more than one agent node.
+Any permutation of machines that fits the above constraints is possible. Below are a few options to try.
+
+## Minimal Cluster
+
+A minimal cluster supports launching small Marathon apps. Most other services will fail to install, because they require more than one agent node.
 
 Requires > 4.5GB free memory (using the example [VagrantConfig](./VagrantConfig.yaml.example)).
 
@@ -191,7 +243,7 @@ Requires > 4.5GB free memory (using the example [VagrantConfig](./VagrantConfig.
 vagrant up m1 a1 boot
 ```
 
-### Small Cluster
+## Small Cluster
 
 A small cluster supports running tasks on multiple nodes.
 
@@ -201,7 +253,7 @@ Requires > 7.25GB free memory (using the example [VagrantConfig](./VagrantConfig
 vagrant up m1 a1 a2 p1 boot
 ```
 
-### Medium Cluster
+## Medium Cluster
 
 A medium cluster supports the installation of a [minimally configured Cassandra](./examples/oinker#install-cassandra).
 
@@ -211,7 +263,7 @@ Requires > 10GB free memory (using the example [VagrantConfig](./VagrantConfig.y
 vagrant up m1 a1 a2 a3 a4 p1 boot
 ```
 
-### Large Cluster
+## Large Cluster
 
 Requires > 17GB free memory (using the example [VagrantConfig](./VagrantConfig.yaml.example)).
 
@@ -221,7 +273,8 @@ A large cluster supports master node fail over, multiple framework installs, and
 vagrant up m1 m2 m3 a1 a2 a3 a4 a5 a6 p1 p2 p3 boot
 ```
 
-## Install DCOS Services
+
+# Install DCOS Services
 
 Once DCOS is installed, services can be installed using the DCOS CLI as a package manager. In order to install the DCOS CLI itself, follow the instructions in the popup when first visiting the DCOS dashboard (http://m1.dcos/). For more information, see the [DCOS CLI Docs](https://docs.mesosphere.com/administration/introcli/).
 
@@ -231,13 +284,13 @@ For example, the following installs cassandra (which requires at least 3 private
 dcos package install cassandra
 ```
 
-## Install Marathon Apps
+## Marathon Apps
 
 Marathon apps can be installed by using the [dcos cli marathon plugin](https://docs.mesosphere.com/administration/introcli/command-reference/#scrollNav-2).
 
 For example, see [Oinker on Marathon](./examples/oinker/) or the [Java-Spring Example App](./examples/java-spring/).
 
-## Install Kubernetes Apps
+## Kubernetes Apps
 
 Kubernetes apps can be installed by using the [dcos cli kubectl plugin](https://github.com/mesosphere/dcos-kubectl).
 
