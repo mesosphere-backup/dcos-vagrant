@@ -107,7 +107,7 @@ module VagrantPlugins
           install_pull(active_machines, machine_types, max_install_threads, postflight_timeout_seconds)
         end
 
-        @machine.ui.success 'DCOS Installation Complete\nWeb Interface: http://m1.dcos/'
+        @machine.ui.success "DCOS Installation Complete\nWeb Interface: http://m1.dcos/"
       end
 
       def filter_machines(active_machines, machine_types, type)
@@ -235,7 +235,7 @@ until OUT=$(${CMD} 2>&1) || [[ T -eq 0 ]]; do
     let T=T-5
 done
 RETCODE=$?
-if [[ "${RETCODE}" == "0" ]]; then
+if [[ "${RETCODE}" != "0" ]]; then
     echo "DCOS Unhealthy\n${OUT}" >&2
 fi
 exit ${RETCODE}
