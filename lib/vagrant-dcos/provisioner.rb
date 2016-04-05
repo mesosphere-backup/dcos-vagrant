@@ -86,15 +86,18 @@ module VagrantPlugins
           gen_conf_config.resolvers = [ '8.8.8.8' ]
         end
 
+        @machine.ui.success 'Generating Configuration: ~/dcos/genconf/config.yaml'
         write_gen_conf_config(gen_conf_config)
 
+        @machine.ui.success 'Generating IP Detection Script: ~/dcos/genconf/ip-detect'
         master_ip = gen_conf_config.master_list.first
         write_ip_detect(master_ip)
 
-        @machine.ui.info 'Importing ~/dcos/genconf/ssh_key'
+        @machine.ui.success 'Importing Private SSH Key: ~/dcos/genconf/ssh_key'
         sudo('cp /vagrant/.vagrant/dcos/private_key_vagrant ~/dcos/genconf/ssh_key')
         #sudo('cat ~/dcos/genconf/ssh_key')
 
+        @machine.ui.success 'Generating DCOS Installer Files: ~/dcos/genconf/serve/'
         sudo('cd ~/dcos && bash ~/dcos/dcos_generate_config.sh --genconf && cp -rpv ~/dcos/genconf/serve/* /var/tmp/dcos/')
 
         case install_method
@@ -103,6 +106,8 @@ module VagrantPlugins
         when :ssh_pull
           install_pull(active_machines, machine_types, max_install_threads, postflight_timeout_seconds)
         end
+
+        @machine.ui.success 'DCOS Installation Complete\nWeb Interface: http://m1.dcos/'
       end
 
       def filter_machines(active_machines, machine_types, type)
@@ -122,7 +127,7 @@ module VagrantPlugins
         filter_machines(active_machines, machine_types, 'master').each do |name, provider|
           machine = @machine.env.machine(name, provider)
           queue.push(Proc.new do
-            machine.ui.info 'Installing DCOS (master)'
+            machine.ui.success 'Installing DCOS (master)'
             remote_sudo(machine, %Q(bash -c "curl --fail --location --silent --show-error --verbose http://boot.dcos/dcos_install.sh | bash -s -- master"))
           end)
         end
@@ -133,14 +138,14 @@ module VagrantPlugins
         filter_machines(active_machines, machine_types, 'agent-private').each do |name, provider|
           machine = @machine.env.machine(name, provider)
           queue.push(Proc.new do
-            machine.ui.info 'Installing DCOS (agent)'
+            machine.ui.success 'Installing DCOS (agent)'
             remote_sudo(machine, %Q(bash -c "curl --fail --location --silent --show-error --verbose http://boot.dcos/dcos_install.sh | bash -s -- slave"))
           end)
         end
         filter_machines(active_machines, machine_types, 'agent-public').each do |name, provider|
           machine = @machine.env.machine(name, provider)
           queue.push(Proc.new do
-            machine.ui.info 'Installing DCOS (agent-public)'
+            machine.ui.success 'Installing DCOS (agent-public)'
             remote_sudo(machine, %Q(bash -c "curl --fail --location --silent --show-error --verbose http://boot.dcos/dcos_install.sh | bash -s -- slave_public"))
           end)
         end
@@ -151,7 +156,7 @@ module VagrantPlugins
         filter_machines(active_machines, machine_types, 'master').each do |name, provider|
           machine = @machine.env.machine(name, provider)
           queue.push(Proc.new do
-            machine.ui.info 'DCOS Postflight'
+            machine.ui.success 'DCOS Postflight'
             write_postflight(machine, postflight_timeout_seconds)
             remote_sudo(machine, '/opt/mesosphere/bin/postflight.sh')
           end)
@@ -159,7 +164,7 @@ module VagrantPlugins
         filter_machines(active_machines, machine_types, 'agent-private').each do |name, provider|
           machine = @machine.env.machine(name, provider)
           queue.push(Proc.new do
-            machine.ui.info 'DCOS Postflight'
+            machine.ui.success 'DCOS Postflight'
             write_postflight(machine, postflight_timeout_seconds)
             remote_sudo(machine, '/opt/mesosphere/bin/postflight.sh')
           end)
@@ -167,7 +172,7 @@ module VagrantPlugins
         filter_machines(active_machines, machine_types, 'agent-public').each do |name, provider|
           machine = @machine.env.machine(name, provider)
           queue.push(Proc.new do
-            machine.ui.info 'DCOS Postflight'
+            machine.ui.success 'DCOS Postflight'
             write_postflight(machine, postflight_timeout_seconds)
             remote_sudo(machine, '/opt/mesosphere/bin/postflight.sh')
           end)
@@ -189,7 +194,6 @@ module VagrantPlugins
       # write config.yaml to the boot machine
       def write_gen_conf_config(gen_conf_config)
         escaped_config_yaml = gen_conf_config.to_yaml.gsub('$', '\$')
-        @machine.ui.info 'Generating ~/dcos/genconf/config.yaml'
         sudo(%Q(cat << EOF > ~/dcos/genconf/config.yaml\n#{escaped_config_yaml}\nEOF))
       end
 
@@ -205,7 +209,6 @@ EOF
 
         escaped_ip_config = ip_config.gsub('$', '\$')
 
-        @machine.ui.info 'Generating ~/dcos/genconf/ip-detect'
         sudo(%Q(cat << EOF > ~/dcos/genconf/ip-detect\n#{escaped_ip_config}\nEOF))
       end
 
@@ -232,15 +235,15 @@ until OUT=$(${CMD} 2>&1) || [[ T -eq 0 ]]; do
     let T=T-5
 done
 RETCODE=$?
-if [[ -n "${OUT}" ]]; then
-    echo "${OUT}" >&2
+if [[ "${RETCODE}" == "0" ]]; then
+    echo "DCOS Unhealthy\n${OUT}" >&2
 fi
 exit ${RETCODE}
 EOF
 
         escaped_postflight = postflight.gsub('$', '\$')
 
-        machine.ui.info 'Generating /opt/mesosphere/bin/postflight.sh'
+        machine.ui.success 'Generating Postflight Script: /opt/mesosphere/bin/postflight.sh'
         remote_sudo(machine, %Q(cat << EOF > /opt/mesosphere/bin/postflight.sh\n#{escaped_postflight}\nEOF))
         remote_sudo(machine, 'chmod u+x /opt/mesosphere/bin/postflight.sh')
       end
