@@ -212,7 +212,7 @@ Vagrant.configure(2) do |config|
         v.memory = machine_type['memory'] || 2048
         v.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
 
-        override.vm.network 'private_network', ip: machine_type['ip']
+        override.vm.network :private_network, ip: machine_type['ip']
       end
 
       # provision a shared SSH key (required by DCOS SSH installer)

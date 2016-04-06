@@ -67,15 +67,15 @@ module VagrantPlugins
         gen_conf_config.agent_list = machine_ips(active_machines, machine_types, 'agent-private') + machine_ips(active_machines, machine_types, 'agent-public')
 
         # configure how to access the boot machine from the nodes
-        boot_public_address = @machine.provider.capability(:public_address)
-        gen_conf_config.exhibitor_zk_hosts = "#{boot_public_address}:2181"
+        boot_address = find_address(@machine)
+        gen_conf_config.exhibitor_zk_hosts = "#{boot_address}:2181"
         case install_method
         when :ssh_push
           #TODO: in the future this may not be required by genconf, since it's really an internal concern
           gen_conf_config.bootstrap_url = 'file:///opt/dcos_install_tmp'
         when :ssh_pull
           # url to the nginx server that will host the output of genconf
-          gen_conf_config.bootstrap_url = "http://#{boot_public_address}"
+          gen_conf_config.bootstrap_url = "http://#{boot_address}"
         end
 
         # configure how the nodes will resolve domains
@@ -185,8 +185,7 @@ module VagrantPlugins
         ip_list = []
         filter_machines(active_machines, machine_types, type).each do |name, provider|
           machine = @machine.env.machine(name, provider)
-          public_address = machine.provider.capability(:public_address)
-          ip_list.push(public_address)
+          ip_list.push(find_address(machine))
         end
         ip_list
       end
@@ -246,6 +245,23 @@ EOF
         machine.ui.success 'Generating Postflight Script: /opt/mesosphere/bin/postflight.sh'
         remote_sudo(machine, %Q(cat << EOF > /opt/mesosphere/bin/postflight.sh\n#{escaped_postflight}\nEOF))
         remote_sudo(machine, 'chmod u+x /opt/mesosphere/bin/postflight.sh')
+      end
+
+      def find_address(machine)
+        # public address
+        address = machine.provider.capability(:public_address)
+        return address if address && address != '127.0.0.1'
+
+        # private address
+        machine.config.vm.networks.each do |network|
+          key, options = network[0], network[1]
+          if key == :private_network
+            address = options[:ip]
+            return address if address
+          end
+        end
+
+        raise AddressResolutionError.new(machine.config.vm.name)
       end
 
     end
