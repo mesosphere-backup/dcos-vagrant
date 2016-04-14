@@ -57,19 +57,28 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
 
 # Requirements
 
+## Hardware
+
+**Minimum**:
+
+- 5GB free memory (8GB system memory)
+
+Most services *cannot* be installed on the Minimal cluster.
+
+**Recommended (Medium)**:
+
+- 10GB free memory (16GB system memory)
+
+Most services *can* be installed on the Medium cluster, but not all at the same time.
+
+## Software
+
 - [Git](https://git-scm.com/) - clone repo
 - [Vagrant](https://www.vagrantup.com/) (>= 1.8.1) - virtualization orchestration
   - [Host Manager Plugin](https://github.com/smdahlen/vagrant-hostmanager) - manage /etc/hosts
   - (Optional) [VBGuest Plugin](https://github.com/dotless-de/vagrant-vbguest) - manage vbox guest additions
 - [VirtualBox](https://www.virtualbox.org/) (>= 4.3) - virtualization engine
 - (Optional) [jq](https://stedolan.github.io/jq/) - json parser used by examples
-
-
-## Tested On
-
-- MacBook Pro (Retina, 13-inch, Early 2015), 2.7 GHz Intel Core i5, 16GB Memory
-- Deploying [Oinker-Go](https://github.com/mesosphere/oinker-go) on [Kubernetes](https://github.com/mesosphere/kubernetes-mesos), depending on [Cassandra](https://github.com/mesosphere/cassandra-mesos)
-- Deploying example [Marathon](https://mesosphere.github.io/marathon/) applications (e.g spring.json, stress.json, oinker.json and router.json)
 
 ## Supported DCOS Versions
 
