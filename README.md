@@ -15,7 +15,7 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
 - [Configure](#configure)
 - [Example Clusters](#example-clusters)
 - [Install DCOS Services](#install-dcos-services)
-- [Appendix: Options](#appendix-options)
+- [Environment Options](#environment-options)
 - [License and Author](#license-and-author)
 
 **Other Docs:**
@@ -194,6 +194,10 @@ Most services *can* be installed on the Medium cluster, but not all at the same 
 
     **Known Issue**: Vagrant's box downloader is [known to be slow](https://github.com/mitchellh/vagrant/issues/5319). If your download is super slow (100-300k/s range), then cancelling the download (Ctrl+C) and restarting it *sometimes* makes it download faster.
 
+1. (Optional) Configure Other Options
+
+   DCOS Vagrant supports many other [configurable options via environment variables](#environment-options). Skip these for first time use.
+
 1. Deploy DCOS
 
    Specify which machines to deploy. For example (requires 5.5GB free memory):
@@ -329,7 +333,7 @@ Kubernetes apps can be installed by using the [dcos cli kubectl plugin](https://
 For example, see the [Oinker on Kubernetes Example](./examples/kube-oinker/).
 
 
-# Appendix: Options
+# Environment Options
 
 There are several configurable options when deploying a cluster and installing DCOS on it. Most of them are configurable via environment variables:
 
