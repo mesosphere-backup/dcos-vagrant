@@ -6,23 +6,24 @@ directories = [
   '/etc/mesosphere',
   '/etc/mesosphere/roles',
   '/etc/mesosphere/setup-flags',
+
+  '/opt/mesosphere/include',
+  '/opt/mesosphere/packages',
+  '/opt/mesosphere/lib',
+  '/opt/mesosphere/etc',
+  '/opt/mesosphere/bin',
+  '/opt/mesosphere/active',
 ]
 
 files = [
   '/etc/mesosphere/roles/master',
   '/etc/mesosphere/setup-flags/bootstrap-id',
   '/etc/mesosphere/setup-flags/cluster-packages.json',
-  '/etc/mesosphere/setup-flags/repository-ur',
-  '/opt/mesosphere/active',
+  '/etc/mesosphere/setup-flags/repository-url',
   '/opt/mesosphere/active.buildinfo.full.json',
-  '/opt/mesosphere/bin',
   '/opt/mesosphere/environment',
   '/opt/mesosphere/environment.export',
   '/opt/mesosphere/environment.ip.marathon',
-  '/opt/mesosphere/etc',
-  '/opt/mesosphere/include',
-  '/opt/mesosphere/lib',
-  '/opt/mesosphere/packages',
 ]
 
 directories.each do |d|
