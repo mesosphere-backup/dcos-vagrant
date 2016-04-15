@@ -1,6 +1,6 @@
 # Using Minuteman with Marathon on DCOS
 
-This example uses Minuteman on [Marathon](https://mesosphere.github.io/marathon/) on [DCOS-Vagrant](https://github.com/mesosphere/dcos-vagrant) with an example application [Helloworld](https://github.com/mesosphere/helloworld).
+This example uses Minuteman on [Marathon](https://mesosphere.github.io/marathon/) on [DCOS-Vagrant](https://github.com/dcos/dcos-vagrant) with an example application [Helloworld](https://github.com/mesosphere/helloworld).
 
 Minuteman, in this example will route the VIP `1.2.3.4:5000`. Although this is not an IP that actually exists in the cluster, if you try to make a TCP connection from any host in the cluster to this IP, it'll automatically be connected to the backend application.
 
@@ -10,14 +10,14 @@ Remember, the Minuteman VIPs are only accessible from other machines running Min
 
 ## Install DCOS
 
-1. Follow the [dcos-vagrant setup](https://github.com/mesosphere/dcos-vagrant#setup) steps to configure your installation.
+1. Follow the [dcos-vagrant setup](https://github.com/dcos/dcos-vagrant#setup) steps to configure your installation.
 1. Use vagrant to deploy a cluster with 4 private agent nodes and 1 public agent node (requires 10GB free memory):
 
     ```
     vagrant up m1 a1 a2 p1 boot
     ```
 1. Wait for DCOS to come up. Check the dashboard: <http://m1.dcos/>.
-1. Install the [dcos-cli](https://github.com/mesosphere/dcos-cli) by following the instructions on the DCOS Dashboard
+1. Install the [DCOS CLI](https://dcos.io/docs/latest/usage/cli/) by following the instructions on the DCOS Dashboard
 
 
 

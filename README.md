@@ -3,7 +3,7 @@ DCOS Vagrant
 
 Quickly provision a DCOS cluster on a local machine for development, testing, or demonstration.
 
-Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using the [dcos-vagrant-box](https://github.com/mesosphere/dcos-vagrant-box) base image and then installing [DCOS](https://mesosphere.com/learn/).
+Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using the [dcos-vagrant-box](https://github.com/dcos/dcos-vagrant-box) base image and then installing [DCOS](https://dcos.io/).
 
 
 # Table of Contents
@@ -82,6 +82,9 @@ Most services *can* be installed on the Medium cluster, but not all at the same 
 
 ## Supported DCOS Versions
 
+- 1.7.x
+  - Requires dcos-vagrant >= 0.6.0
+  - No config changes since 1.6 (e.g. [config-1.7.yaml](etc/config-1.7.yaml))
 - 1.6.x
   - Requires dcos-vagrant >= 0.4.0
   - Requires flattened yaml config (e.g. [config-1.6.yaml](etc/config-1.6.yaml))
@@ -89,7 +92,7 @@ Most services *can* be installed on the Medium cluster, but not all at the same 
   - Requires dcos-vagrant >= 0.3.0
   - Requires yaml config (e.g. [config-1.5.yaml](etc/config-1.5.yaml))
 - CM.4
-  - Requires [dcos-vagrant v0.3.0](https://github.com/mesosphere/dcos-vagrant/tree/v0.3.0)
+  - Requires [dcos-vagrant v0.3.0](https://github.com/dcos/dcos-vagrant/tree/v0.3.0)
 
 
 # Deploy
@@ -102,9 +105,17 @@ Most services *can* be installed on the Medium cluster, but not all at the same 
 
 1. Clone This Repo
 
+    Select where you want the dcos-vagrant repo to be on your local hard drive and `cd` into it. Then clone the repo using git.
+
     ```bash
-    git clone https://github.com/mesosphere/dcos-vagrant
+    git clone https://github.com/dcos/dcos-vagrant
     ```
+
+    To upgrade to a new version of dcos-vagrant:
+
+    1. Change into the repo directory (e.g. `cd ~/workspace/dcos-vagrant`)
+    1. Checkout the new desired version (e.g. `git checkout v0.6.0`)
+    1. Pull the new code (e.g. `git pull`)
 
 1. Configure VirtualBox Networking
 
@@ -136,16 +147,19 @@ Most services *can* be installed on the Medium cluster, but not all at the same 
 
 1. Download the DCOS Installer
 
-    Download `dcos_generate_config.sh` to the root of the repo (the repo will be mounted into the vagrant machines as `/vagrant`).
+    If you don't already have a DCOS Installer downloaded, you'll need to select and download one of the [supported versions](#supported-dcos-versions).
+
+    Once downloaded, move `dcos_generate_config.sh` to the root of the repo (the repo will be mounted into the vagrant machines as `/vagrant`).
 
     If you have multiple `dcos_generate_config.sh` files downloaded you can name them differently and specify which to use with `DCOS_GENERATE_CONFIG_PATH` (e.g. `export DCOS_GENERATE_CONFIG_PATH=dcos_generate_config-1.5-EA.sh`).
 
-    **Important**: Contact your sales representative or <sales@mesosphere.com> to obtain the DCOS setup file.
+    Enterprise edition installers are also supported. Contact your sales representative or <sales@mesosphere.com> to obtain right DCOS installer.
 
 1. <a name="configure-the-dcos-installer"></a>Configure the DCOS Installer
 
    Select a config file template based on the downloaded version of DCOS (select one):
 
+   - DCOS 1.7: `export DCOS_CONFIG_PATH=etc/config-1.7.yaml`
    - DCOS 1.6: `export DCOS_CONFIG_PATH=etc/config-1.6.yaml`
    - DCOS 1.5: `export DCOS_CONFIG_PATH=etc/config-1.5.yaml`
 
@@ -170,7 +184,7 @@ Most services *can* be installed on the Medium cluster, but not all at the same 
     By default, Vagrant will automatically download the latest VM Base Image (virtualbox box) when you run `vagrant up <machines>`, but since downloading the image takes a while the first time, you may want to trigger the download manually.
 
     ```
-    vagrant box add https://downloads.mesosphere.com/dcos-vagrant/metadata.json
+    vagrant box add https://downloads.dcos.io/dcos-vagrant/metadata.json
     ```
 
     If you already have the latest version downloaded, the above command will fail.
@@ -179,7 +193,7 @@ Most services *can* be installed on the Medium cluster, but not all at the same 
 
 1. Deploy DCOS
 
-   Specify which machines to deploy:
+   Specify which machines to deploy. For example (requires 5.5GB free memory):
 
    ```bash
    vagrant up m1 a1 p1 boot
@@ -285,7 +299,7 @@ vagrant up m1 m2 m3 a1 a2 a3 a4 a5 a6 p1 p2 p3 boot
 
 # Install DCOS Services
 
-Once DCOS is installed, services can be installed using the DCOS CLI as a package manager. In order to install the DCOS CLI itself, follow the instructions in the popup when first visiting the DCOS dashboard (http://m1.dcos/). For more information, see the [DCOS CLI Docs](https://docs.mesosphere.com/administration/introcli/).
+Once DCOS is installed, services can be installed using the DCOS CLI as a package manager. In order to install the DCOS CLI itself, follow the instructions in the popup when first visiting the DCOS dashboard (http://m1.dcos/). For more information, see the [DCOS CLI Docs](https://dcos.io/docs/latest/usage/cli/).
 
 For example, the following installs cassandra (which requires at least 3 private agent nodes):
 
@@ -295,7 +309,7 @@ dcos package install cassandra
 
 ## Marathon Apps
 
-Marathon apps can be installed by using the [dcos cli marathon plugin](https://docs.mesosphere.com/administration/introcli/command-reference/#scrollNav-2).
+Marathon apps can be installed by using the [dcos cli marathon plugin](https://dcos.io/docs/latest/usage/cli/command-reference/#dcos-marathon).
 
 For example, see [Oinker on Marathon](./examples/oinker/) or the [Java-Spring Example App](./examples/java-spring/).
 
@@ -308,7 +322,7 @@ For example, see the [Oinker on Kubernetes Example](./examples/kube-oinker/).
 
 # Appendix: Authentication
 
-When installing the Enterprise Edition of DCOS (>= 1.6) on dcos-vagrant, the cluster will prompt for a username and password when using the dcos-cli or the web dashboard.
+When installing the Enterprise Edition of DCOS (>= 1.6) on dcos-vagrant, the cluster will prompt for a username and password when using the DCOS CLI or the web dashboard.
 
 If you're using the provided 1.6 installer config file ([etc/config-1.6.yaml](./etc/config-1.6.yaml)) then the superuser credentials are by default `admin`/`admin`.
 
@@ -329,7 +343,7 @@ If you're using the provided 1.6 installer config file ([etc/config-1.6.yaml](./
 
 ## Architecture Diagram
 
-![Vagrant Diagram](https://github.com/mesosphere/dcos-vagrant-demo/blob/master/docs/dcos_vagrant_setup.png?raw=true)
+![Vagrant Diagram](docs/dcos_vagrant_setup.png?raw=true)
 
 
 # Appendix: Installation
@@ -411,7 +425,7 @@ There are several ways to install ruby. One way is to use ruby-install, using ch
 There are several configurable options when deploying a cluster and installing DCOS on it. Most of them are configurable via environment variables:
 
 - `DCOS_BOX` - VirtualBox box image name (default: `mesosphere/dcos-centos-virtualbox`)
-- `DCOS_BOX_URL` - VirtualBox box image url or vagrant-cloud style image repo (default: `https://downloads.mesosphere.com/dcos-vagrant/metadata.json`)
+- `DCOS_BOX_URL` - VirtualBox box image url or vagrant-cloud style image repo (default: `https://downloads.dcos.io/dcos-vagrant/metadata.json`)
 - `DCOS_BOX_VERSION` - VirtualBox box image version (default: `~> 0.4.1`)
 - `DCOS_MACHINE_CONFIG_PATH` - Path to virtual machine configuration manifest (default: `VagrantConfig.yaml`)
     - Must contain at least one `boot` type machine, one `master` type machine, and one `agent` or `agent-public` type machine.
@@ -458,7 +472,7 @@ Additional advanced configuration may be possible by modifying the Vagrantfile d
 	│   ├── gs-spring-boot-0.1.0.jar   # (Optional) standalone java application (requires jre 8.1)
 	│   └── <jre-8u66-linux-x64.tgz>   # (Optional) Java Runtime Environment (Download from Oracle)
 	│
-	├── <dcos_generate_config.sh>      # (Required) DCOS installer from Mesosphere
+	├── <dcos_generate_config.sh>      # (Required) DCOS installer
 	├── README.md
 	├── <VagrantConfig.yaml>           # (Required) Machine resource definitions
 	├── VagrantConfig.yaml.example     # Used to define node types. Copy to VagrantConfig.yaml
