@@ -18,13 +18,13 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
 - [Appendix: Authentication](#appendix-authentication)
 - [Appendix: Architecture](#appendix-architecture)
 - [Appendix: Installation](#appendix-installation)
-- [Appendix: Install Ruby](#install-ruby)
 - [Appendix: Options](#appendix-options)
 - [Appendix: VirtualBox Guest Additions](#appendix-virtualbox-guest-additions)
 - [License and Author](#license-and-author)
 
 **Other Docs:**
 
+- [Install Ruby](./docs/install-ruby.md)
 - [Repo Structure](./docs/repo-structure.md)
 - [Examples](./examples)
 - [DCOS CLI](./docs/dcos-cli.md)
@@ -146,6 +146,8 @@ Most services *can* be installed on the Medium cluster, but not all at the same 
     This will update `/etc/hosts` every time VMs are created or destroyed.
 
     To avoid entering your password on `vagrant up` & `vagrant destroy` you may enable [passwordless sudo](https://github.com/smdahlen/vagrant-hostmanager#passwordless-sudo).
+
+    On some versions of Mac OS X, installing vagrant plugins may require [installing a modern version of Ruby](./docs/install-ruby.md).
 
 1. Download the DCOS Installer
 
@@ -387,39 +389,7 @@ The DCOS installation is multi-stage with many moving parts.
 
 Ideally deployment and installation failures will be visible in the vagrant output, but sometimes failures occur in the background. This is especially true for systemd components that come up concurrently and wait for dependencies to come up.
 
-To interrogate the system, it's possible to ssh into the machines using `vagrant ssh <machine>` and view the logs of all system components with `joutnalctl -f`. 
-
-
-# Appendix: Install Ruby
-
-Installing vagrant plugins may require having an modern version of ruby installed on the host. 
-
-There are several ways to install ruby. One way is to use ruby-install, using chruby to manage your ruby installations:
-
-1. Install ruby-install via homebrew:
-
-    ```
-    brew install ruby-install
-    ```
-
-1. Install ruby 2.2 via ruby-install:
-
-    ```
-    ruby-install ruby 2.2
-    ```
-
-1. Install chruby via homebrew:
-
-    ```
-    brew install chruby
-    ```
-
-1. Configure your shell (and `~/.bash_profile`) to source chruby:
-
-    ```
-    source '/usr/local/share/chruby/chruby.sh'
-    chruby 2.2
-    ```
+To interrogate the system, it's possible to ssh into the machines using `vagrant ssh <machine>` and view the logs of all system components with `joutnalctl -f`.
 
 
 # Appendix: Options
