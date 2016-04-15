@@ -2,6 +2,7 @@ require 'spec_helper'
 set :os, :family => 'redhat', :release => '7', :arch => 'x86_64'
 
 dcos_master_services = [
+  'docker',
   'dcos-mesos-master.service',
   'dcos-exhibitor.service',
   'dcos-marathon.service',
