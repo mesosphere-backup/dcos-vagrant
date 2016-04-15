@@ -20,12 +20,12 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
 - [Appendix: Installation](#appendix-installation)
 - [Appendix: Install Ruby](#install-ruby)
 - [Appendix: Options](#appendix-options)
-- [Appendix: Repo Structure](#appendix-repo-structure)
 - [Appendix: VirtualBox Guest Additions](#appendix-virtualbox-guest-additions)
 - [License and Author](#license-and-author)
 
 **Other Docs:**
 
+- [Repo Structure](./docs/repo-structure.md)
 - [Examples](./examples)
 - [DCOS CLI](./docs/dcos-cli.md)
 - [Troubleshooting](./docs/troubleshooting.md)
@@ -441,44 +441,6 @@ There are several configurable options when deploying a cluster and installing D
 - `DCOS_PRIVATE_REGISTRY` - Boolean to install an insecure private Docker registry on the boot machine and configure the agents to allow it (default: `false`)
 
 Additional advanced configuration may be possible by modifying the Vagrantfile directly, but is not encouraged because the internal APIs may change at any time.
-
-
-# Appendix: Repo Structure
-
-**NOTE: Take note of the files in [.gitignore](./.gitignore) which will not be committed. These are indicated by angle brackets below. Some of them must be provided for deployment to succeed.**
-
-	.
-	├─── docs                          # Misc images or supporting documentation
-	│
-	├─── etc
-	│   ├── config-1.5.yaml            # DCOS config template (1.5)
-	│   └── config-1.6.yaml            # DCOS config template (1.6)
-	│
-	├─── examples                      # Example app/service definitions
-	│   ├── java-spring                # Example java-spring Marathon application
-	│   ├── kube-oinker                # Example twitter clone on Kubernetes
-	│   ├── oinker                     # Example twitter clone on Marathon
-	│   ├── jenkins.json               # Marathon descriptor for standalone jenkins, not currently functioning
-	│   └── stress.json                # Marathon descriptor for standalone commandline which uses CPU
-	│
-	├── provision
-	│   │
-	│   ├── bin
-	│   │   ├── ca-certificates.sh     # Provision certificate authorities
-	│   │   ├── insecure-registry.sh   # Provision docker daemon to accept the private registry
-	│   │   ├── type-agent-private.sh  # Provision script for "agent-private" type machines
-	│   │   ├── type-agent-public.sh   # Provision script for "agent-public" type machines
-	│   │   ├── type-boot.sh           # Provision script for "boot" type machines
-	│   │   └── type-master.sh         # Provision script for "master" type machines
-	│   │
-	│   ├── gs-spring-boot-0.1.0.jar   # (Optional) standalone java application (requires jre 8.1)
-	│   └── <jre-8u66-linux-x64.tgz>   # (Optional) Java Runtime Environment (Download from Oracle)
-	│
-	├── <dcos_generate_config.sh>      # (Required) DCOS installer
-	├── README.md
-	├── <VagrantConfig.yaml>           # (Required) Machine resource definitions
-	├── VagrantConfig.yaml.example     # Used to define node types. Copy to VagrantConfig.yaml
-	└── VagrantFile                    # Used to deploy nodes and install DCOS
 
 
 # Appendix: VirtualBox Guest Additions
