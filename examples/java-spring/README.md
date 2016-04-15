@@ -65,13 +65,13 @@ dcos marathon app update java-spring instances=3
 
 ## Load Balancer
 
-On production deployments of DCOS, the private agent nodes are not usually externally accessible. So a load balancer (reverse proxy) is required in order to be able to access apps. One way to do that is with [Marathon-LB](https://github.com/mesosphere/marathon-lb).
+On production deployments of DC/OS, the private agent nodes are not usually externally accessible. So a load balancer (reverse proxy) is required in order to be able to access apps. One way to do that is with [Marathon-LB](https://github.com/mesosphere/marathon-lb).
 
 **Add Multiverse Package Repository**
 
-Marathon-LB is in the Multiverse repo. So the Multiverse must be added to the DCOS CLI config.
+Marathon-LB is in the Multiverse repo. So the Multiverse must be added to the DC/OS CLI config.
 
-See the [DCOS CLI docs](../../docs/dcos-cli.md#multiverse) on how to add the multiverse repo.
+See the [DC/OS CLI docs](../../docs/dcos-cli.md#multiverse) on how to add the multiverse repo.
 
 **Deploy Marathon-LB**
 

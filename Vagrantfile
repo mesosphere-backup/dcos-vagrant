@@ -215,7 +215,7 @@ Vagrant.configure(2) do |config|
         override.vm.network :private_network, ip: machine_type['ip']
       end
 
-      # provision a shared SSH key (required by DCOS SSH installer)
+      # provision a shared SSH key (required by DC/OS SSH installer)
       machine.vm.provision(
         :dcos_ssh,
         name: 'Shared SSH Key',
@@ -240,7 +240,7 @@ Vagrant.configure(2) do |config|
       if machine_type['type'] == 'boot'
         machine.vm.provision(
           :shell,
-          name: "DCOS #{machine_type['type'].capitalize}",
+          name: "DC/OS #{machine_type['type'].capitalize}",
           path: provision_script_path("type-#{machine_type['type']}"),
           env: user_config.provision_env
         )

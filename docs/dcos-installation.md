@@ -1,6 +1,6 @@
-# DCOS Installation
+# DC/OS Installation
 
-The DCOS installation is multi-stage with many moving parts.
+The DC/OS installation is multi-stage with many moving parts.
 
 ## High Level Stages
 
@@ -14,24 +14,24 @@ The DCOS installation is multi-stage with many moving parts.
     1. Nginx is started to host generated node config artifacts
     1. Private Docker registry is started (if configured)
     1. Java runtime is copied from host and installed (if configured)
-    1. DCOS release (`dcos_generate_config.sh`) is copied from host
-1. DCOS pre-install
-    1. DCOS release config (`config.yaml` & `ip-detect`) is generated from list of active nodes
-    1. DCOS node config artifacts (`dcos_install.sh` & tarballs) are generated from the release and release config
-1. DCOS install
+    1. DC/OS release (`dcos_generate_config.sh`) is copied from host
+1. DC/OS pre-install
+    1. DC/OS release config (`config.yaml` & `ip-detect`) is generated from list of active nodes
+    1. DC/OS node config artifacts (`dcos_install.sh` & tarballs) are generated from the release and release config
+1. DC/OS install
     1. Node config artifacts are distributed to the nodes and installed (based on node type)
-    1. DCOS systemd services are started on the nodes
-1. DCOS post-install
+    1. DC/OS systemd services are started on the nodes
+1. DC/OS post-install
     1. Exhibitor starts, brings up Zookeeper
     1. Mesos Master starts up and registers with Zookeeper
     1. Mesos DNS detects Mesos Master using Zookeeper and initializes `leader.mesos`
     1. Root Marathon detects `leader.mesos` and starts up
         1. Root Marathon registers with the leading Mesos Master
     1. AdminRouter (nginx) detects `leader.mesos` starts up
-        1. DCOS, Mesos, Marathon, and Exhibitor UIs become externally accessible
+        1. DC/OS, Mesos, Marathon, and Exhibitor UIs become externally accessible
     1. Mesos Slaves detect `leader.mesos` and start up
         1. Mesos Slaves register with the leading Mesos Master
-        1. DCOS Nodes become visible in the DCOS UI
+        1. DC/OS Nodes become visible in the DC/OS UI
 
 ## System Logs
 

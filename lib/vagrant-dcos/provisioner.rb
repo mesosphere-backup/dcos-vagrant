@@ -97,7 +97,7 @@ module VagrantPlugins
         sudo('cp /vagrant/.vagrant/dcos/private_key_vagrant ~/dcos/genconf/ssh_key')
         #sudo('cat ~/dcos/genconf/ssh_key')
 
-        @machine.ui.success 'Generating DCOS Installer Files: ~/dcos/genconf/serve/'
+        @machine.ui.success 'Generating DC/OS Installer Files: ~/dcos/genconf/serve/'
         sudo('cd ~/dcos && bash ~/dcos/dcos_generate_config.sh --genconf && cp -rpv ~/dcos/genconf/serve/* /var/tmp/dcos/')
 
         case install_method
@@ -107,7 +107,7 @@ module VagrantPlugins
           install_pull(active_machines, machine_types, max_install_threads, postflight_timeout_seconds)
         end
 
-        @machine.ui.success "DCOS Installation Complete\nWeb Interface: http://m1.dcos/"
+        @machine.ui.success "DC/OS Installation Complete\nWeb Interface: http://m1.dcos/"
       end
 
       def filter_machines(active_machines, machine_types, type)
@@ -127,7 +127,7 @@ module VagrantPlugins
         filter_machines(active_machines, machine_types, 'master').each do |name, provider|
           machine = @machine.env.machine(name, provider)
           queue.push(Proc.new do
-            machine.ui.success 'Installing DCOS (master)'
+            machine.ui.success 'Installing DC/OS (master)'
             remote_sudo(machine, %Q(bash -c "curl --fail --location --silent --show-error --verbose http://boot.dcos/dcos_install.sh | bash -s -- master"))
           end)
         end
@@ -138,14 +138,14 @@ module VagrantPlugins
         filter_machines(active_machines, machine_types, 'agent-private').each do |name, provider|
           machine = @machine.env.machine(name, provider)
           queue.push(Proc.new do
-            machine.ui.success 'Installing DCOS (agent)'
+            machine.ui.success 'Installing DC/OS (agent)'
             remote_sudo(machine, %Q(bash -c "curl --fail --location --silent --show-error --verbose http://boot.dcos/dcos_install.sh | bash -s -- slave"))
           end)
         end
         filter_machines(active_machines, machine_types, 'agent-public').each do |name, provider|
           machine = @machine.env.machine(name, provider)
           queue.push(Proc.new do
-            machine.ui.success 'Installing DCOS (agent-public)'
+            machine.ui.success 'Installing DC/OS (agent-public)'
             remote_sudo(machine, %Q(bash -c "curl --fail --location --silent --show-error --verbose http://boot.dcos/dcos_install.sh | bash -s -- slave_public"))
           end)
         end
@@ -156,7 +156,7 @@ module VagrantPlugins
         filter_machines(active_machines, machine_types, 'master').each do |name, provider|
           machine = @machine.env.machine(name, provider)
           queue.push(Proc.new do
-            machine.ui.success 'DCOS Postflight'
+            machine.ui.success 'DC/OS Postflight'
             write_postflight(machine, postflight_timeout_seconds)
             remote_sudo(machine, '/opt/mesosphere/bin/postflight.sh')
           end)
@@ -164,7 +164,7 @@ module VagrantPlugins
         filter_machines(active_machines, machine_types, 'agent-private').each do |name, provider|
           machine = @machine.env.machine(name, provider)
           queue.push(Proc.new do
-            machine.ui.success 'DCOS Postflight'
+            machine.ui.success 'DC/OS Postflight'
             write_postflight(machine, postflight_timeout_seconds)
             remote_sudo(machine, '/opt/mesosphere/bin/postflight.sh')
           end)
@@ -172,7 +172,7 @@ module VagrantPlugins
         filter_machines(active_machines, machine_types, 'agent-public').each do |name, provider|
           machine = @machine.env.machine(name, provider)
           queue.push(Proc.new do
-            machine.ui.success 'DCOS Postflight'
+            machine.ui.success 'DC/OS Postflight'
             write_postflight(machine, postflight_timeout_seconds)
             remote_sudo(machine, '/opt/mesosphere/bin/postflight.sh')
           end)
@@ -216,13 +216,13 @@ EOF
       def write_postflight(machine, postflight_timeout_seconds)
         postflight = <<-EOF
 #!/usr/bin/env bash
-# Run the DCOS diagnostic script for up to #{postflight_timeout_seconds} seconds to ensure
+# Run the DC/OS diagnostic script for up to #{postflight_timeout_seconds} seconds to ensure
 # we do not return ERROR on a cluster that hasn't fully achieved quorum.
 if [[ -e "/opt/mesosphere/bin/3dt" ]]; then
-    # DCOS >= 1.7
+    # DC/OS >= 1.7
     CMD="/opt/mesosphere/bin/3dt -diag"
 elif [[ -e "/opt/mesosphere/bin/dcos-diagnostics.py" ]]; then
-    # DCOS <= 1.6
+    # DC/OS <= 1.6
     CMD="/opt/mesosphere/bin/dcos-diagnostics.py"
 else
     echo "Postflight Failure: either 3dt or dcos-diagnostics.py must be present"
@@ -235,7 +235,7 @@ until OUT=$(${CMD} 2>&1) || [[ T -eq 0 ]]; do
 done
 RETCODE=$?
 if [[ "${RETCODE}" != "0" ]]; then
-    echo "DCOS Unhealthy\n${OUT}" >&2
+    echo "DC/OS Unhealthy\n${OUT}" >&2
 fi
 exit ${RETCODE}
 EOF
