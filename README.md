@@ -15,7 +15,6 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
 - [Configure](#configure)
 - [Example Clusters](#example-clusters)
 - [Install DCOS Services](#install-dcos-services)
-- [Appendix: Authentication](#appendix-authentication)
 - [Appendix: Options](#appendix-options)
 - [License and Author](#license-and-author)
 
@@ -209,6 +208,12 @@ Most services *can* be installed on the Medium cluster, but not all at the same 
 
    See [Install DCOS Services](#install-dcos-services) for more information on how to use you new DCOS cluster.
 
+1. (Optional) Authentication
+
+   When installing the Enterprise Edition of DCOS (>= 1.6) on dcos-vagrant, the cluster will prompt for a username and password when using the DCOS CLI or the web dashboard.
+
+   If you're using the provided 1.6 or 1.7 installer config file then the superuser credentials are by default `admin`/`admin`.
+
 
 # Configure
 
@@ -322,13 +327,6 @@ For example, see [Oinker on Marathon](./examples/oinker/) or the [Java-Spring Ex
 Kubernetes apps can be installed by using the [dcos cli kubectl plugin](https://github.com/mesosphere/dcos-kubectl).
 
 For example, see the [Oinker on Kubernetes Example](./examples/kube-oinker/).
-
-
-# Appendix: Authentication
-
-When installing the Enterprise Edition of DCOS (>= 1.6) on dcos-vagrant, the cluster will prompt for a username and password when using the DCOS CLI or the web dashboard.
-
-If you're using the provided 1.6 installer config file ([etc/config-1.6.yaml](./etc/config-1.6.yaml)) then the superuser credentials are by default `admin`/`admin`.
 
 
 # Appendix: Options
