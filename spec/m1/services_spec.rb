@@ -4,9 +4,9 @@ set :os, :family => 'redhat', :release => '7', :arch => 'x86_64'
 dcos_master_services = [
   'dcos-mesos-master.service',
   'dcos-exhibitor.service',
-  'dcos-zookeeper.service',
   'dcos-marathon.service',
-  'dcos-ddt.service',
+  'dcos-nginx.service',
+  'dcos-cosmos.service',
 ]
 
 dcos_master_services.each do |s|
