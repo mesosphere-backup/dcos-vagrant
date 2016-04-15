@@ -16,7 +16,6 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
 - [Example Clusters](#example-clusters)
 - [Install DCOS Services](#install-dcos-services)
 - [Appendix: Authentication](#appendix-authentication)
-- [Appendix: Architecture](#appendix-architecture)
 - [Appendix: Installation](#appendix-installation)
 - [Appendix: Options](#appendix-options)
 - [Appendix: VirtualBox Guest Additions](#appendix-virtualbox-guest-additions)
@@ -24,6 +23,7 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
 
 **Other Docs:**
 
+- [Architecture](./docs/architecture.md)
 - [Install Ruby](./docs/install-ruby.md)
 - [Repo Structure](./docs/repo-structure.md)
 - [Examples](./examples)
@@ -103,7 +103,7 @@ Most services *can* be installed on the Medium cluster, but not all at the same 
 
     This repo assumes Vagrant and VirtualBox are installed and configured to work together.
 
-    See [Appendix: Architecture](#appendix-architecture) for details about the DCOS-Vagrant cluster architecture.
+    See the [Architecture docs](./docs/architecture.md) for details about the DCOS-Vagrant cluster architecture.
 
 1. Clone This Repo
 
@@ -329,25 +329,6 @@ For example, see the [Oinker on Kubernetes Example](./examples/kube-oinker/).
 When installing the Enterprise Edition of DCOS (>= 1.6) on dcos-vagrant, the cluster will prompt for a username and password when using the DCOS CLI or the web dashboard.
 
 If you're using the provided 1.6 installer config file ([etc/config-1.6.yaml](./etc/config-1.6.yaml)) then the superuser credentials are by default `admin`/`admin`.
-
-
-# Appendix: Architecture
-
-**Networking**
-
-- NatNetwork
-  - DHCP
-  - 10.0.1.0/24
-  - No static port forwarding
-
-- vboxnet0
-  - No DHCP
-  - IP4 Address 192.168.65.1
-  - Netmask 255.255.255.0
-
-## Architecture Diagram
-
-![Vagrant Diagram](docs/dcos_vagrant_setup.png?raw=true)
 
 
 # Appendix: Installation
