@@ -16,19 +16,19 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
 - [Example Clusters](#example-clusters)
 - [Install DCOS Services](#install-dcos-services)
 - [Appendix: Authentication](#appendix-authentication)
-- [Appendix: Installation](#appendix-installation)
 - [Appendix: Options](#appendix-options)
-- [Appendix: VirtualBox Guest Additions](#appendix-virtualbox-guest-additions)
 - [License and Author](#license-and-author)
 
 **Other Docs:**
 
 - [Architecture](./docs/architecture.md)
+- [DCOS Installation](./docs/dcos-installation.md)
 - [Install Ruby](./docs/install-ruby.md)
 - [Repo Structure](./docs/repo-structure.md)
 - [Examples](./examples)
 - [DCOS CLI](./docs/dcos-cli.md)
 - [Troubleshooting](./docs/troubleshooting.md)
+- [VirtualBox Guest Additions](./docs/virtualbox-guest-additions.md)
 
 
 # Audience
@@ -218,7 +218,7 @@ The [VagrantConfig.yaml.example](VagrantConfig.yaml.example) includes some prese
 
 Deploying multiple VMs takes a lot of memory and Mesos reserves more for overhead on each node. So don't expect to be able to install every DCOS service or use production-grade configurations. Most services will require reduced configurations in order to fit within the allocated memory. Some services (e.g. Cassandra) may require more nodes/resources than others.
 
-For more information about how the DCOS installation works and how to debug deployment/installation failure, see [Appendix: Installation](#appendix-installation).
+For more information about how the DCOS installation works and how to debug deployment/installation failure, see [DCOS Installation](./docs/dcos-installation.md).
 
 ## Node Types
 
@@ -331,48 +331,6 @@ When installing the Enterprise Edition of DCOS (>= 1.6) on dcos-vagrant, the clu
 If you're using the provided 1.6 installer config file ([etc/config-1.6.yaml](./etc/config-1.6.yaml)) then the superuser credentials are by default `admin`/`admin`.
 
 
-# Appendix: Installation
-
-The DCOS installation is multi-stage with many moving parts. 
-
-## High Level Stages
-
-1. Node machines are created and provisioned (master, agent-private, agent-public)
-    1. Nodes are given IPs and added to a shared network
-    1. SSH keys are updated
-    1. SSL certificate authorities are updated
-    1. Docker is configured to allow insecure registries (if configured)
-1. Boot machine is created and provisioned
-    1. Bootstrap Exhibitor (Zookeeper) is started
-    1. Nginx is started to host generated node config artifacts
-    1. Private Docker registry is started (if configured)
-    1. Java runtime is copied from host and installed (if configured)
-    1. DCOS release (`dcos_generate_config.sh`) is copied from host
-1. DCOS pre-install
-    1. DCOS release config (`config.yaml` & `ip-detect`) is generated from list of active nodes
-    1. DCOS node config artifacts (`dcos_install.sh` & tarballs) are generated from the release and release config
-1. DCOS install
-    1. Node config artifacts are distributed to the nodes and installed (based on node type)
-    1. DCOS systemd services are started on the nodes
-1. DCOS post-install
-    1. Exhibitor starts, brings up Zookeeper
-    1. Mesos Master starts up and registers with Zookeeper
-    1. Mesos DNS detects Mesos Master using Zookeeper and initializes `leader.mesos`
-    1. Root Marathon detects `leader.mesos` and starts up
-        1. Root Marathon registers with the leading Mesos Master
-    1. AdminRouter (nginx) detects `leader.mesos` starts up
-        1. DCOS, Mesos, Marathon, and Exhibitor UIs become externally accessible
-    1. Mesos Slaves detect `leader.mesos` and start up
-        1. Mesos Slaves register with the leading Mesos Master
-        1. DCOS Nodes become visible in the DCOS UI
-
-## System Logs
-
-Ideally deployment and installation failures will be visible in the vagrant output, but sometimes failures occur in the background. This is especially true for systemd components that come up concurrently and wait for dependencies to come up.
-
-To interrogate the system, it's possible to ssh into the machines using `vagrant ssh <machine>` and view the logs of all system components with `joutnalctl -f`.
-
-
 # Appendix: Options
 
 There are several configurable options when deploying a cluster and installing DCOS on it. Most of them are configurable via environment variables:
@@ -393,12 +351,6 @@ There are several configurable options when deploying a cluster and installing D
 
 Additional advanced configuration may be possible by modifying the Vagrantfile directly, but is not encouraged because the internal APIs may change at any time.
 
-
-# Appendix: VirtualBox Guest Additions
-
-Ideally, the vagrant box image used by dcos-vagrant includes VirtualBox Guest Additions compatible with the latest versions of VirtualBox. It should "just work".
-
-However, if they are out of date or incompatible with your installed version of VirtualBox you may want to install the [VBGuest Vagrant Plugin](https://github.com/dotless-de/vagrant-vbguest) to automatically install VirtualBox Guest Additions appropriate to your local VirtualBox version on each new VM after it is created.
 
 ## Install
 
