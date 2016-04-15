@@ -3,12 +3,10 @@ set :os, :family => 'redhat', :release => '7', :arch => 'x86_64'
 
 directories = [
   '/opt/mesosphere',
-  '/opt/genconf'
 ]
 
 files = [
-  '/opt/genconf/config.yaml',
-  '/opt/mesosphere/role'
+  '/etc/mesosphere/role'
 ]
 
 directories.each do |d|
