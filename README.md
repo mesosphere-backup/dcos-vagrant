@@ -82,6 +82,8 @@ Most services *can* be installed on the Medium cluster, but not all at the same 
 
 ## Supported DCOS Versions
 
+[DCOS Downloads &amp; Release Notes](https://dcos.io/releases/)
+
 - 1.7.x
   - Requires dcos-vagrant >= 0.6.0
   - No config changes since 1.6 (e.g. [config-1.7.yaml](etc/config-1.7.yaml))
