@@ -14,7 +14,6 @@ Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using
 - [Deploy](#deploy)
 - [Configure](#configure)
 - [Example Clusters](#example-clusters)
-- [Install DC/OS Services](#install-dcos-services)
 - [Environment Options](#environment-options)
 - [License and Author](#license-and-author)
 
@@ -210,7 +209,7 @@ Most services *can* be installed on the Medium cluster, but not all at the same 
 
    Once the the machines are created and provisioned, DC/OS will be installed. Once complete, the Web Interface will be available at <http://m1.dcos/>.
 
-   See [Install DC/OS Services](#install-dcos-services) for more information on how to use you new DC/OS cluster.
+   See the [DC/OS Usage docs](https://dcos.io/docs/latest/usage/service-install/) for more information on how to use you new DC/OS cluster.
 
 1. (Optional) Authentication
 
@@ -310,29 +309,6 @@ vagrant up m1 m2 m3 a1 a2 a3 a4 a5 a6 p1 p2 p3 boot
 ```
 
 
-# Install DC/OS Services
-
-Once DC/OS is installed, services can be installed using the DC/OS CLI as a package manager. In order to install the DC/OS CLI itself, follow the instructions in the popup when first visiting the DC/OS dashboard (http://m1.dcos/). For more information, see the [DC/OS CLI Docs](https://dcos.io/docs/latest/usage/cli/).
-
-For example, the following installs cassandra (which requires at least 3 private agent nodes):
-
-```bash
-dcos package install cassandra
-```
-
-## Marathon Apps
-
-Marathon apps can be installed by using the [dcos cli marathon plugin](https://dcos.io/docs/latest/usage/cli/command-reference/#dcos-marathon).
-
-For example, see [Oinker on Marathon](./examples/oinker/) or the [Java-Spring Example App](./examples/java-spring/).
-
-## Kubernetes Apps
-
-Kubernetes apps can be installed by using the [dcos cli kubectl plugin](https://github.com/mesosphere/dcos-kubectl).
-
-For example, see the [Oinker on Kubernetes Example](./examples/kube-oinker/).
-
-
 # Environment Options
 
 There are several configurable options when deploying a cluster and installing DC/OS on it. Most of them are configurable via environment variables:
@@ -352,15 +328,6 @@ There are several configurable options when deploying a cluster and installing D
 - `DCOS_PRIVATE_REGISTRY` - Boolean to install an insecure private Docker registry on the boot machine and configure the agents to allow it (default: `false`)
 
 Additional advanced configuration may be possible by modifying the Vagrantfile directly, but is not encouraged because the internal APIs may change at any time.
-
-
-## Install
-
-```bash
-vagrant plugin install vagrant-vbguest
-```
-
-This allows the pre-built vagrant box image to work on multiple (past and future) versions of VirtualBox.
 
 
 # License and Author
