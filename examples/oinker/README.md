@@ -22,14 +22,17 @@ This example runs [Oinker-Go](https://github.com/mesosphere/oinker-go) on [Marat
     ```
     cat >/tmp/cassandra.json <<EOF
     {
-      "cassandra": {
-        "framework": {
-          "mem": 512
-        },
-        "resources": {
-          "mem": 128
+        "nodes": {
+            "cpus": 0.5,
+            "mem": 512,
+            "disk": 4096,
+            "heap": {
+                "size": 1024,
+                "new": 100
+            },
+            "count": 1,
+            "seeds": 1
         }
-      }
     }
     EOF
     ```
@@ -55,9 +58,9 @@ See the [DC/OS CLI docs](../../docs/dcos-cli.md#multiverse) on how to add the mu
     ```
     cat >/tmp/marathon-lb.json <<EOF
     {
-      "marathon-lb": {
-        "mem": 256
-      }
+        "marathon-lb": {
+            "mem": 256
+        }
     }
     EOF
     ```
