@@ -114,8 +114,8 @@ Most services *can* be installed on the Medium cluster, but not all at the same 
     To upgrade to a new version of dcos-vagrant:
 
     1. Change into the repo directory (e.g. `cd ~/workspace/dcos-vagrant`)
+    1. Fetch the new code (e.g. `git fetch`)
     1. Checkout the new desired version (e.g. `git checkout v0.6.0`)
-    1. Pull the new code (e.g. `git pull`)
 
 1. Configure VirtualBox Networking
 
