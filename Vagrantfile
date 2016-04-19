@@ -160,6 +160,7 @@ def provision_script_path(type)
   return "./provision/bin/#{type}.sh"
 end
 
+Vagrant.require_version '>= 1.8.1'
 
 ## VM Creation & Provisioning
 ##############################################
