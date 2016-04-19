@@ -330,7 +330,7 @@ There are several configurable options when deploying a cluster and installing D
 Additional advanced configuration may be possible by modifying the Vagrantfile directly, but is not encouraged because the internal APIs may change at any time.
 
 
-# License and Author
+# License
 
 Copyright 2016 Mesosphere, Inc.
 
@@ -344,5 +344,3 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-
-Authors are listed in [AUTHORS.md file](./AUTHORS.md).
