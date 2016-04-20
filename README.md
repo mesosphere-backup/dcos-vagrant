@@ -181,9 +181,9 @@ Most services *can* be installed on the Medium cluster, but not all at the same 
     
     See [Configure](#configure) for more details on customizing your cluster.
 
-1. (Optional) Download the VM Base Image
+1. (Optional) Download/Update the VM Base Image
 
-    By default, Vagrant will automatically download the latest VM Base Image (virtualbox box) when you run `vagrant up <machines>`, but since downloading the image takes a while the first time, you may want to trigger the download manually.
+    By default, Vagrant should automatically download the latest VM Base Image (virtualbox box) when you run `vagrant up <machines>`, but downloading the image takes a while the first time. You may want to trigger the download or update manually.
 
     ```
     vagrant box add https://downloads.dcos.io/dcos-vagrant/metadata.json
@@ -209,7 +209,7 @@ Most services *can* be installed on the Medium cluster, but not all at the same 
 
    Once the the machines are created and provisioned, DC/OS will be installed. Once complete, the Web Interface will be available at <http://m1.dcos/>.
 
-   See the [DC/OS Usage docs](https://dcos.io/docs/latest/usage/service-install/) for more information on how to use you new DC/OS cluster.
+   See the [DC/OS Usage docs](https://dcos.io/docs/latest/usage/) for more information on how to use you new DC/OS cluster.
 
 1. (Optional) Authentication
 
