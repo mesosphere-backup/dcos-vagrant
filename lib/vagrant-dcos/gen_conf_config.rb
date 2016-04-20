@@ -5,7 +5,6 @@ require 'yaml'
 
 module VagrantPlugins
   module DCOS
-
     class GenConfConfig < Hash
       def initialize
         super
@@ -19,14 +18,14 @@ module VagrantPlugins
       end
 
       def to_yaml
-        ({}.update(self)).to_yaml
+        {}.update(self).to_yaml
       end
 
       def master_list
         raise NoMethodError
       end
 
-      def master_list=(value)
+      def master_list=(_value)
         raise NoMethodError
       end
 
@@ -34,7 +33,7 @@ module VagrantPlugins
         raise NoMethodError
       end
 
-      def agent_list=(value)
+      def agent_list=(_value)
         raise NoMethodError
       end
 
@@ -42,7 +41,7 @@ module VagrantPlugins
         raise NoMethodError
       end
 
-      def exhibitor_zk_hosts=(value)
+      def exhibitor_zk_hosts=(_value)
         raise NoMethodError
       end
 
@@ -50,7 +49,7 @@ module VagrantPlugins
         raise NoMethodError
       end
 
-      def exhibitor_zk_hosts=(value)
+      def exhibitor_zk_hosts=(_value)
         raise NoMethodError
       end
 
@@ -58,7 +57,7 @@ module VagrantPlugins
         raise NoMethodError
       end
 
-      def resolvers=(value)
+      def resolvers=(_value)
         raise NoMethodError
       end
     end
@@ -163,7 +162,7 @@ module VagrantPlugins
 
     class GenConfConfigLoader
       def self.load_file(config_template_path)
-        config_hash = YAML::load_file(Pathname.new(config_template_path).realpath)
+        config_hash = YAML.load_file(Pathname.new(config_template_path).realpath)
         if config_hash['cluster_config']
           # 1.5 config detected
           return GenConfConfig_1_5.new.update(config_hash)
@@ -172,7 +171,5 @@ module VagrantPlugins
         GenConfConfig_1_6.new.update(config_hash)
       end
     end
-
-
   end
 end

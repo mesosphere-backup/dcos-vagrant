@@ -9,7 +9,6 @@ require 'yaml'
 module VagrantPlugins
   module DCOS
     class Provisioner < Vagrant.plugin(2, :provisioner)
-
       def configure(root_config)
       end
 
@@ -19,11 +18,11 @@ module VagrantPlugins
           @config.config_template_path,
           @config.install_method.to_sym,
           @config.max_install_threads,
-          @config.postflight_timeout_seconds,
+          @config.postflight_timeout_seconds
         )
       end
 
-      def cleanup()
+      def cleanup
       end
 
       protected
@@ -32,9 +31,9 @@ module VagrantPlugins
       # print command, stdout, and stderr (indented)
       def remote_sudo(machine, command)
         prefix = '      '
-        machine.ui.output("sudo: #{command.chomp.gsub(/\n/,"\n#{prefix}")}")
+        machine.ui.output("sudo: #{command.chomp.gsub(/\n/, "\n#{prefix}")}")
         machine.communicate.sudo(command) do |type, data|
-          output = prefix + data.chomp.gsub(/\n/,"\n#{prefix}")
+          output = prefix + data.chomp.gsub(/\n/, "\n#{prefix}")
           case type
           when :stdout
             machine.ui.output(output)
@@ -60,7 +59,7 @@ module VagrantPlugins
         active_machines = @machine.env.active_machines
 
         # 1.7 adds --version
-        #sudo('bash ~/dcos/dcos_generate_config.sh --version')
+        # sudo('bash ~/dcos/dcos_generate_config.sh --version')
 
         # configure how to access the nodes from the boot machine
         gen_conf_config.master_list = machine_ips(active_machines, machine_types, 'master')
@@ -71,7 +70,7 @@ module VagrantPlugins
         gen_conf_config.exhibitor_zk_hosts = "#{boot_address}:2181"
         case install_method
         when :ssh_push
-          #TODO: in the future this may not be required by genconf, since it's really an internal concern
+          # TODO: in the future this may not be required by genconf, since it's really an internal concern
           gen_conf_config.bootstrap_url = 'file:///opt/dcos_install_tmp'
         when :ssh_pull
           # url to the nginx server that will host the output of genconf
@@ -81,11 +80,9 @@ module VagrantPlugins
         # configure how the nodes will resolve domains
         case @machine.provider_name
         when :aws
-          gen_conf_config.resolvers = [ '169.254.169.253' ]
+          gen_conf_config.resolvers = ['169.254.169.253']
         else # :virtualbox
-          if !gen_conf_config.resolvers
-            gen_conf_config.resolvers = [ '8.8.8.8' ]
-          end
+          gen_conf_config.resolvers ||= ['8.8.8.8']
         end
 
         @machine.ui.success 'Generating Configuration: ~/dcos/genconf/config.yaml'
@@ -97,7 +94,7 @@ module VagrantPlugins
 
         @machine.ui.success 'Importing Private SSH Key: ~/dcos/genconf/ssh_key'
         sudo('cp /vagrant/.vagrant/dcos/private_key_vagrant ~/dcos/genconf/ssh_key')
-        #sudo('cat ~/dcos/genconf/ssh_key')
+        # sudo('cat ~/dcos/genconf/ssh_key')
 
         @machine.ui.success 'Generating DC/OS Installer Files: ~/dcos/genconf/serve/'
         sudo('cd ~/dcos && bash ~/dcos/dcos_generate_config.sh --genconf && cp -rpv ~/dcos/genconf/serve/* /var/tmp/dcos/')
@@ -113,7 +110,7 @@ module VagrantPlugins
       end
 
       def filter_machines(active_machines, machine_types, type)
-        active_machines.select{ |name, _provider| machine_types[name.to_s]['type'] == type }
+        active_machines.select { |name, _provider| machine_types[name.to_s]['type'] == type }
       end
 
       def install_push
@@ -123,14 +120,13 @@ module VagrantPlugins
       end
 
       def install_pull(active_machines, machine_types, max_install_threads, postflight_timeout_seconds)
-
         # install masters in parallel
         queue = Queue.new
         filter_machines(active_machines, machine_types, 'master').each do |name, provider|
           machine = @machine.env.machine(name, provider)
           queue.push(Proc.new do
             machine.ui.success 'Installing DC/OS (master)'
-            remote_sudo(machine, %Q(bash -c "curl --fail --location --silent --show-error --verbose http://boot.dcos/dcos_install.sh | bash -s -- master"))
+            remote_sudo(machine, %(bash -c "curl --fail --location --silent --show-error --verbose http://boot.dcos/dcos_install.sh | bash -s -- master"))
           end)
         end
         Executor.exec(queue, max_install_threads)
@@ -141,14 +137,14 @@ module VagrantPlugins
           machine = @machine.env.machine(name, provider)
           queue.push(Proc.new do
             machine.ui.success 'Installing DC/OS (agent)'
-            remote_sudo(machine, %Q(bash -c "curl --fail --location --silent --show-error --verbose http://boot.dcos/dcos_install.sh | bash -s -- slave"))
+            remote_sudo(machine, %(bash -c "curl --fail --location --silent --show-error --verbose http://boot.dcos/dcos_install.sh | bash -s -- slave"))
           end)
         end
         filter_machines(active_machines, machine_types, 'agent-public').each do |name, provider|
           machine = @machine.env.machine(name, provider)
           queue.push(Proc.new do
             machine.ui.success 'Installing DC/OS (agent-public)'
-            remote_sudo(machine, %Q(bash -c "curl --fail --location --silent --show-error --verbose http://boot.dcos/dcos_install.sh | bash -s -- slave_public"))
+            remote_sudo(machine, %(bash -c "curl --fail --location --silent --show-error --verbose http://boot.dcos/dcos_install.sh | bash -s -- slave_public"))
           end)
         end
         Executor.exec(queue, max_install_threads)
@@ -180,7 +176,6 @@ module VagrantPlugins
           end)
         end
         Executor.exec(queue, max_install_threads)
-
       end
 
       def machine_ips(active_machines, machine_types, type)
@@ -195,7 +190,7 @@ module VagrantPlugins
       # write config.yaml to the boot machine
       def write_gen_conf_config(gen_conf_config)
         escaped_config_yaml = gen_conf_config.to_yaml.gsub('$', '\$')
-        sudo(%Q(cat << EOF > ~/dcos/genconf/config.yaml\n#{escaped_config_yaml}\nEOF))
+        sudo(%(cat << EOF > ~/dcos/genconf/config.yaml\n#{escaped_config_yaml}\nEOF))
       end
 
       # write ip-detect to the boot machine
@@ -210,7 +205,7 @@ EOF
 
         escaped_ip_config = ip_config.gsub('$', '\$')
 
-        sudo(%Q(cat << EOF > ~/dcos/genconf/ip-detect\n#{escaped_ip_config}\nEOF))
+        sudo(%(cat << EOF > ~/dcos/genconf/ip-detect\n#{escaped_ip_config}\nEOF))
       end
 
       # from https://github.com/mesosphere/dcos-installer/blob/master/dcos_installer/action_lib/__init__.py#L250
@@ -245,7 +240,7 @@ EOF
         escaped_postflight = postflight.gsub('$', '\$')
 
         machine.ui.success 'Generating Postflight Script: /opt/mesosphere/bin/postflight.sh'
-        remote_sudo(machine, %Q(cat << EOF > /opt/mesosphere/bin/postflight.sh\n#{escaped_postflight}\nEOF))
+        remote_sudo(machine, %(cat << EOF > /opt/mesosphere/bin/postflight.sh\n#{escaped_postflight}\nEOF))
         remote_sudo(machine, 'chmod u+x /opt/mesosphere/bin/postflight.sh')
       end
 
@@ -256,7 +251,8 @@ EOF
 
         # private address
         machine.config.vm.networks.each do |network|
-          key, options = network[0], network[1]
+          key = network[0]
+          options = network[1]
           if key == :private_network
             address = options[:ip]
             return address if address
@@ -265,7 +261,6 @@ EOF
 
         raise AddressResolutionError.new(machine.config.vm.name)
       end
-
     end
   end
 end
