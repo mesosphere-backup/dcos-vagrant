@@ -5,6 +5,9 @@ Quickly provision a DC/OS cluster on a local machine for development, testing, o
 
 Deploying dcos-vagrant involves creating a local cluster of VirtualBox VMs using the [dcos-vagrant-box](https://github.com/dcos/dcos-vagrant-box) base image and then installing [DC/OS](https://dcos.io/).
 
+**Issue tracking is moving to the [DCOS JIRA](https://dcosjira.atlassian.net/) ([dcos-vagrant component](https://dcosjira.atlassian.net/issues/?jql=project%20%3D%20DCOS%20AND%20component%20%3D%20dcos-vagrant)).
+Issues on Github will be disabled soon.**
+
 
 # Table of Contents
 
