@@ -318,7 +318,7 @@ There are several configurable options when deploying a cluster and installing D
 
 - `DCOS_BOX` - VirtualBox box image name (default: `mesosphere/dcos-centos-virtualbox`)
 - `DCOS_BOX_URL` - VirtualBox box image url or vagrant-cloud style image repo (default: `https://downloads.dcos.io/dcos-vagrant/metadata.json`)
-- `DCOS_BOX_VERSION` - VirtualBox box image version (default: `~> 0.4.1`)
+- `DCOS_BOX_VERSION` - VirtualBox box image version (default: `~> 0.5.0`)
 - `DCOS_MACHINE_CONFIG_PATH` - Path to virtual machine configuration manifest (default: `VagrantConfig.yaml`)
     - Must contain at least one `boot` type machine, one `master` type machine, and one `agent` or `agent-public` type machine.
 - `DCOS_CONFIG_PATH` - Path to DC/OS configuration template (default: `etc/config.yaml`)
