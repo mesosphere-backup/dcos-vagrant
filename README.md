@@ -78,6 +78,7 @@ Most services *can* be installed on the Medium cluster, but not all at the same 
 - [Vagrant](https://www.vagrantup.com/) (>= 1.8.1) - virtualization orchestration
   - [Host Manager Plugin](https://github.com/smdahlen/vagrant-hostmanager) - manage /etc/hosts
   - (Optional) [VBGuest Plugin](https://github.com/dotless-de/vagrant-vbguest) - manage vbox guest additions
+  - (Optional) [Proxy Plugin](https://github.com/tmatilai/vagrant-proxyconf) - proxies are the same as hosts
 - [VirtualBox](https://www.virtualbox.org/) (>= 4.3) - virtualization engine
 - (Optional) [jq](https://stedolan.github.io/jq/) - json parser used by examples
 
