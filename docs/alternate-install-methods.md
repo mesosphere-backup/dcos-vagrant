@@ -2,13 +2,13 @@
 
 DC/OS supports 3 primary installation methods:
 
-- Advanced - command line manual installation
-- CLI - command line automated installation using SSH
-- GUI - browser-based installer
+- [Advanced](#advanced-installer) - command line manual installation (default)
+- [CLI](#cli-installer) - command line automated installation using SSH
+- [GUI](#gui-installer) - browser-based installer
 
 By default, DC/OS Vagrant uses the Advanced installation method, with tweaks specific to Vagrant. But the other two methods are also supported, for experimentation and automated testing.
 
-# Advanced Installer (default)
+# Advanced Installer
 
 The advanced installer is supported and fully automated.
 
