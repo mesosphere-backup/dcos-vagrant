@@ -24,6 +24,7 @@ Issues on Github will be disabled soon.**
 
 **Other Docs:**
 
+- [Alternate Install Methods](./docs/alternate-install-methods.md)
 - [Architecture](./docs/architecture.md)
 - [DC/OS Installation](./docs/dcos-installation.md)
 - [Install Ruby](./docs/install-ruby.md)
@@ -330,9 +331,10 @@ There are several configurable options when deploying a cluster and installing D
 - `DCOS_CONFIG_PATH` - Path to DC/OS configuration template (default: `etc/config.yaml`)
     - `master_list`, `agent_list`, `exhibitor_zk_hosts`, and `bootstrap_url` will be overridden.
 - `DCOS_GENERATE_CONFIG_PATH` - Path to DC/OS configuration generation script (default: `dcos_generate_config.sh`)
-- `DCOS_INSTALL_METHOD` - One of the following methods (default: `ssh_pull`):
+- `DCOS_INSTALL_METHOD` - One of the following [installation methods](./docs/alternate-install-methods.md) (default: `ssh_pull`):
     - `ssh_pull` - Use the "manual" DC/OS installation method (`dcos_install.sh`) with a pool of thread workers performing remote SHH installation.
     - `ssh_push` - Use the "automated" DC/OS installation method (`dcos_generate_config.sh --deploy`). WARNING: Does not (yet) support agent-public nodes!
+    - `web` - Use the GUI DC/OS installation method (`dcos_generate_config.sh --web`). WARNING: Does not (yet) support agent-public nodes!
 - `DCOS_JAVA_ENABLED` - Boolean to install java on each agent (default: `false`)
 - `DCOS_PRIVATE_REGISTRY` - Boolean to install an insecure [private Docker registry](./examples/private-registry.md) on the boot machine and configure the agents to allow it (default: `false`)
 - `DCOS_VAGRANT_MOUNT_METHOD` - One of the following methods (default: `virtualbox`):
