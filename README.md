@@ -329,6 +329,9 @@ There are several configurable options when deploying a cluster and installing D
     - `ssh_push` - Use the "automated" DC/OS installation method (`dcos_generate_config.sh --deploy`). WARNING: Does not (yet) support agent-public nodes!
 - `DCOS_JAVA_ENABLED` - Boolean to install java on each agent (default: `false`)
 - `DCOS_PRIVATE_REGISTRY` - Boolean to install an insecure private Docker registry on the boot machine and configure the agents to allow it (default: `false`)
+- `DCOS_VAGRANT_MOUNT_METHOD` - One of the following methods (default: `virtualbox`):
+    - `virtualbox` - Use cross-platform [VirtualBox shared folders](https://www.vagrantup.com/docs/synced-folders/virtualbox.html)
+    - `nfs` - Use faster [NFS shared folders](https://www.vagrantup.com/docs/synced-folders/nfs.html).
 
 Additional advanced configuration may be possible by modifying the Vagrantfile directly, but is not encouraged because the internal APIs may change at any time.
 
