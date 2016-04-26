@@ -64,8 +64,6 @@ After `vagrant up`, when the installer says `Starting DCOS installer in web mode
 
 On the next page, the installer prompts you with form fields. The values to enter into these field can be found at the pre-generated `config.yaml` and `ip-detect` files that should be at the root of the dcos-vagrant repo (copied there by the vagrant provisioner).
 
-![DC/OS GUI Installer Form](imgs/gui-install-form.png)
-
 1. Enter the Master Private IPs from `config.yaml` - `master_list`.
 1. Enter the Agent IPs from `config.yaml` - `agent_list`.
 1. Enter the first Master Public IP from `config.yaml` - `master_list[0]` prefixed with `http://` (auto-filled).
@@ -75,6 +73,8 @@ On the next page, the installer prompts you with form fields. The values to ente
 1. Enter the Upstream DNS Servers `config.yaml` - `resolvers` (auto-filled).
 1. Select `Custom Script` for `IP Detect Script` and select `ip-detect`.
 
-Then select `Run Pre-Flight`.
+![DC/OS GUI Installer Form](imgs/gui-install-form.png)
+
+Finally, select `Run Pre-Flight` and navigate through the subsequent prompts.
 
 ![DC/OS GUI Installer Success Page](imgs/gui-install-success.png)

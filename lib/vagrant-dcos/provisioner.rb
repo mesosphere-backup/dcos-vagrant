@@ -99,7 +99,7 @@ module VagrantPlugins
           # Move config files to the /vagrant mount so the user can reference/upload them to the web ui
           sudo('mv ~/dcos/genconf/config.yaml /vagrant/config.yaml')
           sudo('mv ~/dcos/genconf/ip-detect /vagrant/ip-detect')
-          @machine.ui.success "Starting Web Installer: http://#{@machine.config.hostname}:9000"
+          @machine.ui.success "Starting Web Installer: http://#{@machine.config.vm.hostname}:9000"
           install_web
           return
         end
