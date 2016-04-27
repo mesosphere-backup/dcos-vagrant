@@ -83,7 +83,9 @@ module VagrantPlugins
         when :aws
           gen_conf_config.resolvers = [ '169.254.169.253' ]
         else # :virtualbox
-          gen_conf_config.resolvers = [ '8.8.8.8' ]
+          if !gen_conf_config.resolvers
+            gen_conf_config.resolvers = [ '8.8.8.8' ]
+          end
         end
 
         @machine.ui.success 'Generating Configuration: ~/dcos/genconf/config.yaml'
