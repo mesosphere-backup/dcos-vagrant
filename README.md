@@ -100,11 +100,9 @@ Most services *can* be installed on the Medium cluster, but not all at the same 
 
 # Deploy
 
-1. Install & Configure Vagrant & VirtualBox
+1. Install Vagrant & VirtualBox
 
-    This repo assumes Vagrant and VirtualBox are installed and configured to work together.
-
-    See the [Architecture docs](./docs/architecture.md) for details about the DC/OS Vagrant cluster architecture.
+    For installer links, see [Software Requirements](#software).
 
 1. Clone This Repo
 
@@ -135,6 +133,8 @@ Most services *can* be installed on the Medium cluster, but not all at the same 
         ```
         VBoxManage hostonlyif ipconfig vboxnet0 --ip 192.168.65.1
         ```
+
+    For more details about the networking of a DC/OS Vagrant cluster, see the [Architecture docs](./docs/architecture.md).
 
 1. Install Vagrant Host Manager Plugin
 
