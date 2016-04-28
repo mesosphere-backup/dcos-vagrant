@@ -16,6 +16,8 @@ Issues on Github will be disabled soon.**
 - [Requirements](#requirements)
 - [Deploy](#deploy)
 - [Configure](#configure)
+- [Upgrade dcos-vagrant](#upgrade-dcos-vagrant)
+- [Destroy Your Cluster](#destroy-your-cluster)
 - [Example Clusters](#example-clusters)
 - [Environment Options](#environment-options)
 - [License and Author](#license-and-author)
@@ -104,19 +106,13 @@ Most services *can* be installed on the Medium cluster, but not all at the same 
 
     For installer links, see [Software Requirements](#software).
 
-1. Clone This Repo
+1. Clone this Repo
 
     Select where you want the dcos-vagrant repo to be on your local hard drive and `cd` into it. Then clone the repo using git.
 
     ```bash
     git clone https://github.com/dcos/dcos-vagrant
     ```
-
-    To upgrade to a new version of dcos-vagrant:
-
-    1. Change into the repo directory (e.g. `cd ~/workspace/dcos-vagrant`)
-    1. Fetch the new code (e.g. `git fetch`)
-    1. Checkout the new desired version (e.g. `git checkout v0.6.0`)
 
 1. Configure VirtualBox Networking
 
@@ -146,19 +142,19 @@ Most services *can* be installed on the Medium cluster, but not all at the same 
 
     This will update `/etc/hosts` every time VMs are created or destroyed.
 
-    To avoid entering your password on `vagrant up` & `vagrant destroy` you may enable [passwordless sudo](https://github.com/smdahlen/vagrant-hostmanager#passwordless-sudo).
+    To avoid entering your password on `vagrant up` & `vagrant destroy`, enable [passwordless sudo](https://github.com/smdahlen/vagrant-hostmanager#passwordless-sudo).
 
     On some versions of Mac OS X, installing vagrant plugins may require [installing a modern version of Ruby](./docs/install-ruby.md).
 
 1. Download the DC/OS Installer
 
-    If you don't already have a DC/OS Installer downloaded, you'll need to select and download one of the [supported versions](#supported-dcos-versions).
+    If you don't already have a DC/OS installer downloaded, you'll need to select and download one of the [supported versions](#supported-dcos-versions).
 
-    Once downloaded, move `dcos_generate_config.sh` to the root of the repo (the repo will be mounted into the vagrant machines as `/vagrant`).
+    Once downloaded, move the installer, `dcos_generate_config.sh`, to the root of the repo (the repo will be mounted into the vagrant machines as `/vagrant`).
 
     If you have multiple `dcos_generate_config.sh` files downloaded you can name them differently and specify which to use with `DCOS_GENERATE_CONFIG_PATH` (e.g. `export DCOS_GENERATE_CONFIG_PATH=dcos_generate_config-1.5-EA.sh`).
 
-    Enterprise edition installers are also supported. Contact your sales representative or <sales@mesosphere.com> to obtain right DC/OS installer.
+    Enterprise edition installers are also supported. Contact your sales representative or <sales@mesosphere.com> to obtain the right DC/OS installer.
 
 1. <a name="configure-the-dcos-installer"></a>Configure the DC/OS Installer
 
@@ -258,7 +254,7 @@ When selecting which machines to deploy, the following constraints must be obser
 
 ## Resource Constraints
 
-Mesos agent nodes are where DC/OS services will be installed. Mesos will auto-detect the amount of resources available on these machines, with the following constraint:
+DC/OS services will be installed on Mesos agent nodes. Mesos will auto-detect the amount of resources available on these machines, with the following constraint:
 
 - Mesos reserves half or 1 GB of each machine's memory for overhead (whichever is least)
 
@@ -266,6 +262,19 @@ For example, `m1` has 3328 MB memory by default. Some of that memory will be tak
 
 **IMPORTANT**: Make sure your local machine has enough memory to launch all your desired VMs, otherwise your machine may lock up as all the memory is consumed.
 
+# Destroy Your Cluster
+
+The following command destroys your cluster and any data stored there:
+
+`vagrant destroy -f`
+
+# Upgrade dcos-vagrant
+
+To upgrade to a new version of dcos-vagrant:
+
+1. Change into the repo directory (e.g. `cd ~/workspace/dcos-vagrant`)
+1. Fetch the new code (e.g. `git fetch`)
+1. Check out the new desired version (e.g. `git checkout v0.6.0`)
 
 # Example Clusters
 
@@ -310,7 +319,6 @@ A large cluster supports master node fail over, multiple framework installs, and
 ```bash
 vagrant up m1 m2 m3 a1 a2 a3 a4 a5 a6 p1 p2 p3 boot
 ```
-
 
 # Environment Options
 
