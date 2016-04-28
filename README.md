@@ -16,8 +16,8 @@ Issues on Github will be disabled soon.**
 - [Requirements](#requirements)
 - [Deploy](#deploy)
 - [Configure](#configure)
-- [Upgrade dcos-vagrant](#upgrade-dcos-vagrant)
-- [Destroy Your Cluster](#destroy-your-cluster)
+- [Upgrade](#upgrade)
+- [Destroy](#destroy)
 - [Example Clusters](#example-clusters)
 - [Environment Options](#environment-options)
 - [License and Author](#license-and-author)
@@ -99,6 +99,10 @@ Most services *can* be installed on the Medium cluster, but not all at the same 
 - CM.4
   - Requires [dcos-vagrant v0.3.0](https://github.com/dcos/dcos-vagrant/tree/v0.3.0)
 
+The latest version of DC/OS Vagrant usually works with the latest DC/OS Early Access and Stable releases.
+
+To test bleeding-edge Master releases of DC/OS it may be necessary to use the master branch of dcos-vagrant.
+
 
 # Deploy
 
@@ -150,7 +154,7 @@ Most services *can* be installed on the Medium cluster, but not all at the same 
 
     If you don't already have a DC/OS installer downloaded, you'll need to select and download one of the [supported versions](#supported-dcos-versions).
 
-    Once downloaded, move the installer, `dcos_generate_config.sh`, to the root of the repo (the repo will be mounted into the vagrant machines as `/vagrant`).
+    Once downloaded, move the installer (`dcos_generate_config.sh`) to the root of the repo (the repo will be mounted into the vagrant machines as `/vagrant`).
 
     If you have multiple `dcos_generate_config.sh` files downloaded you can name them differently and specify which to use with `DCOS_GENERATE_CONFIG_PATH` (e.g. `export DCOS_GENERATE_CONFIG_PATH=dcos_generate_config-1.5-EA.sh`).
 
@@ -262,19 +266,31 @@ For example, `m1` has 3328 MB memory by default. Some of that memory will be tak
 
 **IMPORTANT**: Make sure your local machine has enough memory to launch all your desired VMs, otherwise your machine may lock up as all the memory is consumed.
 
-# Destroy Your Cluster
+# Upgrade
 
-The following command destroys your cluster and any data stored there:
+In-place upgrading of DC/OS is not currently supported using DC/OS Vagrant. Existing clusters must be [destroyed](#destroy) before a new one can be created.
 
-`vagrant destroy -f`
+For version compatibility, see [Supported DC/OS Versions](#supported-dcos-versions).
 
-# Upgrade dcos-vagrant
-
-To upgrade to a new version of dcos-vagrant:
+**Upgrade to a new version of DC/OS Vagrant**:
 
 1. Change into the repo directory (e.g. `cd ~/workspace/dcos-vagrant`)
 1. Fetch the new code (e.g. `git fetch`)
-1. Check out the new desired version (e.g. `git checkout v0.6.0`)
+1. Check out the new desired version (e.g. `git checkout v0.6.0` or `git checkout master`)
+
+**Upgrade to a new version of DC/OS**:
+
+1. Download a new release from [DC/OS Releases](https://dcos.io/releases/)
+2. Move the new `dcos_generate_config.sh` into the dcos-vagrant repo directory
+3. Update the DC/OS config (e.g. `export DCOS_CONFIG_PATH=etc/config-1.7.yaml`)
+
+# Destroy
+
+The following command destroys your cluster and any data stored there:
+
+```
+vagrant destroy -f
+```
 
 # Example Clusters
 
