@@ -173,8 +173,11 @@ Vagrant.configure(2) do |config|
   config.hostmanager.manage_host = true
   config.hostmanager.ignore_private_ip = false
 
-  # configure vagrant-vbguest plugin
-  config.vbguest.auto_update = true if Vagrant.has_plugin?('vagrant-vbguest')
+  # Vagrant Plugin Configuration: vagrant-vbguest
+  if Vagrant.has_plugin?('vagrant-vbguest')
+    # enable auto update guest additions
+    config.vbguest.auto_update = true
+  end
 
   user_config = UserConfig.from_env
 
