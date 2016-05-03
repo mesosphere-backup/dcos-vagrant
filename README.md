@@ -118,24 +118,6 @@ To test bleeding-edge Master releases of DC/OS it may be necessary to use the ma
     git clone https://github.com/dcos/dcos-vagrant
     ```
 
-1. Configure VirtualBox Networking
-
-    Configure the host-only `vboxnet0` network to use the 192.168.65.0/24 subnet.
-    
-    1. Create the `vboxnet0` network if it does not exist:
-    
-        ```bash
-        VBoxManage list hostonlyifs | grep vboxnet0 -q || VBoxManage hostonlyif create
-        ```
-
-    1. Set the `vboxnet0` subnet:
-
-        ```
-        VBoxManage hostonlyif ipconfig vboxnet0 --ip 192.168.65.1
-        ```
-
-    For more details about the networking of a DC/OS Vagrant cluster, see the [Architecture docs](./docs/architecture.md).
-
 1. Install Vagrant Host Manager Plugin
 
     The [Host Manager Plugin](https://github.com/smdahlen/vagrant-hostmanager) manages the `/etc/hosts` on the VMs and host to allow access by hostname.

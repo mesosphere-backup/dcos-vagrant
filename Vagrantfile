@@ -166,6 +166,9 @@ end
 
 Vagrant.configure(2) do |config|
 
+  # configure vbox networking
+  system(provision_script_path('vbox-network'))
+
   validate_plugins || exit(1)
 
   # configure vagrant-hostmanager plugin
