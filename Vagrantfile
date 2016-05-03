@@ -181,6 +181,19 @@ Vagrant.configure(2) do |config|
     config.vbguest.auto_update = true
   end
 
+  # confugre vagrant-proxyconf plugin
+  if Vagrant.has_plugin?('vagrant-proxyconf')
+    config.proxy.http     = ENV.fetch('http_proxy', '')
+    config.proxy.https    = ENV.fetch('https_proxy', '')
+    config.proxy.no_proxy = ENV.fetch('no_proxy', 'localhost,127.0.0.1,.dcos,192.168.65.0/24')
+    if !config.proxy.no_proxy.include? '.dcos'
+      config.proxy.no_proxy += ',.dcos'
+    end
+    if !config.proxy.no_proxy.include? '.192.168.65.0/24'
+      config.proxy.no_proxy += ',.192.168.65.0/24'
+    end
+  end
+
 
   user_config = UserConfig.from_env
 
