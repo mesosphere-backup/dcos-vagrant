@@ -4,7 +4,6 @@
 require_relative 'lib/vagrant-dcos'
 require 'yaml'
 
-
 ## User Config
 ##############################################
 
@@ -21,7 +20,7 @@ class UserConfig
   attr_accessor :private_registry
 
   def self.from_env
-    c = self.new
+    c = new
     c.box                  = ENV.fetch('DCOS_BOX', 'mesosphere/dcos-centos-virtualbox')
     c.box_url              = ENV.fetch('DCOS_BOX_URL', 'https://downloads.dcos.io/dcos-vagrant/metadata.json')
     c.box_version          = ENV.fetch('DCOS_BOX_VERSION', '~> 0.5.0')
@@ -48,7 +47,7 @@ class UserConfig
       :config_path,
       :generate_config_path,
       :install_method,
-      :vagrant_mount_method,
+      :vagrant_mount_method
     ]
     required_fields.each do |field_name|
       field_value = send(field_name.to_sym)
@@ -63,7 +62,7 @@ class UserConfig
     required_files = [
       :machine_config_path,
       :generate_config_path,
-      :config_path,
+      :config_path
     ]
     required_files.each do |field_name|
       file_path = send(field_name.to_sym)
@@ -81,7 +80,7 @@ class UserConfig
       'DCOS_CONFIG_PATH' => path_to_url(@config_path),
       'DCOS_GENERATE_CONFIG_PATH' => path_to_url(@generate_config_path),
       'DCOS_JAVA_ENABLED' => @java_enabled ? 'true' : 'false',
-      'DCOS_PRIVATE_REGISTRY' => @private_registry ? 'true' : 'false',
+      'DCOS_PRIVATE_REGISTRY' => @private_registry ? 'true' : 'false'
     }
   end
 
@@ -89,24 +88,21 @@ class UserConfig
 
   # resolve relative paths to be relative to the vagrant mount (allow remote urls)
   def path_to_url(path)
-    /^\w*:\/\//.match(path) ? path : 'file:///vagrant/' + path
+    %r{^\w*:\/\/} =~ path ? path : 'file:///vagrant/' + path
   end
 
   # convert field symbol to env var
   def env_var(field)
     "DCOS_#{field.to_s.upcase}"
   end
-
 end
-
-
 
 ## Plugin Validation
 ##############################################
 
-def validate_plugins()
+def validate_plugins
   required_plugins = [
-    'vagrant-hostmanager',
+    'vagrant-hostmanager'
   ]
   missing_plugins = []
 
@@ -117,27 +113,27 @@ def validate_plugins()
   end
 
   unless missing_plugins.empty?
-    missing_plugins.each{ |x| STDERR.puts x }
+    missing_plugins.each { |x| STDERR.puts x }
     return false
   end
 
-  return true
+  true
 end
 
 def validate_machine_types(machine_types)
-  boot_types = machine_types.select{ |_, cfg| cfg['type'] == 'boot' }
+  boot_types = machine_types.select { |_, cfg| cfg['type'] == 'boot' }
   if boot_types.empty?
     STDERR.puts 'Must have at least one machine of type boot'
     exit 2
   end
 
-  master_types = machine_types.select{ |_, cfg| cfg['type'] == 'master' }
+  master_types = machine_types.select { |_, cfg| cfg['type'] == 'master' }
   if master_types.empty?
     STDERR.puts 'Must have at least one machine of type master'
     exit 2
   end
 
-  agent_types = machine_types.select{ |_, cfg| cfg['type'] == 'agent-private' || cfg['type'] == 'agent-public' }
+  agent_types = machine_types.select { |_, cfg| cfg['type'] == 'agent-private' || cfg['type'] == 'agent-public' }
   if agent_types.empty?
     STDERR.puts 'Must have at least one machine of type agent-private or agent-public'
     exit 2
@@ -145,7 +141,7 @@ def validate_machine_types(machine_types)
 end
 
 def raise_errors(errors)
-  STDERR.puts "Errors:"
+  STDERR.puts 'Errors:'
   errors.each do |category, error_list|
     STDERR.puts "  #{category}:"
     error_list.each do |error|
@@ -157,9 +153,10 @@ end
 
 # path to the provision shell scripts
 def provision_script_path(type)
-  return "./provision/bin/#{type}.sh"
+  "./provision/bin/#{type}.sh"
 end
 
+Vagrant.require_version '>= 1.8.1'
 
 ## VM Creation & Provisioning
 ##############################################
@@ -176,29 +173,27 @@ Vagrant.configure(2) do |config|
   config.hostmanager.manage_host = true
   config.hostmanager.ignore_private_ip = false
 
-  # configure vagrant-vbguest plugin
+  # Vagrant Plugin Configuration: vagrant-vbguest
   if Vagrant.has_plugin?('vagrant-vbguest')
+    # enable auto update guest additions
     config.vbguest.auto_update = true
   end
-
 
   user_config = UserConfig.from_env
 
   errors = user_config.validate
   raise_errors(errors) unless errors.empty?
 
-  machine_types =  YAML::load_file(Pathname.new(user_config.machine_config_path).realpath)
+  machine_types = YAML.load_file(Pathname.new(user_config.machine_config_path).realpath)
   validate_machine_types(machine_types)
-
 
   machine_types.each do |name, machine_type|
     config.vm.define name do |machine|
-
       machine.vm.hostname = "#{name}.dcos"
 
       # custom hostname aliases
       if machine_type['aliases']
-        machine.hostmanager.aliases = %Q(#{machine_type['aliases'].join(' ')})
+        machine.hostmanager.aliases = machine_type['aliases'].join(' ').to_s
       end
 
       # custom mount type
@@ -256,7 +251,6 @@ Vagrant.configure(2) do |config|
           preserve_order: true
         )
       end
-
     end
   end
 end

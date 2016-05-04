@@ -6,7 +6,6 @@ require 'thread'
 module VagrantPlugins
   module DCOS
     class Executor
-
       # create a pool of worker threads to drain the work queue
       # join the threads to block until they are finished
       def self.exec(proc_queue, max_worker_pool_size)
@@ -27,7 +26,6 @@ module VagrantPlugins
         # block until finished
         worker_pool.map(&:join)
       end
-
     end
   end
 end

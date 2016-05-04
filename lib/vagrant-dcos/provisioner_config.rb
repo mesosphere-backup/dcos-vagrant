@@ -10,7 +10,7 @@ module VagrantPlugins
       attr_accessor :config_template_path
       attr_accessor :postflight_timeout_seconds
 
-      def initialize()
+      def initialize
         super
         @install_method = UNSET_VALUE
         @max_install_threads = UNSET_VALUE
@@ -29,7 +29,7 @@ module VagrantPlugins
       end
 
       # The validation method is given a machine object, since validation is done for each machine that Vagrant is managing
-      def validate(machine)
+      def validate(_machine)
         errors = _detected_errors
 
         install_methods = [:ssh_pull, :ssh_push]
@@ -38,17 +38,17 @@ module VagrantPlugins
         end
 
         unless @max_install_threads > 0
-          errors << "Invalid config: max_install_threads must be greater than zero"
+          errors << 'Invalid config: max_install_threads must be greater than zero'
         end
 
         unless @postflight_timeout_seconds > 0
-          errors << "Invalid config: postflight_timeout_seconds must be greater than zero"
+          errors << 'Invalid config: postflight_timeout_seconds must be greater than zero'
         end
 
         # Validate required fields
         required_fields = [
           :machine_types,
-          :config_template_path,
+          :config_template_path
         ]
         required_fields.each do |field_name|
           value = send(field_name.to_sym)
@@ -57,11 +57,11 @@ module VagrantPlugins
           end
         end
 
-        return { "dcos" => errors } unless errors.empty?
+        return { 'dcos' => errors } unless errors.empty?
 
         # Validate required files
         required_file_fields = [
-          :config_template_path,
+          :config_template_path
         ]
         required_file_fields.each do |field_name|
           file_path = send(field_name.to_sym)
@@ -70,7 +70,7 @@ module VagrantPlugins
           end
         end
 
-        { "dcos_install" => errors }
+        { 'dcos_install' => errors }
       end
     end
   end

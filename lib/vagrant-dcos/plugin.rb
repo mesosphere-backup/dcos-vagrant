@@ -3,10 +3,10 @@
 
 module VagrantPlugins
   module DCOS
-    VERSION = '0.1'
+    VERSION = '0.1'.freeze
 
     class Plugin < Vagrant.plugin(2)
-      name "dcos"
+      name 'dcos'
 
       config :dcos_install, :provisioner do
         require_relative 'provisioner_config'
@@ -23,6 +23,5 @@ module VagrantPlugins
         SSHProvisioner
       end
     end
-
   end
 end
