@@ -94,7 +94,7 @@ EOF
     If auth is enabled, authenticate as instructed by the CLI.
 1. Test the nginx endpoint
 
-    ```
+    ```bash
     $ curl nginx.marathon.mesos
     <!DOCTYPE html>
     <html>
