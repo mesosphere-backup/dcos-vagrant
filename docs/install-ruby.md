@@ -10,10 +10,10 @@ There are several ways to install ruby. One way is to use ruby-install, using ch
     brew install ruby-install
     ```
 
-1. Install ruby 2.2 via ruby-install:
+1. Install ruby 2.2.0 via ruby-install:
 
     ```
-    ruby-install ruby 2.2
+    ruby-install ruby 2.2.0
     ```
 
 1. Install chruby via homebrew:
