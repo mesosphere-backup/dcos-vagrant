@@ -62,16 +62,16 @@ After `vagrant up`, when the installer says `Starting DCOS installer in web mode
 
 ![DC/OS GUI Installer Landing Page](imgs/gui-install-landing.png)
 
-On the next page, the installer prompts you with form fields. The values to enter into these field can be found at the pre-generated `config.yaml` and `ip-detect` files that should be at the root of the dcos-vagrant repo (copied there by the vagrant provisioner).
+On the next page, the installer prompts you with form fields. The values to enter into these field can be found at the pre-generated `dcos/config.yaml` and `dcos/ip-detect` files that should be at the root of the dcos-vagrant repo (copied there by the vagrant provisioner).
 
-1. Enter the Master Private IPs from `config.yaml` - `master_list`.
-1. Enter the Agent IPs from `config.yaml` - `agent_list`.
-1. Enter the first Master Public IP from `config.yaml` - `master_list[0]` prefixed with `http://` (auto-filled).
-1. Enter the SSH Username from `config.yaml` - `ssh_user`.
-1. Enter the SSH Listening Port from `config.yaml` - `ssh_port` (auto-filled).
+1. Enter the Master Private IPs from `dcos/config.yaml` - `master_list`.
+1. Enter the Agent IPs from `dcos/config.yaml` - `agent_list`.
+1. Enter the first Master Public IP from `dcos/config.yaml` - `master_list[0]` prefixed with `http://` (auto-filled).
+1. Enter the SSH Username from `dcos/config.yaml` - `ssh_user`.
+1. Enter the SSH Listening Port from `dcos/config.yaml` - `ssh_port` (auto-filled).
 1. Enter the Private SSH Key from `.vagrant/dcos/private_key_vagrant` (auto-filled).
-1. Enter the Upstream DNS Servers `config.yaml` - `resolvers` (auto-filled).
-1. Select `Custom Script` for `IP Detect Script` and select `ip-detect`.
+1. Enter the Upstream DNS Servers `dcos/config.yaml` - `resolvers` (auto-filled).
+1. Select `Custom Script` for `IP Detect Script` and select `dcos/ip-detect`.
 
 ![DC/OS GUI Installer Form](imgs/gui-install-form.png)
 
