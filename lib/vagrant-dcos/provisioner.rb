@@ -3,8 +3,12 @@
 
 require_relative 'gen_conf_config'
 require_relative 'executor'
+require_relative 'errors'
 require 'thread'
 require 'yaml'
+require 'uri'
+require 'open-uri'
+require 'time'
 
 module VagrantPlugins
   module DCOS
@@ -97,10 +101,19 @@ module VagrantPlugins
 
         if install_method == :web
           # Move config files to the /vagrant mount so the user can reference/upload them to the web ui
-          sudo('mv ~/dcos/genconf/config.yaml /vagrant/config.yaml')
-          sudo('mv ~/dcos/genconf/ip-detect /vagrant/ip-detect')
-          @machine.ui.success "Starting Web Installer: http://#{@machine.config.vm.hostname}:9000"
-          install_web
+          sudo('mkdir -p /vagrant/dcos')
+          sudo('mv ~/dcos/genconf/config.yaml /vagrant/dcos/config.yaml')
+          sudo('mv ~/dcos/genconf/ip-detect /vagrant/dcos/ip-detect')
+          start_web_installer
+          installer_address = "http://#{@machine.config.vm.hostname}:9000"
+          unless probe_address(installer_address)
+            @machine.ui.error 'Timed out waiting for the Web Installer to start'
+            sudo('systemctl status dcos-installer')
+            raise InstallError.new('Timed out waiting for the Web Installer to start')
+          end
+          @machine.ui.success "DC/OS Web Installer Available: #{installer_address}"
+          @machine.ui.success "Example config: dcos/config.yaml"
+          @machine.ui.success "Example ip-detect: dcos/ip-detect"
           return
         end
 
@@ -121,8 +134,65 @@ module VagrantPlugins
         active_machines.select { |name, _provider| machine_types[name.to_s]['type'] == type }
       end
 
-      def install_web
-        sudo('cd ~/dcos && bash ~/dcos/dcos_generate_config.sh --web -v')
+      def start_web_installer
+        service_start_path = '/usr/local/bin/dcos-installer'
+        service_start = <<-EOF
+#!/usr/bin/env bash
+cd /root/dcos
+exec bash /root/dcos/dcos_generate_config.sh --web
+EOF
+
+        escaped_service_start = service_start.gsub('$', '\$')
+
+        @machine.ui.success "Generating Installer Script: #{service_start_path}"
+        sudo(%(cat << EOF > #{service_start_path}\n#{escaped_service_start}\nEOF))
+        sudo("chmod u+x #{service_start_path}")
+
+        service_config_path = '/etc/systemd/system/dcos-installer.service'
+        service_config = <<-EOF
+[Unit]
+Description=DC/OS Web Installer
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=simple
+ExecStart=#{service_start_path}
+KillMode=process
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+        escaped_service_config = service_config.gsub('$', '\$')
+
+        @machine.ui.success "Generating Installer Service: #{service_config_path}"
+        sudo(%(cat << EOF > #{service_config_path}\n#{escaped_service_config}\nEOF))
+        sudo('systemctl daemon-reload && systemctl enable dcos-installer')
+
+        @machine.ui.success "Starting Installer Service"
+        sudo('systemctl start dcos-installer')
+      end
+
+      def probe_address(address)
+        # 2 minute timeout
+        timeout = Time.now + (60 * 2)
+
+        until Time.now > timeout do
+          machine.ui.output("Probing #{address} ...")
+          begin
+            open(address) do |file|
+              # ignore response
+            end
+            return true
+          rescue OpenURI::HTTPError, Errno::ECONNREFUSED => error
+            sleep(5)
+          end
+        end
+
+        # timeout exceeded
+        return false
       end
 
       def install_push
@@ -271,7 +341,7 @@ EOF
           end
         end
 
-        raise AddressResolutionError.new(machine.config.vm.name)
+        raise InstallError.new("Failed to find IP address of machine: #{machine.config.vm.name}")
       end
     end
   end
