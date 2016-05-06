@@ -44,7 +44,7 @@ Then follow the normal [DC/OS Vagrant Deploy Steps](/#deploy).
 
 # GUI Installer
 
-The GUI installer is supported, but requires manual intervention to fill out and navigate the web forms.
+The GUI installer support is experimental and requires manual intervention to fill out and navigate the web forms.
 
 For the official documentation, see the [GUI DC/OS Installation Guide](https://dcos.io/docs/latest/administration/installing/custom/gui/)
 
