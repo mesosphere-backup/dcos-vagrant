@@ -75,6 +75,20 @@ Most services *cannot* be installed on the Minimal cluster.
 
 Most services *can* be installed on the Medium cluster, but not all at the same time.
 
+## Operating System
+
+Ideally DC/OS Vagrant would work everywhere Vagrant and VirtualBox do, but each platform tends to require custom tweaks to the vagrant and guest OS configurations.
+
+The following host OS's have been reported to work:
+
+- Mac OS X 10.10, 10.11
+- Windows 7, 10
+- Ubuntu 14, 15
+- Fedora 23
+- Arch Linux
+
+The default guest OS box from [dcos-vagrant-box](https://github.com/dcos/dcos-vagrant-box) uses CentOS 7.2.
+
 ## Software
 
 - [Git](https://git-scm.com/) - clone repo
