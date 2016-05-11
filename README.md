@@ -180,27 +180,27 @@ To test bleeding-edge Master releases of DC/OS it may be necessary to use the ma
 
 1. (Optional) Configure Other Options
 
-   DC/OS Vagrant supports many other [configurable options via environment variables](#environment-options). Skip these for first time use.
+    DC/OS Vagrant supports many other [configurable options via environment variables](#environment-options). Skip these for first time use.
 
 1. Deploy DC/OS
 
-   Specify which machines to deploy. For example (requires 5.5GB free memory):
+    Specify which machines to deploy. For example (requires 5.5GB free memory):
 
-   ```bash
-   vagrant up m1 a1 p1 boot
-   ```
+    ```bash
+    vagrant up m1 a1 p1 boot
+    ```
 
-   Many permutations of machines are possible. See [Example Clusters](#example-clusters) for more options.
+    Many permutations of machines are possible. See [Example Clusters](#example-clusters) for more options.
 
-   Once the the machines are created and provisioned, DC/OS will be installed. Once complete, the Web Interface will be available at <http://m1.dcos/>.
+    Once the the machines are created and provisioned, DC/OS will be installed. Once complete, the Web Interface will be available at <http://m1.dcos/>.
 
-   See the [DC/OS Usage docs](https://dcos.io/docs/latest/usage/) for more information on how to use you new DC/OS cluster.
+    See the [DC/OS Usage docs](https://dcos.io/docs/latest/usage/) for more information on how to use you new DC/OS cluster.
 
 1. (Optional) Authentication
 
-   When installing the Enterprise Edition of DC/OS (>= 1.6) on dcos-vagrant, the cluster will prompt for a username and password when using the DC/OS CLI or the web dashboard.
+    When installing **DC/OS** (>= 1.7) on dcos-vagrant, the cluster will prompt for authentication through Google, Github, or Microsoft. The first user to log in becomes the superuser and must add additional users to allow multiple. It's also possible to [disable login](https://dcos.io/docs/1.7/administration/security/managing-authentication/#authentication-opt-out) in the installation config, if desired.
 
-   If you're using the provided 1.6 or 1.7 installer config file then the superuser credentials are by default `admin`/`admin`.
+    When installing **Mesosphere Enterprise DC/OS** (>= 1.6) on dcos-vagrant, the cluster will prompt for a username and password when using the DC/OS CLI or the web dashboard. If you're using the provided 1.6 or 1.7 installer config file then the superuser credentials are by default `admin`/`admin`.
 
 
 # Configure
