@@ -273,7 +273,7 @@ For version compatibility, see [Supported DC/OS Versions](#supported-dcos-versio
 
 1. Change into the repo directory (e.g. `cd ~/workspace/dcos-vagrant`)
 1. Fetch the new code (e.g. `git fetch`)
-1. Check out the new desired version (e.g. `git checkout v0.6.0` or `git checkout master`)
+1. Check out the new desired version (e.g. `git checkout v0.7.0` or `git checkout master`)
 
 **Upgrade to a new version of DC/OS**:
 

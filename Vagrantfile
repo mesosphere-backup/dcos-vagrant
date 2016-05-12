@@ -23,7 +23,7 @@ class UserConfig
     c = new
     c.box                  = ENV.fetch('DCOS_BOX', 'mesosphere/dcos-centos-virtualbox')
     c.box_url              = ENV.fetch('DCOS_BOX_URL', 'https://downloads.dcos.io/dcos-vagrant/metadata.json')
-    c.box_version          = ENV.fetch('DCOS_BOX_VERSION', '~> 0.5.0')
+    c.box_version          = ENV.fetch('DCOS_BOX_VERSION', '~> 0.6.0')
     c.machine_config_path  = ENV.fetch('DCOS_MACHINE_CONFIG_PATH', 'VagrantConfig.yaml')
     c.config_path          = ENV.fetch('DCOS_CONFIG_PATH', 'etc/config.yaml')
     c.generate_config_path = ENV.fetch('DCOS_GENERATE_CONFIG_PATH', 'dcos_generate_config.sh')
