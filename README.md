@@ -263,6 +263,40 @@ For example, `m1` has 3328 MB memory by default. Some of that memory will be tak
 
 **IMPORTANT**: Make sure your local machine has enough memory to launch all your desired VMs, otherwise your machine may lock up as all the memory is consumed.
 
+# Scale
+
+DC/OS Vagrant allows for easy scaling up and down by adding and removing public or private agent nodes.
+
+Note: DC/OS itself does not allow changing the number of master nodes after installation.
+
+Adding more nodes to an existing cluster requires your VagrantConfig.yaml to have both new and old nodes configured.
+
+## Add an Agent Node
+
+Adding a node will not immediately change scheduled services by may allow pending tasks to be scheduled using the newly available resources.
+
+```
+# Example initial cluster deploy
+vagrant up m1 a1 p1 boot
+# Add a private agent node
+vagrant up a2
+# Add a public agent node
+vagrant up p2
+```
+
+## Remove an Agent Node
+
+Removing an agent node will cause all tasks running on that node to be rescheduled elsewhere, if resources allow.
+
+```
+# Example initial cluster deploy
+vagrant up m1 a1 p1 boot
+# Remove a private agent node
+vagrant destroy -f a1
+# Remove a public agent node
+vagrant destroy -f p1
+```
+
 # Upgrade
 
 In-place upgrading of DC/OS is not currently supported using DC/OS Vagrant. Existing clusters must be [destroyed](#destroy) before a new one can be created.

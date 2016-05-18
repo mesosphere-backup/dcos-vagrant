@@ -234,15 +234,18 @@ Vagrant.configure(2) do |config|
         )
       end
 
-      # only provision the boot machine
-      if machine_type['type'] == 'boot'
+      script_path = provision_script_path("type-#{machine_type['type']}")
+      if File.exist?(script_path)
         machine.vm.provision(
           :shell,
           name: "DC/OS #{machine_type['type'].capitalize}",
-          path: provision_script_path("type-#{machine_type['type']}"),
+          path: script_path,
           env: user_config.provision_env
         )
+      end
 
+      if machine_type['type'] == 'boot'
+        # install DC/OS after boot machine is provisioned
         machine.vm.provision(
           :dcos_install,
           install_method: user_config.install_method,
