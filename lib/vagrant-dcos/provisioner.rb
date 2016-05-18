@@ -86,7 +86,8 @@ module VagrantPlugins
         when :aws
           gen_conf_config.resolvers = ['169.254.169.253']
         else # :virtualbox
-          gen_conf_config.resolvers ||= ['8.8.8.8']
+          # default to VirtualBox's NAT DNS Host Resolver
+          gen_conf_config.resolvers ||= ['10.0.2.3']
         end
 
         @machine.ui.success 'Generating Configuration: ~/dcos/genconf/config.yaml'
