@@ -226,6 +226,12 @@ Vagrant.configure(2) do |config|
         path: provision_script_path('ca-certificates')
       )
 
+      machine.vm.provision(
+        :shell,
+        name: "Install Probe",
+        path: provision_script_path('install-probe')
+      )
+
       if user_config.private_registry
         machine.vm.provision(
           :shell,

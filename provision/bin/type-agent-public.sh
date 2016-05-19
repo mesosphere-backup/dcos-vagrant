@@ -4,8 +4,8 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-if ! curl --fail --location --silent --show-error http://boot.dcos/dcos_install.sh > /dev/null; then
-  echo ">>> Bootstrap machine unreachable - postponing DC/OS slave install"
+if ! probe tcp://boot.dcos:80; then
+  >&2 echo "Bootstrap machine unreachable - postponing DC/OS slave install"
   exit 0
 fi
 
