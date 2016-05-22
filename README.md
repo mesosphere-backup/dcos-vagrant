@@ -104,7 +104,7 @@ The default guest OS box from [dcos-vagrant-box](https://github.com/dcos/dcos-va
 
 - 1.7.x
   - Requires dcos-vagrant >= 0.6.0
-  - No config changes since 1.6 (e.g. [config-1.7.yaml](etc/config-1.7.yaml))
+  - Allows faster startup with static Exhibitor storage backend (e.g. [config-1.7.yaml](etc/config-1.7.yaml))
 - 1.6.x
   - Requires dcos-vagrant >= 0.4.0
   - Requires flattened yaml config (e.g. [config-1.6.yaml](etc/config-1.6.yaml))

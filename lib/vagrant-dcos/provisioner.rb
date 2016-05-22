@@ -22,7 +22,6 @@ module VagrantPlugins
           @config.config_template_path,
           @config.install_method.to_sym,
           @config.max_install_threads,
-          @config.postflight_timeout_seconds
         )
       end
 
@@ -52,7 +51,7 @@ module VagrantPlugins
         remote_sudo(@machine, command)
       end
 
-      def install(machine_types, config_template_path, install_method, max_install_threads, postflight_timeout_seconds)
+      def install(machine_types, config_template_path, install_method, max_install_threads)
         @machine.ui.info "Reading #{config_template_path}"
         gen_conf_config = GenConfConfigLoader.load_file(config_template_path)
 
@@ -125,7 +124,7 @@ module VagrantPlugins
         when :ssh_push
           install_push
         when :ssh_pull
-          install_pull(active_machines, machine_types, max_install_threads, postflight_timeout_seconds)
+          install_pull(active_machines, machine_types, max_install_threads)
         end
 
         @machine.ui.success "DC/OS Installation Complete\nWeb Interface: http://m1.dcos/"
@@ -202,7 +201,7 @@ EOF
         sudo('cd ~/dcos && bash ~/dcos/dcos_generate_config.sh --postflight')
       end
 
-      def install_pull(active_machines, machine_types, max_install_threads, postflight_timeout_seconds)
+      def install_pull(active_machines, machine_types, max_install_threads)
         # install masters in parallel
         queue = Queue.new
         filter_machines(active_machines, machine_types, 'master').each do |name, provider|
@@ -233,29 +232,41 @@ EOF
         Executor.exec(queue, max_install_threads)
 
         # postflight all nodes in parallel
+        # reconfigure agent memory after postflight
         queue = Queue.new
         filter_machines(active_machines, machine_types, 'master').each do |name, provider|
           machine = @machine.env.machine(name, provider)
           queue.push(Proc.new do
             machine.ui.success 'DC/OS Postflight'
-            write_postflight(machine, postflight_timeout_seconds)
-            remote_sudo(machine, '/opt/mesosphere/bin/postflight.sh')
+            remote_sudo(machine, 'dcos-postflight')
           end)
         end
         filter_machines(active_machines, machine_types, 'agent-private').each do |name, provider|
           machine = @machine.env.machine(name, provider)
           queue.push(Proc.new do
             machine.ui.success 'DC/OS Postflight'
-            write_postflight(machine, postflight_timeout_seconds)
-            remote_sudo(machine, '/opt/mesosphere/bin/postflight.sh')
+            remote_sudo(machine, 'dcos-postflight')
+            if machine_types[name.to_s]['memory-reserved']
+              memory = machine_types[name.to_s]['memory'] - machine_types[name.to_s]['memory-reserved']
+              machine.ui.success "Setting Mesos Memory: #{memory} (role=*)"
+              remote_sudo(machine, %(mesos-memory #{memory}))
+              machine.ui.success 'Restarting Mesos Agent'
+              remote_sudo(machine, %(bash -c "systemctl stop dcos-mesos-slave.service && rm -f /var/lib/mesos/slave/meta/slaves/latest && systemctl start dcos-mesos-slave.service --no-block"))
+            end
           end)
         end
         filter_machines(active_machines, machine_types, 'agent-public').each do |name, provider|
           machine = @machine.env.machine(name, provider)
           queue.push(Proc.new do
             machine.ui.success 'DC/OS Postflight'
-            write_postflight(machine, postflight_timeout_seconds)
-            remote_sudo(machine, '/opt/mesosphere/bin/postflight.sh')
+            remote_sudo(machine, 'dcos-postflight')
+            if machine_types[name.to_s]['memory-reserved']
+              memory = machine_types[name.to_s]['memory'] - machine_types[name.to_s]['memory-reserved']
+              machine.ui.success "Setting Mesos Memory: #{memory} (role=slave_public)"
+              remote_sudo(machine, %(mesos-memory #{memory} slave_public))
+              machine.ui.success 'Restarting Mesos Agent'
+              remote_sudo(machine, %(bash -c "systemctl stop dcos-mesos-slave-public.service && rm -f /var/lib/mesos/slave/meta/slaves/latest && systemctl start dcos-mesos-slave-public.service --no-block"))
+            end
           end)
         end
         Executor.exec(queue, max_install_threads)
@@ -286,45 +297,7 @@ set -o pipefail
 echo $(/usr/sbin/ip route show to match #{master_ip} | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | tail -1)
 EOF
 
-        escaped_ip_config = ip_config.gsub('$', '\$')
-
-        sudo(%(cat << EOF > ~/dcos/genconf/ip-detect\n#{escaped_ip_config}\nEOF))
-      end
-
-      # from https://github.com/mesosphere/dcos-installer/blob/master/dcos_installer/action_lib/__init__.py#L250
-      # TODO: hopefully this goes away at some point so we dont have to write a looping postflight check
-      def write_postflight(machine, postflight_timeout_seconds)
-        postflight = <<-EOF
-#!/usr/bin/env bash
-# Run the DC/OS diagnostic script for up to #{postflight_timeout_seconds} seconds to ensure
-# we do not return ERROR on a cluster that hasn't fully achieved quorum.
-if [[ -e "/opt/mesosphere/bin/3dt" ]]; then
-    # DC/OS >= 1.7
-    CMD="/opt/mesosphere/bin/3dt -diag"
-elif [[ -e "/opt/mesosphere/bin/dcos-diagnostics.py" ]]; then
-    # DC/OS <= 1.6
-    CMD="/opt/mesosphere/bin/dcos-diagnostics.py"
-else
-    echo "Postflight Failure: either 3dt or dcos-diagnostics.py must be present"
-    exit 1
-fi
-T=#{postflight_timeout_seconds}
-until OUT=$(${CMD} 2>&1) || [[ T -eq 0 ]]; do
-    sleep 5
-    let T=T-5
-done
-RETCODE=$?
-if [[ "${RETCODE}" != "0" ]]; then
-    echo "DC/OS Unhealthy\n${OUT}" >&2
-fi
-exit ${RETCODE}
-EOF
-
-        escaped_postflight = postflight.gsub('$', '\$')
-
-        machine.ui.success 'Generating Postflight Script: /opt/mesosphere/bin/postflight.sh'
-        remote_sudo(machine, %(cat << EOF > /opt/mesosphere/bin/postflight.sh\n#{escaped_postflight}\nEOF))
-        remote_sudo(machine, 'chmod u+x /opt/mesosphere/bin/postflight.sh')
+        sudo(%(cat << 'EOF' > ~/dcos/genconf/ip-detect\n#{ip_config}\nEOF))
       end
 
       def find_address(machine)

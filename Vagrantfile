@@ -75,13 +75,17 @@ class UserConfig
   end
 
   # create environment for provisioning scripts
-  def provision_env
-    {
+  def provision_env(machine_type)
+    env = {
       'DCOS_CONFIG_PATH' => path_to_url(@config_path),
       'DCOS_GENERATE_CONFIG_PATH' => path_to_url(@generate_config_path),
       'DCOS_JAVA_ENABLED' => @java_enabled ? 'true' : 'false',
       'DCOS_PRIVATE_REGISTRY' => @private_registry ? 'true' : 'false'
     }
+    if machine_type['memory-reserved']
+      env['DCOS_TASK_MEMORY'] = machine_type['memory'] - machine_type['memory-reserved']
+    end
+    env
   end
 
   protected
@@ -232,6 +236,27 @@ Vagrant.configure(2) do |config|
         path: provision_script_path('install-probe')
       )
 
+      machine.vm.provision(
+        :shell,
+        name: "Install jq",
+        path: provision_script_path('install-jq')
+      )
+
+      machine.vm.provision(
+        :shell,
+        name: "Install DC/OS Postflight",
+        path: provision_script_path('install-postflight')
+      )
+
+      case machine_type['type']
+      when 'agent-private', 'agent-public'
+        machine.vm.provision(
+          :shell,
+          name: "Install Mesos Memory Modifier",
+          path: provision_script_path('install-mesos-memory')
+        )
+      end
+
       if user_config.private_registry
         machine.vm.provision(
           :shell,
@@ -246,7 +271,7 @@ Vagrant.configure(2) do |config|
           :shell,
           name: "DC/OS #{machine_type['type'].capitalize}",
           path: script_path,
-          env: user_config.provision_env
+          env: user_config.provision_env(machine_type)
         )
       end
 

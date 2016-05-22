@@ -6,10 +6,10 @@ This example runs [Oinker-Go](https://github.com/mesosphere/oinker-go) on [Marat
 ## Install DC/OS
 
 1. Follow the [dcos-vagrant setup](https://github.com/dcos/dcos-vagrant#setup) steps to configure your installation.
-1. Use vagrant to deploy a cluster with 4 private agent nodes and 1 public agent node (requires 10GB free memory):
+1. Use vagrant to deploy a cluster with 3 private agent nodes and 1 public agent node (requires 10GB free memory):
 
     ```
-    vagrant up m1 a1 a2 a3 a4 p1 boot
+    vagrant up m1 a1 a2 a3 p1 boot
     ```
 1. Wait for DC/OS to come up. Check the dashboard: <http://m1.dcos/>.
 1. Install the [DC/OS CLI](https://dcos.io/docs/latest/usage/cli/) by following the instructions on the DC/OS Dashboard
@@ -17,14 +17,24 @@ This example runs [Oinker-Go](https://github.com/mesosphere/oinker-go) on [Marat
 
 ## Install Cassandra
 
-1. Configure Cassandra with lower memory usage than default:
+1. Configure Cassandra with lower resource usage than default:
 
     ```
     cat >/tmp/cassandra.json <<EOF
     {
+        "service": {
+            "cpus": 0.1,
+            "mem": 512,
+            "heap": 256
+        },
+        "executor": {
+            "cpus": 0.1,
+            "mem": 512,
+            "heap": 256
+        },
         "nodes": {
             "cpus": 0.5,
-            "mem": 512,
+            "mem": 2048,
             "disk": 4096,
             "heap": {
                 "size": 1024,
@@ -32,6 +42,10 @@ This example runs [Oinker-Go](https://github.com/mesosphere/oinker-go) on [Marat
             },
             "count": 1,
             "seeds": 1
+        },
+        "task": {
+            "cpus": 0.1,
+            "mem": 128
         }
     }
     EOF
@@ -46,7 +60,7 @@ This example runs [Oinker-Go](https://github.com/mesosphere/oinker-go) on [Marat
 
 ## Add Multiverse Package Repository
 
-Marathon-LB is in the Multiverse repo. So the Multiverse must be added to the DC/OS CLI config.
+Prior to DC/OS 1.7, Marathon-LB was in the Multiverse repo. So the Multiverse needed to be added to the DC/OS CLI config.
 
 See the [DC/OS CLI docs](../../docs/dcos-cli.md#multiverse) on how to add the multiverse repo.
 
