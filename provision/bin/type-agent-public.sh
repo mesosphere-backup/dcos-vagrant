@@ -4,8 +4,8 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-if ! probe tcp://boot.dcos:80; then
-  >&2 echo "Bootstrap machine unreachable - postponing DC/OS slave install"
+if ! probe tcp://boot.dcos:80 2>/dev/null; then
+  >&2 echo "Warning: Bootstrap machine unreachable - postponing DC/OS public agent install - only an error if adding this node to an existing cluster"
   exit 0
 fi
 
