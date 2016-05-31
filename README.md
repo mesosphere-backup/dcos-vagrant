@@ -87,7 +87,8 @@ The following host OS's have been reported to work:
 - Fedora 23
 - Arch Linux
 
-Notes:
+Caveats:
+
 1. <a name="ubuntu-16"></a>Using Ubuntu 16 as host OS requires [installing Vagrant from source](https://github.com/mitchellh/vagrant/wiki/Installing-Vagrant-from-Source) due to https://github.com/mitchellh/vagrant/issues/7155
 
 The default guest OS box from [dcos-vagrant-box](https://github.com/dcos/dcos-vagrant-box) uses CentOS 7.2.
