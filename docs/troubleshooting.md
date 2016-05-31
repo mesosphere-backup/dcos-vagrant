@@ -79,3 +79,13 @@ service dcos-cosmos restart
 ```
 
 This happens because Cosmos doesn't always pick up DNS changes that happen during bootstrap. Known bug in 1.6.1. Should be fixed in 1.7.0.
+
+## Too Many Open Files
+
+**Problem**: `vagrant up` errors with `Too many open files - getcwd (Errno::EMFILE)`
+
+**Solution**: Increase the file limit on the host
+
+```
+ulimit -n 1024
+```
