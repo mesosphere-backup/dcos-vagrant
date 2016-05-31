@@ -15,7 +15,7 @@ curl --fail --location --silent --show-error --verbose http://boot.dcos/dcos_ins
 echo ">>> Executing DC/OS Postflight"
 dcos-postflight
 
-if [ -n "${DCOS_TASK_MEMORY}" ]; then
+if [ -n "${DCOS_TASK_MEMORY:-}" ]; then
   echo ">>> Setting Mesos Memory: ${DCOS_TASK_MEMORY} (role=*)"
   mesos-memory ${DCOS_TASK_MEMORY}
   echo ">>> Restarting Mesos Agent"
