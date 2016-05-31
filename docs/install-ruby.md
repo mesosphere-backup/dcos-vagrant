@@ -10,10 +10,16 @@ There are several ways to install ruby. One way is to use ruby-install, using ch
     brew install ruby-install
     ```
 
-1. Install ruby 2.2 via ruby-install:
+1. Find the latest stable ruby:
 
     ```
-    ruby-install ruby 2.2
+    curl --fail --location --silent --show-error http://cache.ruby-lang.org/pub/ruby/index.txt | cut -f1 | sort | tail -1 | cut -d'-' -f2
+    ```
+
+1. Install ruby via ruby-install:
+
+    ```
+    ruby-install ruby <version>
     ```
 
 1. Install chruby via homebrew:
@@ -26,5 +32,5 @@ There are several ways to install ruby. One way is to use ruby-install, using ch
 
     ```
     source '/usr/local/share/chruby/chruby.sh'
-    chruby 2.2
+    chruby <version>
     ```
