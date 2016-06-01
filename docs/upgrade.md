@@ -2,7 +2,7 @@
 
 In-place upgrading of DC/OS is not currently supported using DC/OS Vagrant. Existing clusters must be [destroyed](/docs/deploy.md#destroy) before a new one can be created.
 
-For version compatibility, see [Supported DC/OS Versions](#supported-dcos-versions).
+For version compatibility, see [Supported DC/OS Versions](/docs/deploy.md#supported-dcos-versions).
 
 **Upgrade to a new version of DC/OS Vagrant**:
 

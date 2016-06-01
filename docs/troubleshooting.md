@@ -64,7 +64,7 @@ $ vboxmanage hostonlyif ipconfig vboxnet0 --ip 192.168.65.1
 
 **Problem**: One or more Vagrant plugins fail to install.
 
-**Solution**: Upgrade Ruby to >= 2.2. See [Appendix: Install Ruby](#install-ruby) for instructions.
+**Solution**: Upgrade Ruby to >= 2.2. See [Install Ruby](/docs/install-ruby.md) for instructions.
 
 
 ## Package Install Failure

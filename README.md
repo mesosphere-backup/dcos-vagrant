@@ -20,7 +20,7 @@ Issues on Github will be disabled soon.**
 # DC/OS Vagrant Documentation
 
 - [Audience and Goals](/docs/audience-and-goals.md)
-- [Architecture](/docs/architecture.md)
+- [Network Topology](/docs/network-topology.md)
 - [Alternate Install Methods](/docs/alternate-install-methods.md)
 - [DC/OS Install Process](/docs/dcos-install-process.md)
 - [Install Ruby](/docs/install-ruby.md)
@@ -35,9 +35,9 @@ Issues on Github will be disabled soon.**
 - Learn More - https://dcos.io/
 - Find the Docs - https://dcos.io/docs/
 - Get Help - http://chat.dcos.io/
-- Join the Discussion - https://groups.google.com/a/dcos.io/d/forum/users
+- Join the Discussion - https://groups.google.com/a/dcos.io/d/forum/users/
 - Report a DC/OS Vagrant Issue - https://dcosjira.atlassian.net/projects/VAGRANT/
-- Report a DC/OS Issue - https://dcosjira.atlassian.net
+- Report a DC/OS Issue - https://dcosjira.atlassian.net/projects/DCOS/
 - Contribute - https://dcos.io/contribute/
 
 

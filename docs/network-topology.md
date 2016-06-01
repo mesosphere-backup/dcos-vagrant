@@ -1,6 +1,4 @@
-# Architecture
-
-**Networking**
+# Network Topology
 
 - NatNetwork
   - DHCP
@@ -12,6 +10,6 @@
   - IP4 Address 192.168.65.1
   - Netmask 255.255.255.0
 
-## Architecture Diagram
+## Network Diagram
 
-![Vagrant Diagram](./dcos_vagrant_setup.png?raw=true)
+![Network Diagram](/docs/dcos_vagrant_setup.png?raw=true)
