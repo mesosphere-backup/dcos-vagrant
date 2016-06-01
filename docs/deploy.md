@@ -166,7 +166,7 @@ Specify which machines to deploy. For example (requires 5.5GB free memory):
 vagrant up m1 a1 p1 boot
 ```
 
-Many permutations of machines are possible. See [Example Clusters](#example-deployments) for more options.
+Many permutations of machines are possible. See [Example Deployments](#example-deployments) for more options.
 
 Once the the machines are created and provisioned, DC/OS will be installed. Once complete, the Web Interface will be available at <http://m1.dcos/>.
 
@@ -175,7 +175,9 @@ See the [DC/OS Usage docs](https://dcos.io/docs/latest/usage/) for more informat
 
 # Example Deployments
 
-Any permutation of machines that fits the above constraints is possible. Below are a few options to try.
+DC/OS Vagrant deployments consist of various permutations of several types of machines. Below are a few options to try.
+
+See [Configure](/docs/configure.md) for more details about node types, cluster constraints, and resource constraints.
 
 ## Minimal Cluster
 
