@@ -20,7 +20,7 @@ Optionally, export the following environment variable before performing `vagrant
 export DCOS_INSTALL_METHOD=ssh_pull
 ```
 
-Then follow the normal [DC/OS Vagrant Deploy Steps](/#deploy).
+Then follow the normal [DC/OS Vagrant Deploy Steps](/docs/deploy.md).
 
 **Note**: Advanced Installer supports both Public and Private Agent Nodes.
 
@@ -37,7 +37,7 @@ First, export the following environment variable before performing `vagrant up`:
 export DCOS_INSTALL_METHOD=ssh_push
 ```
 
-Then follow the normal [DC/OS Vagrant Deploy Steps](/#deploy).
+Then follow the normal [DC/OS Vagrant Deploy Steps](/docs/deploy.md).
 
 **Note**: CLI Installer does not currently support Public Agent Nodes.
 
@@ -54,7 +54,7 @@ First, export the following environment variable before performing `vagrant up`:
 export DCOS_INSTALL_METHOD=web
 ```
 
-Then follow the normal [DC/OS Vagrant Deploy Steps](/#deploy).
+Then follow the normal [DC/OS Vagrant Deploy Steps](/docs/deploy.md).
 
 **Note**: GUI Installer does not currently support Public Agent Nodes.
 

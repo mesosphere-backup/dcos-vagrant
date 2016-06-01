@@ -9,7 +9,7 @@ The following steps demonstrate how to enable and use the private Docker registr
     ```bash
     $ export DCOS_PRIVATE_REGISTRY=true
     ```
-1. [Deploy DC/OS Vagrant](/#deploy)
+1. [Deploy DC/OS Vagrant](/docs/deploy.md)
 1. SSH into one of the machines:
 
     ```bash
