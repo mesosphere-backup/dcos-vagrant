@@ -163,7 +163,7 @@ To test bleeding-edge Master releases of DC/OS it may be necessary to use the ma
 Specify which machines to deploy. For example (requires 5.5GB free memory):
 
 ```bash
-vagrant up m1 a1 p1 boot
+vagrant up boot m1 a1 p1
 ```
 
 Many permutations of machines are possible. See [Example Deployments](#example-deployments) for more options.
@@ -186,7 +186,7 @@ A minimal cluster supports launching small Marathon apps. Most other services wi
 Requires > 4.5GB free memory (using the example [VagrantConfig](./VagrantConfig.yaml.example)).
 
 ```bash
-vagrant up m1 a1 boot
+vagrant up boot m1 a1
 ```
 
 ## Small Cluster
