@@ -196,7 +196,7 @@ A small cluster supports running tasks on multiple nodes.
 Requires > 7.25GB free memory (using the example [VagrantConfig](./VagrantConfig.yaml.example)).
 
 ```bash
-vagrant up m1 a1 a2 p1 boot
+vagrant up boot m1 a1 a2 p1
 ```
 
 ## Medium Cluster
@@ -206,7 +206,7 @@ A medium cluster supports the installation of a [minimally configured Cassandra]
 Requires > 10GB free memory (using the example [VagrantConfig](./VagrantConfig.yaml.example)).
 
 ```bash
-vagrant up m1 a1 a2 a3 a4 p1 boot
+vagrant up m1 boot a1 a2 a3 a4 p1
 ```
 
 ## Large Cluster
@@ -216,7 +216,7 @@ Requires > 17GB free memory (using the example [VagrantConfig](./VagrantConfig.y
 A large cluster supports master node fail over, multiple framework installs, and multiple public load balancers.
 
 ```bash
-vagrant up m1 m2 m3 a1 a2 a3 a4 a5 a6 p1 p2 p3 boot
+vagrant up boot m1 m2 m3 a1 a2 a3 a4 a5 a6 p1 p2 p3
 ```
 
 
