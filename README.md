@@ -5,8 +5,10 @@ Quickly provision a [DC/OS](https://github.com/dcos/dcos) cluster on a local mac
 
 Deploying DC/OS Vagrant involves creating a local cluster of VirtualBox VMs using the [dcos-vagrant-box](https://github.com/dcos/dcos-vagrant-box) base image and then installing [DC/OS](https://dcos.io/).
 
-**Issue tracking is moving to the [DCOS JIRA](https://dcosjira.atlassian.net/projects/VAGRANT/).
-Issues on Github will be disabled soon.**
+### Issue Tracking
+
+- Issue tracking is in [DCOS JIRA](https://dcosjira.atlassian.net/projects/VAGRANT/).
+- Remember to make a DC/OS JIRA account and login so you can get update notifications!
 
 
 # Where Do I Start?
