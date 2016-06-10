@@ -89,3 +89,10 @@ This happens because Cosmos doesn't always pick up DNS changes that happen durin
 ```
 ulimit -n 1024
 ```
+
+## Unable to login to your DC/OS cluster
+
+**Problem**: Trying to login to http://m1.dcos/ fails with the message `Unable to login to your DC/OS cluster. Clusters must be connected to the internet.`
+
+**Solution**: Ensure that you have installed the latest version of VirtualBox. 
+
