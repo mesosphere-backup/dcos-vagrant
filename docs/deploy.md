@@ -183,7 +183,7 @@ See [Configure](/docs/configure.md) for more details about node types, cluster c
 
 A minimal cluster supports launching small Marathon apps. Most other services will fail to install, because they require more than one agent node.
 
-Requires > 4.5GB free memory (using the example [VagrantConfig](./VagrantConfig.yaml.example)).
+Requires > 4.5GB free memory (using the example [VagrantConfig](/VagrantConfig.yaml.example)).
 
 ```bash
 vagrant up m1 a1 boot
@@ -193,7 +193,7 @@ vagrant up m1 a1 boot
 
 A small cluster supports running tasks on multiple nodes.
 
-Requires > 7.25GB free memory (using the example [VagrantConfig](./VagrantConfig.yaml.example)).
+Requires > 7.25GB free memory (using the example [VagrantConfig](/VagrantConfig.yaml.example)).
 
 ```bash
 vagrant up m1 a1 a2 p1 boot
@@ -203,7 +203,7 @@ vagrant up m1 a1 a2 p1 boot
 
 A medium cluster supports the installation of a [minimally configured Cassandra](./examples/oinker#install-cassandra).
 
-Requires > 10GB free memory (using the example [VagrantConfig](./VagrantConfig.yaml.example)).
+Requires > 10GB free memory (using the example [VagrantConfig](/VagrantConfig.yaml.example)).
 
 ```bash
 vagrant up m1 a1 a2 a3 a4 p1 boot
@@ -211,7 +211,7 @@ vagrant up m1 a1 a2 a3 a4 p1 boot
 
 ## Large Cluster
 
-Requires > 17GB free memory (using the example [VagrantConfig](./VagrantConfig.yaml.example)).
+Requires > 17GB free memory (using the example [VagrantConfig](/VagrantConfig.yaml.example)).
 
 A large cluster supports master node fail over, multiple framework installs, and multiple public load balancers.
 
