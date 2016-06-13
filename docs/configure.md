@@ -2,11 +2,11 @@
 
 The number of machines and their resources is configurable, depending on your needs and hardware constraints.
 
-The [VagrantConfig.yaml.example](VagrantConfig.yaml.example) includes some preset machine configurations that have been chosen to allow the widest possible use cases within a constrained memory environment (e.g. a laptop with 16GB memory). These presets may or may not fit your use case. If they don't, just modify your `VagrantConfig.yaml` file to fit your needs.
+The [VagrantConfig.yaml.example](/VagrantConfig.yaml.example) includes some preset machine configurations that have been chosen to allow the widest possible use cases within a constrained memory environment (e.g. a laptop with 16GB memory). These presets may or may not fit your use case. If they don't, just modify your `VagrantConfig.yaml` file to fit your needs.
 
 Deploying multiple VMs takes a lot of memory and Mesos reserves more for overhead on each node. So don't expect to be able to install every DC/OS service or use production-grade configurations. Most services will require reduced configurations in order to fit within the allocated memory. Some services (e.g. Cassandra) may require more nodes/resources than others.
 
-For more information about how the DC/OS installation works and how to debug deployment/installation failure, see [DC/OS Install Process](./docs/dcos-install-process.md).
+For more information about how the DC/OS installation works and how to debug deployment/installation failure, see [DC/OS Install Process](/docs/dcos-install-process.md).
 
 ## Node Types
 
@@ -56,12 +56,12 @@ There are several configurable options when deploying a cluster and installing D
 - `DCOS_CONFIG_PATH` - Path to DC/OS configuration template (default: `etc/config.yaml`)
     - `master_list`, `agent_list`, `exhibitor_zk_hosts`, and `bootstrap_url` will be overridden.
 - `DCOS_GENERATE_CONFIG_PATH` - Path to DC/OS configuration generation script (default: `dcos_generate_config.sh`)
-- `DCOS_INSTALL_METHOD` - One of the following [installation methods](./docs/alternate-install-methods.md) (default: `ssh_pull`):
+- `DCOS_INSTALL_METHOD` - One of the following [installation methods](/docs/alternate-install-methods.md) (default: `ssh_pull`):
     - `ssh_pull` - Use the "manual" DC/OS installation method (`dcos_install.sh`) with a pool of thread workers performing remote SHH installation.
     - `ssh_push` - Use the "automated" DC/OS installation method (`dcos_generate_config.sh --deploy`). WARNING: Does not (yet) support agent-public nodes!
     - `web` - Use the GUI DC/OS installation method (`dcos_generate_config.sh --web`). WARNING: Does not (yet) support agent-public nodes!
 - `DCOS_JAVA_ENABLED` - Boolean to install java on each agent (default: `false`)
-- `DCOS_PRIVATE_REGISTRY` - Boolean to install an insecure [private Docker registry](./examples/private-registry.md) on the boot machine and configure the agents to allow it (default: `false`)
+- `DCOS_PRIVATE_REGISTRY` - Boolean to install an insecure [private Docker registry](/examples/private-registry.md) on the boot machine and configure the agents to allow it (default: `false`)
 - `DCOS_VAGRANT_MOUNT_METHOD` - One of the following methods (default: `virtualbox`):
     - `virtualbox` - Use cross-platform [VirtualBox shared folders](https://www.vagrantup.com/docs/synced-folders/virtualbox.html)
     - `nfs` - Use faster [NFS shared folders](https://www.vagrantup.com/docs/synced-folders/nfs.html).
