@@ -58,13 +58,13 @@ The default guest OS box from [dcos-vagrant-box](https://github.com/dcos/dcos-va
 
 - 1.7.x
   - Requires DC/OS Vagrant >= 0.6.0
-  - Allows faster startup with static Exhibitor storage backend (e.g. [config-1.7.yaml](etc/config-1.7.yaml))
+  - Allows faster startup with static Exhibitor storage backend (e.g. [config-1.7.yaml](/etc/config-1.7.yaml))
 - 1.6.x
   - Requires DC/OS Vagrant >= 0.4.0
-  - Requires flattened yaml config (e.g. [config-1.6.yaml](etc/config-1.6.yaml))
+  - Requires flattened yaml config (e.g. [config-1.6.yaml](/etc/config-1.6.yaml))
 - 1.5.x
   - Requires DC/OS Vagrant >= 0.3.0
-  - Requires yaml config (e.g. [config-1.5.yaml](etc/config-1.5.yaml))
+  - Requires yaml config (e.g. [config-1.5.yaml](/etc/config-1.5.yaml))
 - CM.4
   - Requires [DC/OS Vagrant v0.3.0](https://github.com/dcos/dcos-vagrant/tree/v0.3.0)
 
