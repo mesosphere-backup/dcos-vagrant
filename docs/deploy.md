@@ -99,7 +99,7 @@ To test bleeding-edge Master releases of DC/OS it may be necessary to use the ma
 
     To avoid entering your password on `vagrant up` & `vagrant destroy`, enable [passwordless sudo](https://github.com/smdahlen/vagrant-hostmanager#passwordless-sudo).
 
-    On some versions of Mac OS X, installing vagrant plugins may require [installing a modern version of Ruby](./docs/install-ruby.md).
+    On some versions of Mac OS X, installing vagrant plugins may require [installing a modern version of Ruby](/docs/install-ruby.md).
 
 1. Download the DC/OS Installer
 
@@ -201,7 +201,7 @@ vagrant up m1 a1 a2 p1 boot
 
 ## Medium Cluster
 
-A medium cluster supports the installation of a [minimally configured Cassandra](./examples/oinker#install-cassandra).
+A medium cluster supports the installation of a [minimally configured Cassandra](/examples/oinker#install-cassandra).
 
 Requires > 10GB free memory (using the example [VagrantConfig](/VagrantConfig.yaml.example)).
 
