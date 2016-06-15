@@ -94,5 +94,16 @@ ulimit -n 1024
 
 **Problem**: Trying to login to http://m1.dcos/ fails with the message `Unable to login to your DC/OS cluster. Clusters must be connected to the internet.`
 
-**Solution**: Ensure that you have installed the latest version of VirtualBox. 
+**Solution**: Ensure that you have installed the latest version of VirtualBox (5.0.20+).
 
+## Plugin Install Fails on Vagrant 1.8.3
+
+**Problem**: The following error is returned when attempting to `vagrant plugin install vagrant-hostmanager`
+
+```
+...
+/usr/local/lib/ruby/site_ruby/2.1/rubygems/specification.rb:945:in `all=': undefined method `group_by' for nil:NilClass (NoMethodError)
+...
+```
+
+**Solution**: Upgrade Vagrant to 1.8.4+ to fix an incompatibility with Ruby 2.3
