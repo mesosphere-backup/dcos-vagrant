@@ -33,13 +33,9 @@ The following host OS's have been reported to work:
 
 - Mac OS X 10.10, 10.11
 - Windows 7, 10
-- Ubuntu 14, 15
+- Ubuntu 14, 15, 16
 - Fedora 23
 - Arch Linux
-
-Known Incompatibilities:
-
-- Ubuntu 16 does not work as host OS with Vagrant 1.8.1 due to https://github.com/mitchellh/vagrant/issues/7155 and https://github.com/mitchellh/vagrant/pull/7376 which are pending release of Vagrant 1.8.2.
 
 The default guest OS box from [dcos-vagrant-box](https://github.com/dcos/dcos-vagrant-box) uses CentOS 7.2.
 
