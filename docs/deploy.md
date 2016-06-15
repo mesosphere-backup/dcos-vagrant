@@ -46,11 +46,16 @@ The default guest OS box from [dcos-vagrant-box](https://github.com/dcos/dcos-va
 ## Software
 
 - [Git](https://git-scm.com/) - clone repo
-- [Vagrant](https://www.vagrantup.com/) (>= 1.8.1) - virtualization orchestration
+- [Vagrant](https://www.vagrantup.com/) (>= 1.8.4) - virtualization orchestration
   - [Host Manager Plugin](https://github.com/smdahlen/vagrant-hostmanager) - manage /etc/hosts
   - (Optional) [VBGuest Plugin](https://github.com/dotless-de/vagrant-vbguest) - manage vbox guest additions
-- [VirtualBox](https://www.virtualbox.org/) (>= 4.3) - virtualization engine
+- [VirtualBox](https://www.virtualbox.org/) (>= 5.0.20) - virtualization engine
 - (Optional) [jq](https://stedolan.github.io/jq/) - json parser used by examples
+
+Known Incompatibilities:
+
+- Older versions of Vagrant are known to cause problems on Ubuntu 16
+- Older versions of VirtualBox are known to cause problems on Windows
 
 ## Supported DC/OS Versions
 
