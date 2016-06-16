@@ -51,7 +51,13 @@ module VagrantPlugins
         raise Vagrant::Errors::SSHInsertKeyUnsupported unless cap
 
         machine.ui.output('Inserting generated public key within guest...')
-        machine.guest.capability(:insert_public_key, openssh_key)
+        # Hack to fix a vagrant bug in 1.8.3 & 1.8.4
+	    # https://github.com/mitchellh/vagrant/issues/7455
+        if VagrantPlugins::GuestLinux::Guest.new.detect?(machine)
+          linux_insert_public_key(machine, openssh_key)
+		else
+          machine.guest.capability(:insert_public_key, openssh_key)
+        end
 
         # Write out the private key (.vagrant/machines/<name>/<provider>/private_key) so vagrant can find it.
         machine.ui.output('Configuring vagrant to connect using generated private key...')
@@ -64,8 +70,22 @@ module VagrantPlugins
         vagrant_public_key = Vagrant.source_root.join('keys', 'vagrant.pub').read.chomp
         machine.guest.capability(:remove_public_key, vagrant_public_key)
 
-        # TODO: restart machines?
+        # TODO: systemctl restart sshd.service?
       end
+
+      def linux_insert_public_key(machine, contents)
+		comm = machine.communicate
+		contents = contents.chomp
+		contents = Vagrant::Util::ShellQuote.escape(contents, "'")
+
+		comm.execute <<-EOH.gsub(/^ {12}/, '')
+		  mkdir -p ~/.ssh
+		  chmod 0700 ~/.ssh
+		  [ "$(tail -n 1 ~/.ssh/authorized_keys)" != "" ] && echo >> ~/.ssh/authorized_keys
+		  printf '#{contents}\\n' >> ~/.ssh/authorized_keys
+		  chmod 0600 ~/.ssh/authorized_keys
+		EOH
+	  end
     end
   end
 end
