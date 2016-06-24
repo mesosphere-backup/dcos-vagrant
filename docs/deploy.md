@@ -110,7 +110,7 @@ To test bleeding-edge Master releases of DC/OS it may be necessary to use the ma
 
     If you have multiple `dcos_generate_config.sh` files downloaded you can name them differently and specify which to use with `DCOS_GENERATE_CONFIG_PATH` (e.g. `export DCOS_GENERATE_CONFIG_PATH=dcos_generate_config-1.5-EA.sh`).
 
-    Enterprise edition installers are also supported. Contact your sales representative or <sales@mesosphere.com> to obtain the right DC/OS installer.
+    Enterprise edition installers are also supported. Contact your sales representative or <sales@mesosphere.com> to obtain the right DC/OS installer. You may need to rename your Enterprise installer to `dcos_generate_config.sh`.
 
 1. <a name="configure-the-dcos-installer"></a>Configure the DC/OS Installer
 
