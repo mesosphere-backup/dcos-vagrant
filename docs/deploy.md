@@ -150,7 +150,7 @@ To test bleeding-edge Master releases of DC/OS it may be necessary to use the ma
 
 1. (Optional) Configure Authentication
 
-    When installing **DC/OS** (>= 1.7) on DC/OS Vagrant, the cluster uses external OAuth by default, which will prompt for authentication through Google, Github, or Microsoft. The first user to log in becomes the superuser and must add additional users to allow multiple. It's also possible to [disable login](https://dcos.io/docs/1.7/administration/security/managing-authentication/#authentication-opt-out) in the installation config, if desired.
+    When installing **DC/OS** (>= 1.7) on DC/OS Vagrant, the cluster uses external OAuth by default, which will prompt for authentication through Google, Github, or Microsoft. The first user to log in becomes the superuser and must add additional users to allow multiple. It's also possible to [disable login](https://dcos.io/docs/1.7/administration/id-and-access-mgt/managing-authentication/#authentication-opt-out) in the installation config, if desired.
 
     When installing **Mesosphere Enterprise DC/OS** (>= 1.6) on DC/OS Vagrant, the cluster uses an internal user database by default, which will prompt for a username and password. If you're using the provided 1.6 or 1.7 installer config file then the superuser credentials are by default `admin`/`admin`. See [Managing Authentication](https://docs.mesosphere.com/administration/security/managing-authorization/) for more details about users and groups.
 
