@@ -167,6 +167,8 @@ Specify which machines to deploy. For example (requires 5.5GB free memory):
 vagrant up m1 a1 p1 boot
 ```
 
+The order of startup is important: master VMs (beginning with `m`) must be started first.
+
 Many permutations of machines are possible. See [Example Deployments](#example-deployments) for more options.
 
 Once the the machines are created and provisioned, DC/OS will be installed. Once complete, the Web Interface will be available at <http://m1.dcos/>.
