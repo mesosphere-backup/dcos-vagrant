@@ -220,72 +220,59 @@ Vagrant.configure(2) do |config|
       end
 
       # provision a shared SSH key (required by DC/OS SSH installer)
-      machine.vm.provision(
-        :dcos_ssh,
-        name: 'Shared SSH Key',
-        preserve_order: true
-      )
+      machine.vm.provision :dcos_ssh, name: 'Shared SSH Key'
 
-      machine.vm.provision(
-        :shell,
-        name: 'Certificate Authorities',
-        path: provision_script_path('ca-certificates')
-      )
+      machine.vm.provision :shell do |vm|
+        vm.name = 'Certificate Authorities'
+        vm.path = provision_script_path('ca-certificates')
+      end
 
-      machine.vm.provision(
-        :shell,
-        name: "Install Probe",
-        path: provision_script_path('install-probe')
-      )
+      machine.vm.provision :shell do |vm|
+	    vm.name = "Install Probe"
+        vm.path = provision_script_path('install-probe')
+      end
 
-      machine.vm.provision(
-        :shell,
-        name: "Install jq",
-        path: provision_script_path('install-jq')
-      )
+      machine.vm.provision :shell do |vm|
+        vm.name = "Install jq"
+        vm.path = provision_script_path('install-jq')
+      end
 
-      machine.vm.provision(
-        :shell,
-        name: "Install DC/OS Postflight",
-        path: provision_script_path('install-postflight')
-      )
+      machine.vm.provision :shell do |vm|
+        vm.name = 'Install DC/OS Postflight'
+        vm.path = provision_script_path('install-postflight')
+      end
 
       case machine_type['type']
       when 'agent-private', 'agent-public'
-        machine.vm.provision(
-          :shell,
-          name: "Install Mesos Memory Modifier",
-          path: provision_script_path('install-mesos-memory')
-        )
+        machine.vm.provision :shell do |vm|
+          vm.name = 'Install Mesos Memory Modifier'
+          vm.path = provision_script_path('install-mesos-memory')
+        end
       end
 
       if user_config.private_registry
-        machine.vm.provision(
-          :shell,
-          name: 'Private Docker Registry',
-          path: provision_script_path('insecure-registry')
-        )
+        machine.vm.provision :shell do |vm|
+          vm.name = 'Start Private Docker Registry'
+          vm.path = provision_script_path('insecure-registry')
+        end
       end
 
       script_path = provision_script_path("type-#{machine_type['type']}")
       if File.exist?(script_path)
-        machine.vm.provision(
-          :shell,
-          name: "DC/OS #{machine_type['type'].capitalize}",
-          path: script_path,
-          env: user_config.provision_env(machine_type)
-        )
+        machine.vm.provision :shell do |vm|
+          vm.name = "DC/OS #{machine_type['type'].capitalize}"
+          vm.path = script_path
+          vm.env = user_config.provision_env(machine_type)
+        end
       end
 
       if machine_type['type'] == 'boot'
         # install DC/OS after boot machine is provisioned
-        machine.vm.provision(
-          :dcos_install,
-          install_method: user_config.install_method,
-          machine_types: machine_types,
-          config_template_path: user_config.config_path,
-          preserve_order: true
-        )
+        machine.vm.provision :dcos_install do |dcos|
+          dcos.install_method = user_config.install_method
+          dcos.machine_types = machine_types
+          dcos.config_template_path = user_config.config_path
+        end
       end
     end
   end
