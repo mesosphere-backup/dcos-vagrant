@@ -4,13 +4,13 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-if ! probe tcp://boot.dcos:80 2>/dev/null; then
+if ! curl --fail --location --max-redir 0 --silent http://boot.dcos/dcos_install.sh; then
   >&2 echo "Warning: Bootstrap machine unreachable - postponing DC/OS public agent install - only an error if adding this node to an existing cluster"
   exit 0
 fi
 
 echo ">>> Installing DC/OS slave_public"
-curl --fail --location --silent --show-error --verbose http://boot.dcos/dcos_install.sh | bash -s -- slave_public
+curl --fail --location --max-redir 0 --silent --show-error --verbose http://boot.dcos/dcos_install.sh | bash -s -- slave_public
 
 echo ">>> Executing DC/OS Postflight"
 dcos-postflight
