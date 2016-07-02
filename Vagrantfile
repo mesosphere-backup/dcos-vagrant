@@ -228,12 +228,12 @@ Vagrant.configure(2) do |config|
       end
 
       machine.vm.provision :shell do |vm|
-	    vm.name = "Install Probe"
+	    vm.name = 'Install Probe'
         vm.path = provision_script_path('install-probe')
       end
 
       machine.vm.provision :shell do |vm|
-        vm.name = "Install jq"
+        vm.name = 'Install jq'
         vm.path = provision_script_path('install-jq')
       end
 
