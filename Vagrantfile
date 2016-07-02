@@ -146,11 +146,8 @@ end
 
 def raise_errors(errors)
   STDERR.puts 'Errors:'
-  errors.each do |category, error_list|
-    STDERR.puts "  #{category}:"
-    error_list.each do |error|
-      STDERR.puts "    #{error}"
-    end
+  errors.each do |error|
+    STDERR.puts "  #{error}"
   end
   exit 2
 end
@@ -160,17 +157,30 @@ def provision_script_path(type)
   "./provision/bin/#{type}.sh"
 end
 
+## One Time Setup
+##############################################
+
 Vagrant.require_version '>= 1.8.1'
+
+validate_plugins || exit(1)
+
+# parse and validate environment
+user_config = UserConfig.from_env
+errors = user_config.validate
+raise_errors(errors) unless errors.empty?
+
+# parse and validate machine config
+machine_types = YAML.load_file(Pathname.new(user_config.machine_config_path).realpath)
+validate_machine_types(machine_types)
+
+# configure vbox host-only network
+system(provision_script_path('vbox-network'))
+
 
 ## VM Creation & Provisioning
 ##############################################
 
 Vagrant.configure(2) do |config|
-
-  # configure vbox networking
-  system(provision_script_path('vbox-network'))
-
-  validate_plugins || exit(1)
 
   # configure vagrant-hostmanager plugin
   config.hostmanager.enabled = true
@@ -182,14 +192,6 @@ Vagrant.configure(2) do |config|
     # enable auto update guest additions
     config.vbguest.auto_update = true
   end
-
-  user_config = UserConfig.from_env
-
-  errors = user_config.validate
-  raise_errors(errors) unless errors.empty?
-
-  machine_types = YAML.load_file(Pathname.new(user_config.machine_config_path).realpath)
-  validate_machine_types(machine_types)
 
   machine_types.each do |name, machine_type|
     config.vm.define name do |machine|
