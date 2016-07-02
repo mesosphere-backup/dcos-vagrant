@@ -11,9 +11,6 @@ module VagrantPlugins
         sync_keys(@machine)
       end
 
-      def cleanup
-      end
-
       protected
 
       # generate a shared ssh key to use on all machines (required by dcos ssh installer)

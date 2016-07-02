@@ -25,9 +25,6 @@ module VagrantPlugins
         )
       end
 
-      def cleanup
-      end
-
       protected
 
       # execute remote command as root
