@@ -92,8 +92,9 @@ EOF
     ```
 
     If auth is enabled, authenticate as instructed by the CLI.
-1. Lookup the nginx container IP from Mesos-DNS
-    with the dcos CLI and jq:
+1. Lookup the nginx container IP
+
+    With the DC/OS CLI and jq:
 
     ```bash
     NGINX_IP=$(dcos marathon app show nginx | jq -r .tasks[0].host)
@@ -113,7 +114,7 @@ EOF
     ```
 
     This step is necessary from the boot machine (but not the masters or agents), because configuring it to resolve using Mesos-DNS would create a dependency cycle.
-1. Test the nginx endpoint with Curl
+1. Test the nginx endpoint with curl
 
     ```bash
     $ curl ${NGINX_IP}
