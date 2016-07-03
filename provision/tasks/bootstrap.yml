@@ -17,7 +17,18 @@
     net: default # workaround bug: https://github.com/ansible/ansible-modules-core/issues/1885
 
 #TODO: private docker registry
+#if [ "${DCOS_PRIVATE_REGISTRY}" == "true" ] && [ -z "$(docker ps -f name=registry -q)" ]; then
+#  echo ">>> Starting private docker registry"
+#  docker run -d --name registry -p 5000:5000 --restart=always registry:2
+#fi
+
 #TODO: copy java artifacts
+#if [ "${DCOS_JAVA_ENABLED:-false}" == "true" ]; then
+#  echo ">>> Copying java artifacts to nginx directory (/var/tmp/dcos/java)."
+#  mkdir -p /var/tmp/dcos/java
+#  cp -rp /vagrant/provision/gs-spring-boot-0.1.0.jar /var/tmp/dcos/java/
+#  cp -rp /vagrant/provision/jre-*-linux-x64.* /var/tmp/dcos/java/
+#fi
 
 - name: Create Genconf Dir
   file: path=~/dcos/genconf state=directory
