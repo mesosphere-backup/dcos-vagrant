@@ -1,0 +1,15 @@
+---
+- name: Detect Pip Version
+  command: pip --version
+  ignore_errors: true
+  register: pip_installed
+  changed_when: false
+
+- when: pip_installed.rc != 0
+  block:
+  - name: Download Pip Installer
+    get_url: url=https://bootstrap.pypa.io/get-pip.py  dest=/tmp/get-pip.py
+  - name: Exec Pip Installer
+    command: python /tmp/get-pip.py
+  - name: Delete Pip Installer
+    file: path=/tmp/get-pip.py state=absent

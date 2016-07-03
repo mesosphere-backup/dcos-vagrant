@@ -1,0 +1,40 @@
+---
+- name: Global Provisioning
+  hosts: all
+  become: yes
+  become_user: root
+  gather_facts: yes
+  tasks:
+  - name: Set Public Network Interface
+    set_fact: public_iface=enp0s8
+  - name: Detect Public IP
+    set_fact: public_ip={{ hostvars[inventory_hostname]['ansible_' + public_iface]['ipv4']['address'] }}
+  #- debug: msg="{{ hostvars[inventory_hostname] }}"
+  - name: Link Certificate Authorities
+    # required on CentOS because DC/OS compilation is done on Ubuntu
+    file: src=/etc/ssl/certs/ca-bundle.crt dest=/etc/ssl/certs/ca-certificates.crt state=link
+
+- name: Generate DC/OS Node Installer
+  hosts: boot
+  become: yes
+  become_user: root
+  gather_facts: no
+  tasks:
+  - include: tasks/bootstrap.yml
+
+- name: Install DC/OS
+  hosts: master,agent
+  strategy: free
+  become: yes
+  become_user: root
+  gather_facts: no
+  tasks:
+  - include: tasks/install.yml
+
+- name: Modify Mesos Memory
+  hosts: agent
+  become: yes
+  become_user: root
+  gather_facts: no
+  tasks:
+  - include: tasks/mesos-memory.yml

@@ -1,0 +1,32 @@
+---
+- name: Generate Mesos Memory Modifier Script
+  copy: src=scripts/mesos-memory.sh dest="/usr/local/sbin/mesos-memory" mode=0755
+
+- name: Modify Mesos Memory Config
+  shell: . /etc/profile && mesos-memory {{ DCOS_TASK_MEMORY }} {{ node_role }}
+  register: modify_result
+  changed_when: "'Updated:' in modify_result.stdout"
+  # can't use script because it doesn't source the profile which updates PATH to tell us where jq is
+  #script: scripts/mesos-memory.sh {{ DCOS_TASK_MEMORY }} {{ node_role }}
+
+- when: modify_result.changed
+  block:
+
+  - name: Stop Mesos Private Agent
+    command: systemctl stop dcos-mesos-slave.service
+    when: "'agent-private' in group_names"
+
+  - name: Stop Mesos Public Agent
+    command: systemctl stop dcos-mesos-slave-public.service
+    when: "'agent-public' in group_names"
+
+  - name: Delete Mesos Agent State
+    file: path=/var/lib/mesos/slave/meta/slaves/latest state=absent
+
+  - name: Start Mesos Private Agent
+    command: systemctl start dcos-mesos-slave.service --no-block
+    when: "'agent-private' in group_names"
+
+  - name: Start Mesos Public Agent
+    command: systemctl start dcos-mesos-slave-public.service --no-block
+    when: "'agent-public' in group_names"

@@ -176,6 +176,14 @@ validate_machine_types(machine_types)
 # configure vbox host-only network
 system(provision_script_path('vbox-network'))
 
+ansible_groups = {
+  'master:vars' => { 'node_type' => 'master' },
+  'agent-private:vars' => { 'node_type' => 'slave', 'node_role' => '*' },
+  'agent-public:vars' => { 'node_type' => 'slave_public', 'node_role' => 'slave_public' },
+}
+
+ansible_host_vars = {}
+
 
 ## VM Creation & Provisioning
 ##############################################
@@ -222,34 +230,6 @@ Vagrant.configure(2) do |config|
       # provision a shared SSH key (required by DC/OS SSH installer)
       machine.vm.provision :dcos_ssh, name: 'Shared SSH Key'
 
-      machine.vm.provision :shell do |vm|
-        vm.name = 'Certificate Authorities'
-        vm.path = provision_script_path('ca-certificates')
-      end
-
-      machine.vm.provision :shell do |vm|
-	    vm.name = 'Install Probe'
-        vm.path = provision_script_path('install-probe')
-      end
-
-      machine.vm.provision :shell do |vm|
-        vm.name = 'Install jq'
-        vm.path = provision_script_path('install-jq')
-      end
-
-      machine.vm.provision :shell do |vm|
-        vm.name = 'Install DC/OS Postflight'
-        vm.path = provision_script_path('install-postflight')
-      end
-
-      case machine_type['type']
-      when 'agent-private', 'agent-public'
-        machine.vm.provision :shell do |vm|
-          vm.name = 'Install Mesos Memory Modifier'
-          vm.path = provision_script_path('install-mesos-memory')
-        end
-      end
-
       if user_config.private_registry
         machine.vm.provision :shell do |vm|
           vm.name = 'Start Private Docker Registry'
@@ -257,21 +237,33 @@ Vagrant.configure(2) do |config|
         end
       end
 
-      script_path = provision_script_path("type-#{machine_type['type']}")
-      if File.exist?(script_path)
-        machine.vm.provision :shell do |vm|
-          vm.name = "DC/OS #{machine_type['type'].capitalize}"
-          vm.path = script_path
-          vm.env = user_config.provision_env(machine_type)
-        end
+      type = machine_type['type']
+
+      # ansible groups: one for each machine type
+      ansible_groups[type] ||= []
+      ansible_groups[type] << name
+
+      # ansible groups: one for all agents
+      case type
+      when 'agent-private', 'agent-public'
+        ansible_groups['agent'] ||= []
+        ansible_groups['agent'] << name
       end
 
-      if machine_type['type'] == 'boot'
-        # install DC/OS after boot machine is provisioned
-        machine.vm.provision :dcos_install do |dcos|
-          dcos.install_method = user_config.install_method
-          dcos.machine_types = machine_types
-          dcos.config_template_path = user_config.config_path
+      # ansible host vars: unique for each machine
+      ansible_host_vars[name] = user_config.provision_env(machine_type)
+
+      if type == 'boot'
+        machine.vm.provision :ansible do |ansible|
+          # concurrently provision all machines
+          ansible.limit = 'all'
+          ansible.playbook = 'provision/playbook.yml'
+          ansible.raw_arguments  = [
+            '--private-key=.vagrant/dcos/private_key_vagrant'
+          ]
+          ansible.groups = ansible_groups
+          ansible.host_vars = ansible_host_vars
+          ansible.verbose = true
         end
       end
     end

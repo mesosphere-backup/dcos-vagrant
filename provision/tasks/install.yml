@@ -1,0 +1,15 @@
+---
+- name: Download DC/OS Node Installer
+  get_url: url=http://boot.dcos/dcos_install.sh dest=/tmp/dcos_install.sh mode=0755
+
+- name: Install DC/OS Node
+  command: creates="/opt/mesosphere" /tmp/dcos_install.sh {{ node_type }}
+
+#- name: Generate DC/OS Postflight Script
+#  template: src=templates/dcos-postflight.sh dest="/usr/local/sbin/dcos-postflight" mode=0755
+
+- name: Validate DC/OS Installation
+  #command: /usr/local/sbin/dcos-postflight
+  script: scripts/dcos-postflight.sh
+  changed_when: false
+  always_run: yes

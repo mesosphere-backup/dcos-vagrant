@@ -1,0 +1,48 @@
+---
+- include: tasks/install-pip.yml
+
+- name: Install Docker-Py
+  pip: name=docker-py version=1.8.1
+
+- name: Start Nginx
+  docker:
+    name: nginx
+    image: nginx
+    state: reloaded
+    volumes:
+    - /var/tmp/dcos:/usr/share/nginx/html
+    ports:
+    - "80:80"
+    restart_policy: always
+    net: default # workaround bug: https://github.com/ansible/ansible-modules-core/issues/1885
+
+#TODO: private docker registry
+#TODO: copy java artifacts
+
+- name: Create Genconf Dir
+  file: path=~/dcos/genconf state=directory
+
+- name: Download DC/OS Installer
+  get_url: url={{ DCOS_GENERATE_CONFIG_PATH }} dest=~/dcos/dcos_generate_config.sh mode=0755
+
+- name: Lookup Headnode Public IP
+  set_fact: headnode_ip={{ hostvars[groups['master'][0]]['public_ip'] }}
+
+- name: Generate IP Node Installer Config
+  template: src=templates/config.yaml.j2 dest="~/dcos/genconf/config.yaml"
+
+- name: Generate IP Detection Script
+  template: src=templates/ip-detect.sh.j2 dest="~/dcos/genconf/ip-detect" mode="u=rwx,g=rwx,o=rwx"
+
+- name: Copy Node SSH Private Key
+  command: creates="~/dcos/genconf/ssh_key" cp /vagrant/.vagrant/dcos/private_key_vagrant ~/dcos/genconf/ssh_key
+
+- name: Generate DC/OS Node Installer
+  command: creates="~/dcos/genconf/serve" bash ~/dcos/dcos_generate_config.sh --genconf
+  args:
+   chdir: ~/dcos
+  register: genconf_result
+
+- name: Host DC/OS Node Installer via Nginx
+  shell: cp -rpv ~/dcos/genconf/serve/* /var/tmp/dcos/
+  when: genconf_result.changed

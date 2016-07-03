@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -o errexit
+set -o nounset
+set -o pipefail
+echo $(/usr/sbin/ip route show to match {{ headnode_ip }} | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | tail -1)
