@@ -9,7 +9,6 @@
     set_fact: public_iface=enp0s8
   - name: Detect Public IP
     set_fact: public_ip={{ hostvars[inventory_hostname]['ansible_' + public_iface]['ipv4']['address'] }}
-  #- debug: msg="{{ hostvars[inventory_hostname] }}"
   - name: Link Certificate Authorities
     # required on CentOS because DC/OS compilation is done on Ubuntu
     file: src=/etc/ssl/certs/ca-bundle.crt dest=/etc/ssl/certs/ca-certificates.crt state=link

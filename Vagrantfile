@@ -12,7 +12,6 @@ class UserConfig
   attr_accessor :box_url
   attr_accessor :box_version
   attr_accessor :machine_config_path
-  attr_accessor :config_path
   attr_accessor :generate_config_path
   attr_accessor :install_method
   attr_accessor :vagrant_mount_method
@@ -25,7 +24,6 @@ class UserConfig
     c.box_url              = ENV.fetch('DCOS_BOX_URL', 'https://downloads.dcos.io/dcos-vagrant/metadata.json')
     c.box_version          = ENV.fetch('DCOS_BOX_VERSION', '~> 0.7.0')
     c.machine_config_path  = ENV.fetch('DCOS_MACHINE_CONFIG_PATH', 'VagrantConfig.yaml')
-    c.config_path          = ENV.fetch('DCOS_CONFIG_PATH', 'etc/config.yaml')
     c.generate_config_path = ENV.fetch('DCOS_GENERATE_CONFIG_PATH', 'dcos_generate_config.sh')
     c.install_method       = ENV.fetch('DCOS_INSTALL_METHOD', 'ssh_pull')
     c.vagrant_mount_method = ENV.fetch('DCOS_VAGRANT_MOUNT_METHOD', 'virtualbox')
@@ -44,7 +42,6 @@ class UserConfig
       :box_url,
       :box_version,
       :machine_config_path,
-      :config_path,
       :generate_config_path,
       :install_method,
       :vagrant_mount_method
@@ -61,8 +58,7 @@ class UserConfig
     # Validate required files
     required_files = [
       :machine_config_path,
-      :generate_config_path,
-      :config_path
+      :generate_config_path
     ]
     required_files.each do |field_name|
       file_path = send(field_name.to_sym)
@@ -77,7 +73,6 @@ class UserConfig
   # create environment for provisioning scripts
   def provision_env(machine_type)
     env = {
-      'DCOS_CONFIG_PATH' => path_to_url(@config_path),
       'DCOS_GENERATE_CONFIG_PATH' => path_to_url(@generate_config_path),
       'DCOS_JAVA_ENABLED' => @java_enabled ? 'true' : 'false',
       'DCOS_PRIVATE_REGISTRY' => @private_registry ? 'true' : 'false'
