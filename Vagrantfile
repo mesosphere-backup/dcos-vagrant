@@ -219,6 +219,10 @@ Vagrant.configure(2) do |config|
         override.vm.network :private_network, ip: machine_type['ip']
       end
 
+      # Hack to remove loopback host alias that conflicts with vagrant-hostmanager
+      # https://dcosjira.atlassian.net/browse/VAGRANT-15
+      machine.vm.provision :shell, inline: "sed -i'' '/^127.0.0.1\\t#{machine.vm.hostname}\\t#{name}$/d' /etc/hosts"
+
       # provision a shared SSH key (required by DC/OS SSH installer)
       machine.vm.provision :dcos_ssh, name: 'Shared SSH Key'
 
