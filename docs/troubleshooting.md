@@ -107,3 +107,16 @@ ulimit -n 1024
 ```
 
 **Solution**: Upgrade Vagrant to 1.8.4+ to fix an incompatibility with Ruby 2.3
+
+## No Usable Default Provider
+
+**Problem**: The following error is returned when booting up a cluster via `vagrant up` using Vagrant
+1.8.4 and VirtualBox 5.1.
+
+```
+No usable default provider could be found for your system.
+...
+```
+This is a known behavior and should be fixed with Vagrant 1.8.5. See [mitchellh/vagrant#7411](https://github.com/mitchellh/vagrant/issues/7411) for details.
+
+**Solution**: Using [VirtualBox 5.0](https://www.virtualbox.org/wiki/Download_Old_Builds_5_0) should resolve the incompatibility.
