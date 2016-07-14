@@ -52,6 +52,7 @@ Known Incompatibilities:
 
 - Older versions of Vagrant are known to cause problems on Ubuntu 16
 - Older versions of VirtualBox are known to cause problems on Windows
+- [All versions of Vagrant are known to be incompatible with VirtualBox 5.1](troubleshooting.md#vagrant-up-fails-on-vagrant-184-with-virtualbox-51)
 
 ## Supported DC/OS Versions
 
