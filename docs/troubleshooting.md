@@ -123,7 +123,7 @@ This is a known behavior and should be fixed with Vagrant 1.8.5. See [mitchellh/
 
 ## SSH Authentication Failure
 
-**Problem: Provisioning fails to log into machines after inserting a generated public key:
+**Problem**: Provisioning fails to log into machines after inserting a generated public key:
 
 ```
 ==> m1: Waiting for machine to boot. This may take a few minutes...
