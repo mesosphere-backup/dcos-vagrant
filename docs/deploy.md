@@ -53,7 +53,7 @@ Known Incompatibilities:
 - Older versions of Vagrant are known to cause problems on Ubuntu 16
 - Older versions of VirtualBox are known to cause problems on Windows
 - [Vagrant 1.8.4 and prior are incompatible with VirtualBox 5.1](/docs/troubleshooting.md#no-usable-default-provider)
-- [Vagrant 1.8.5 introduced an SSH key permissions bug](https://github.com/mitchellh/vagrant/pull/7611). Use Vagrant 1.8.4 (with VirtualBox 5.0) until the next Vagrant release.
+- [Vagrant 1.8.5 introduced an SSH key permissions bug](/docs/troubleshooting.md#ssh-authentication-failure).
 
 ## Supported DC/OS Versions
 
