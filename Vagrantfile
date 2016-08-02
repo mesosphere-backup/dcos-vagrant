@@ -160,7 +160,14 @@ end
 ## One Time Setup
 ##############################################
 
-Vagrant.require_version '>= 1.8.1'
+if Vagrant::VERSION == '1.8.5'
+  ui = Vagrant::UI::Colored.new
+  ui.error 'Unsupported Vagrant Version: 1.8.5'
+  ui.error 'For more info, visit https://github.com/dcos/dcos-vagrant/blob/master/docs/troubleshooting.md#ssh-authentication-failure'
+  ui.error ''
+end
+
+Vagrant.require_version '>= 1.8.4', '!= 1.8.5'
 
 validate_plugins || exit(1)
 
