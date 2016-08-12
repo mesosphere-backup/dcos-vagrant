@@ -1,0 +1,14 @@
+---
+cluster_name: dcos-vagrant
+bootstrap_url: http://boot.dcos
+exhibitor_storage_backend: static
+master_discovery: static
+master_list:
+- 192.168.65.90
+resolvers:
+- 10.0.2.3
+superuser_username: admin
+superuser_password_hash: "$6$rounds=656000$123o/Qz.InhbkbsO$kn5IkpWm5CplEorQo7jG/27LkyDgWrml36lLxDtckZkCxu22uihAJ4DOJVVnNbsz/Y5MCK3B1InquE6E7Jmh30" # admin
+ssh_port: 22
+ssh_user: vagrant
+agent_list: []
