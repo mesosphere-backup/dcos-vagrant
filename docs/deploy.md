@@ -166,7 +166,7 @@ To test bleeding-edge Master releases of DC/OS it may be necessary to use the ma
 Specify which machines to deploy. For example (requires 5.5GB free memory):
 
 ```bash
-vagrant up m1 a1 p1 boot
+vagrant up m1 boot a1 p1
 ```
 
 Many permutations of machines are possible. See [Example Deployments](#example-deployments) for more options.
@@ -189,7 +189,7 @@ A minimal cluster supports launching small Marathon apps. Most other services wi
 Requires > 4.5GB free memory (using the example [VagrantConfig](/VagrantConfig.yaml.example)).
 
 ```bash
-vagrant up m1 a1 boot
+vagrant up m1 boot a1
 ```
 
 ## Small Cluster
@@ -199,7 +199,7 @@ A small cluster supports running tasks on multiple nodes.
 Requires > 7.25GB free memory (using the example [VagrantConfig](/VagrantConfig.yaml.example)).
 
 ```bash
-vagrant up m1 a1 a2 p1 boot
+vagrant up m1 boot a1 a2 p1
 ```
 
 ## Medium Cluster
@@ -209,7 +209,7 @@ A medium cluster supports the installation of a [minimally configured Cassandra]
 Requires > 10GB free memory (using the example [VagrantConfig](/VagrantConfig.yaml.example)).
 
 ```bash
-vagrant up m1 a1 a2 a3 a4 p1 boot
+vagrant up m1 boot a1 a2 a3 a4 p1
 ```
 
 ## Large Cluster
@@ -219,7 +219,7 @@ Requires > 17GB free memory (using the example [VagrantConfig](/VagrantConfig.ya
 A large cluster supports master node fail over, multiple framework installs, and multiple public load balancers.
 
 ```bash
-vagrant up m1 m2 m3 a1 a2 a3 a4 a5 a6 p1 p2 p3 boot
+vagrant up m1 m2 m3 boot a1 a2 a3 a4 a5 a6 p1 p2 p3
 ```
 
 
@@ -237,7 +237,7 @@ Adding a node will not immediately change scheduled services by may allow pendin
 
 ```
 # Example initial cluster deploy
-vagrant up m1 a1 p1 boot
+vagrant up m1 boot a1 p1
 # Add a private agent node
 vagrant up a2
 # Add a public agent node
@@ -250,7 +250,7 @@ Removing an agent node will cause all tasks running on that node to be reschedul
 
 ```
 # Example initial cluster deploy
-vagrant up m1 a1 p1 boot
+vagrant up m1 boot a1 p1
 # Remove a private agent node
 vagrant destroy -f a1
 # Remove a public agent node
