@@ -58,14 +58,11 @@ This example runs [Oinker-Go](https://github.com/mesosphere/oinker-go) on [Marat
 1. Wait for the cassandra framework to deploy 3 executors and 3 servers (takes 5m+). Check the Mesos UI: <http://m1.dcos/mesos>.
 
 
-## Add Multiverse Package Repository
-
-Prior to DC/OS 1.7, Marathon-LB was in the Multiverse repo. So the Multiverse needed to be added to the DC/OS CLI config.
-
-See the [DC/OS CLI docs](../../docs/dcos-cli.md#multiverse) on how to add the multiverse repo.
-
-
 ## Install Marathon-LB
+
+For Mesosphere Enterprise DC/OS, reference [the documentation for securely installing Marathon-LB](https://docs.mesosphere.com/1.8/usage/service-discovery/marathon-lb/usage/). Make sure to specify 256 MB memory when configuring Marathon-LB.
+
+For vanilla DC/OS, use the following steps to configure and install Marathon-LB:
 
 1. Configure marathon-lb with lower memory usage than default:
 
@@ -83,7 +80,7 @@ See the [DC/OS CLI docs](../../docs/dcos-cli.md#multiverse) on how to add the mu
     ```
     dcos package install --options=/tmp/marathon-lb.json marathon-lb --yes
     ```
-1. Wait for the marathon-lb framework to deploy 1 task. Check the Mesos UI: <http://m1.dcos/mesos>.
+1. Wait for the marathon-lb framework to be running and healthy. Check the DC/OS Services UI: <http://m1.dcos/#/services/>.
 
 
 ## Install Oinker
