@@ -115,7 +115,7 @@ module VagrantPlugins
         end
 
         @machine.ui.success 'Generating DC/OS Installer Files: ~/dcos/genconf/serve/'
-        sudo('cd ~/dcos && bash ~/dcos/dcos_generate_config.sh --genconf && cp -rpv ~/dcos/genconf/serve/* /var/tmp/dcos/')
+        sudo('cd ~/dcos && bash ~/dcos/dcos_generate_config.sh --genconf && cp -rpv ~/dcos/genconf/serve/* /var/tmp/dcos/ && echo ok > /var/tmp/dcos/ready')
 
         case install_method
         when :ssh_push

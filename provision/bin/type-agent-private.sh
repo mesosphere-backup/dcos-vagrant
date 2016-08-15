@@ -1,13 +1,17 @@
 #!/usr/bin/env bash
 
-set -o errexit
 set -o nounset
 set -o pipefail
 
-if ! curl --fail --location --max-redir 0 --silent http://boot.dcos/dcos_install.sh; then
-  >&2 echo "Warning: Bootstrap machine unreachable - postponing DC/OS private agent install - only an error if adding this node to an existing cluster"
+# By default, agents are provisioned in parallel during boot machine provisioning.
+# The following agent provisioning should only run if the boot machine provisioning has already occurred.
+# This ready check validates that the boot machine is ready and not just being impersonated by DNS hijacking.
+if [ "$(curl --fail --location --max-redir 0 --silent http://boot.dcos/ready)" != "ok" ]; then
+  echo "Skipping DC/OS private agent install (boot machine will provision in parallel)"
   exit 0
 fi
+
+set -o errexit
 
 echo ">>> Installing DC/OS slave"
 curl --fail --location --max-redir 0 --silent --show-error --verbose http://boot.dcos/dcos_install.sh | bash -s -- slave
