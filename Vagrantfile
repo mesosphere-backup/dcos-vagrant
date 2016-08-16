@@ -266,7 +266,7 @@ Vagrant.configure(2) do |config|
           ansible.verbose = true
         end
 
-        config.vm.post_up_message = "DC/OS Installation Complete\nWeb Interface: http://#{machine.vm.hostname}/"
+        config.vm.post_up_message = "DC/OS Installation Complete\nWeb Interface: http://m1.dcos/"
       end
     end
   end
