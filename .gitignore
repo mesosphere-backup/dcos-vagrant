@@ -1,10 +1,10 @@
 .DS_Store
 .idea
 .vagrant
-exhibitor.properties
-dcos
-provision/jre-*-linux-x64.tgz
+
+/dcos
+/provision/playbook.retry
+/provision/jre-*-linux-x64.tgz
 
 dcos_generate_config*.sh
-/etc/config.yaml
 /VagrantConfig.yaml

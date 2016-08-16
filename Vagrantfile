@@ -1,6 +1,7 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+require_relative 'lib/ansible-patch'
 require_relative 'lib/vagrant-dcos'
 require 'yaml'
 
@@ -249,17 +250,23 @@ Vagrant.configure(2) do |config|
       ansible_host_vars[name] = user_config.provision_env(machine_type)
 
       if type == 'boot'
-        machine.vm.provision :ansible do |ansible|
+        machine.vm.provision :ansible_local do |ansible|
+          # install ansible on the boot machine
+          ansible.install = true
+          ansible.version = '2.1.1'
+          ansible.install_mode = :pip
           # concurrently provision all machines
           ansible.limit = 'all'
           ansible.playbook = 'provision/playbook.yml'
           ansible.raw_arguments  = [
-            '--private-key=.vagrant/dcos/private_key_vagrant'
+            '--private-key=/vagrant/.vagrant/dcos/private_key_vagrant'
           ]
           ansible.groups = ansible_groups
           ansible.host_vars = ansible_host_vars
           ansible.verbose = true
         end
+
+        config.vm.post_up_message = "DC/OS Installation Complete\nWeb Interface: http://#{machine.vm.hostname}/"
       end
     end
   end

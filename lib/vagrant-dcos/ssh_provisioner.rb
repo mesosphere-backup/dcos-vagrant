@@ -38,6 +38,8 @@ module VagrantPlugins
           public_key_file.open('w') { |io| io.write(openssh_key) }
         end
 
+        Vagrant::Util::SSH.check_key_permissions(private_key_file)
+
         [private_key, openssh_key]
       end
 
