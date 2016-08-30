@@ -194,6 +194,9 @@ Vagrant.configure(2) do |config|
   config.hostmanager.manage_host = true
   config.hostmanager.ignore_private_ip = false
 
+  # Avoid random ssh key for demo purposes
+  config.ssh.insert_key = false
+  
   # Vagrant Plugin Configuration: vagrant-vbguest
   if Vagrant.has_plugin?('vagrant-vbguest')
     # enable auto update guest additions
