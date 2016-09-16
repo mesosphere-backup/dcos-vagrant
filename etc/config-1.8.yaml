@@ -12,3 +12,4 @@ superuser_password_hash: "$6$rounds=656000$123o/Qz.InhbkbsO$kn5IkpWm5CplEorQo7jG
 ssh_port: 22
 ssh_user: vagrant
 agent_list: []
+check_time: false
