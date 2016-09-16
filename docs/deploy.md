@@ -27,7 +27,7 @@ Most services *can* be installed on the Medium cluster, but not all at the same 
 
 ## Operating System
 
-Ideally DC/OS Vagrant would work everywhere Vagrant and VirtualBox do, but each platform tends to require custom tweaks to the vagrant and guest OS configurations.
+Ideally, DC/OS Vagrant would work everywhere Vagrant and VirtualBox do, but each platform tends to require custom tweaks to the vagrant and guest OS configurations.
 
 The following host OS's have been reported to work:
 
@@ -59,6 +59,9 @@ Known Incompatibilities:
 
 [DC/OS Downloads &amp; Release Notes](https://dcos.io/releases/)
 
+- 1.8.x
+  - Requires DC/OS Vagrant >=
+  - 
 - 1.7.x
   - Requires DC/OS Vagrant >= 0.6.0
   - Allows faster startup with static Exhibitor storage backend (e.g. [config-1.7.yaml](/etc/config-1.7.yaml))
@@ -117,12 +120,13 @@ To test bleeding-edge Master releases of DC/OS it may be necessary to use the ma
 1. <a name="configure-the-dcos-installer"></a>Configure the DC/OS Installer
 
    Select a config file template based on the downloaded version of DC/OS (select one):
-
+   
+   - DC/OS 1.8: `export DCOS_CONFIG_PATH=etc/config-1.8.yaml`
    - DC/OS 1.7: `export DCOS_CONFIG_PATH=etc/config-1.7.yaml`
    - DC/OS 1.6: `export DCOS_CONFIG_PATH=etc/config-1.6.yaml`
    - DC/OS 1.5: `export DCOS_CONFIG_PATH=etc/config-1.5.yaml`
 
-   The path to the config file is relative to the repo dir, because the repo dir will be mounted as `/vagrant` within each VM.
+   The path to the config file is relative to the repo dir because the repo dir will be mounted as `/vagrant` within each VM.
    Alternate configurations may be added to the `<repo>/etc/` dir and configured in a similar manner.
 
    Alternatively, a URL to an online config can be specified (e.g. `export DCOS_CONFIG_PATH=http://example.com/config.yaml`).
@@ -171,7 +175,7 @@ vagrant up m1 a1 p1 boot
 
 Many permutations of machines are possible. See [Example Deployments](#example-deployments) for more options.
 
-Once the the machines are created and provisioned, DC/OS will be installed. Once complete, the Web Interface will be available at <http://m1.dcos/>.
+Once the the machines are created and provisioned, DC/OS will be installed. Once complete, the web interface will be available at <http://m1.dcos/>.
 
 See the [DC/OS Usage docs](https://dcos.io/docs/latest/usage/) for more information on how to use you new DC/OS cluster.
 
@@ -233,7 +237,7 @@ Adding more nodes to an existing cluster requires your VagrantConfig.yaml to hav
 
 ## Add an Agent Node
 
-Adding a node will not immediately change scheduled services by may allow pending tasks to be scheduled using the newly available resources.
+Adding a node will not immediately change scheduled services, but may allow pending tasks to be scheduled using the newly available resources.
 
 ```
 # Example initial cluster deploy
