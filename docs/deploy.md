@@ -59,6 +59,9 @@ Known Incompatibilities:
 
 [DC/OS Downloads &amp; Release Notes](https://dcos.io/releases/)
 
+- 1.8.x 
+  - Requires DC/OS Vagrant >= 0.9.0
+  - Requires `check_time: false` (e.g. [config-1.8.yaml](/etc/config-1.8.yaml))
 - 1.7.x
   - Requires DC/OS Vagrant >= 0.6.0
   - Allows faster startup with static Exhibitor storage backend (e.g. [config-1.7.yaml](/etc/config-1.7.yaml))
