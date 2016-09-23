@@ -121,6 +121,7 @@ To test bleeding-edge Master releases of DC/OS it may be necessary to use the ma
 
    Select a config file template based on the downloaded version of DC/OS (select one):
 
+   - DC/OS 1.8: `export DCOS_CONFIG_PATH=etc/config-1.8.yaml`
    - DC/OS 1.7: `export DCOS_CONFIG_PATH=etc/config-1.7.yaml`
    - DC/OS 1.6: `export DCOS_CONFIG_PATH=etc/config-1.6.yaml`
    - DC/OS 1.5: `export DCOS_CONFIG_PATH=etc/config-1.5.yaml`
