@@ -44,7 +44,7 @@ For example, `m1` has 3328 MB memory by default. Some of that memory will be tak
 **IMPORTANT**: Make sure your local machine has enough memory to launch all your desired VMs, otherwise your machine may lock up as all the memory is consumed.
 
 
-# Environment Options
+## Environment Options
 
 There are several configurable options when deploying a cluster and installing DC/OS on it. Most of them are configurable via environment variables:
 
@@ -67,3 +67,40 @@ There are several configurable options when deploying a cluster and installing D
     - `nfs` - Use faster [NFS shared folders](https://www.vagrantup.com/docs/synced-folders/nfs.html).
 
 Additional advanced configuration may be possible by modifying the Vagrantfile directly, but is not encouraged because the internal APIs may change at any time.
+
+# Configure DC/OS
+
+While the `VagrantConfig.yaml` configuration is specific to DC/OS Vagrant, the `config.yaml` content is generic for DC/OS.
+
+## Configure a Proxy
+
+In DC/OS 1.8.5 proxies are allowed to be configured in `config.yaml`.
+
+Make sure that `no_proxy` includes all DC/OS Vagrant VM IPs and any local network addresses you want accessible to the cluster.
+
+Also make sure to update the user, password, and proxy address bellow.
+
+While the example routes https through http, you probably want to use http -> http and https -> https, however this requires your proxy to use a valid SSL certificate.
+
+Example:
+
+```
+use_proxy: true
+http_proxy: "http://test:testtest@10.0.90.127:3128"
+https_proxy: "http://test:testtest@10.0.90.127:3128"
+no_proxy:
+- "192.168.65.90"
+- "192.168.65.95"
+- "192.168.65.101"
+- "192.168.65.111"
+- "192.168.65.121"
+- "192.168.65.131"
+- "192.168.65.141"
+- "192.168.65.151"
+- "192.168.65.161"
+- "192.168.65.60"
+- "192.168.65.70"
+- "192.168.65.50"
+```
+
+Remember, `config.yaml` cannot be changed after your cluster is deployed!
