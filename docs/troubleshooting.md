@@ -145,4 +145,17 @@ This is a known behavior and should be fixed with Vagrant 1.8.5. See [mitchellh/
     m1: Warning: Authentication failure. Retrying...
 ```
 
-**Solution**: Vagrant 1.8.5 introduced an [SSH key permissions bug](https://github.com/mitchellh/vagrant/issues/7610). It should be [fixed in a subsequent release](https://github.com/mitchellh/vagrant/pull/7611), but until then, use Use [Vagrant 1.8.4](https://releases.hashicorp.com/vagrant/1.8.4/) (with [VirtualBox 5.0](https://www.virtualbox.org/wiki/Download_Old_Builds_5_0)).
+**Solution**: Vagrant 1.8.5 introduced an [SSH key permissions bug](https://github.com/mitchellh/vagrant/issues/7610). It was [fixed in 1.8.6](https://github.com/mitchellh/vagrant/pull/7611), but 1.8.6 introduced [another bug](#network-interface-configuration-failure). So for now use [Vagrant 1.8.4](https://releases.hashicorp.com/vagrant/1.8.4/) (with [VirtualBox 5.0](https://www.virtualbox.org/wiki/Download_Old_Builds_5_0)).
+
+## Network Interface Configuration Failure
+
+**Problem**: Provisioning hangs and fails while configuring and enable network interfaces:
+
+```
+==> m1: Machine booted and ready!
+==> m1: Checking for guest additions in VM...
+==> m1: Setting hostname...
+==> m1: Configuring and enabling network interfaces...
+```
+
+**Solution**: Vagrant 1.8.6 introduced an [network interface detection bug](https://github.com/mitchellh/vagrant/issues/7858). It should be [fixed in 1.8.7](https://github.com/mitchellh/vagrant/pull/7866). For now use [Vagrant 1.8.4](https://releases.hashicorp.com/vagrant/1.8.4/) (with [VirtualBox 5.0](https://www.virtualbox.org/wiki/Download_Old_Builds_5_0)).
