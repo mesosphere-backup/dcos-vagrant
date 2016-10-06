@@ -48,7 +48,7 @@ The default guest OS box from [dcos-vagrant-box](https://github.com/dcos/dcos-va
 - [VirtualBox](https://www.virtualbox.org/) (>= 5.0.20) - virtualization engine
 - (Optional) [jq](https://stedolan.github.io/jq/) - json parser used by examples
 
-Known Incompatibilities:
+**Known Incompatibilities**:
 
 - Older versions of Vagrant are known to cause problems on Ubuntu 16
 - Older versions of VirtualBox are known to cause problems on Windows
