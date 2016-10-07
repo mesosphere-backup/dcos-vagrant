@@ -158,4 +158,4 @@ This is a known behavior and should be fixed with Vagrant 1.8.5. See [mitchellh/
 ==> m1: Configuring and enabling network interfaces...
 ```
 
-**Solution**: Vagrant 1.8.6 introduced an [network interface detection bug](https://github.com/mitchellh/vagrant/issues/7858). It should be [fixed in 1.8.7](https://github.com/mitchellh/vagrant/pull/7866). For now use [Vagrant 1.8.4](https://releases.hashicorp.com/vagrant/1.8.4/) (with [VirtualBox 5.0](https://www.virtualbox.org/wiki/Download_Old_Builds_5_0)).
+**Solution**: Vagrant 1.8.6 introduced an [network interface detection bug](https://github.com/mitchellh/vagrant/issues/7876). It should be [fixed in 1.8.7](https://github.com/mitchellh/vagrant/pull/7866). For now use [Vagrant 1.8.4](https://releases.hashicorp.com/vagrant/1.8.4/) (with [VirtualBox 5.0](https://www.virtualbox.org/wiki/Download_Old_Builds_5_0)).
