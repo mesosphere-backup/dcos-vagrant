@@ -169,6 +169,12 @@ end
 
 Vagrant.require_version '>= 1.8.4', '!= 1.8.5'
 
+if Vagrant::VERSION == '1.8.6'
+  # Monkey patch for network interface detection bug in Vagrant 1.8.6
+  # https://github.com/mitchellh/vagrant/issues/7876
+  require_relative 'lib/linux_network_interfaces'
+end
+
 validate_plugins || exit(1)
 
 # parse and validate environment
