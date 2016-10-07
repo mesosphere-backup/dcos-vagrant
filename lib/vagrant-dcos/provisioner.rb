@@ -205,7 +205,7 @@ EOF
           machine = @machine.env.machine(name, provider)
           queue.push(Proc.new do
             machine.ui.success 'Installing DC/OS (master)'
-            remote_sudo(machine, %(bash -c "curl --fail --location --silent --show-error --verbose http://boot.dcos/dcos_install.sh | bash -s -- master"))
+            remote_sudo(machine, %(bash -ceu "curl --fail --location --silent --show-error --verbose http://boot.dcos/dcos_install.sh | bash -s -- master"))
           end)
         end
         Executor.exec(queue, max_install_threads)
@@ -216,14 +216,14 @@ EOF
           machine = @machine.env.machine(name, provider)
           queue.push(Proc.new do
             machine.ui.success 'Installing DC/OS (agent)'
-            remote_sudo(machine, %(bash -c "curl --fail --location --silent --show-error --verbose http://boot.dcos/dcos_install.sh | bash -s -- slave"))
+            remote_sudo(machine, %(bash -ceu "curl --fail --location --silent --show-error --verbose http://boot.dcos/dcos_install.sh | bash -s -- slave"))
           end)
         end
         filter_machines(active_machines, machine_types, 'agent-public').each do |name, provider|
           machine = @machine.env.machine(name, provider)
           queue.push(Proc.new do
             machine.ui.success 'Installing DC/OS (agent-public)'
-            remote_sudo(machine, %(bash -c "curl --fail --location --silent --show-error --verbose http://boot.dcos/dcos_install.sh | bash -s -- slave_public"))
+            remote_sudo(machine, %(bash -ceu "curl --fail --location --silent --show-error --verbose http://boot.dcos/dcos_install.sh | bash -s -- slave_public"))
           end)
         end
         Executor.exec(queue, max_install_threads)
@@ -248,7 +248,7 @@ EOF
               machine.ui.success "Setting Mesos Memory: #{memory} (role=*)"
               remote_sudo(machine, %(mesos-memory #{memory}))
               machine.ui.success 'Restarting Mesos Agent'
-              remote_sudo(machine, %(bash -c "systemctl stop dcos-mesos-slave.service && rm -f /var/lib/mesos/slave/meta/slaves/latest && systemctl start dcos-mesos-slave.service --no-block"))
+              remote_sudo(machine, %(bash -ceu "systemctl stop dcos-mesos-slave.service && rm -f /var/lib/mesos/slave/meta/slaves/latest && systemctl start dcos-mesos-slave.service --no-block"))
             end
           end)
         end
@@ -262,7 +262,7 @@ EOF
               machine.ui.success "Setting Mesos Memory: #{memory} (role=slave_public)"
               remote_sudo(machine, %(mesos-memory #{memory} slave_public))
               machine.ui.success 'Restarting Mesos Agent'
-              remote_sudo(machine, %(bash -c "systemctl stop dcos-mesos-slave-public.service && rm -f /var/lib/mesos/slave/meta/slaves/latest && systemctl start dcos-mesos-slave-public.service --no-block"))
+              remote_sudo(machine, %(bash -ceu "systemctl stop dcos-mesos-slave-public.service && rm -f /var/lib/mesos/slave/meta/slaves/latest && systemctl start dcos-mesos-slave-public.service --no-block"))
             end
           end)
         end
