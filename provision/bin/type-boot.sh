@@ -11,7 +11,7 @@ else
   echo ">>> Found zookeeper container running"
 fi
 
-if [ "$(docker inspect -f '{{.State.Running}}' ngnix-boot)" != "true" ]; then
+if [ "$(docker inspect -f '{{.State.Running}}' nginx-boot)" != "true" ]; then
   echo ">>> Starting nginx (for distributing bootstrap artifacts to cluster)"
   docker run -d --name=ngnix-boot -v /var/tmp/dcos:/usr/share/nginx/html -p 80:80 --restart=always nginx
 else
