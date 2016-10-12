@@ -6,13 +6,23 @@ This example runs [Oinker-Go](https://github.com/mesosphere/oinker-go) on [Marat
 ## Install DC/OS
 
 1. Follow the [dcos-vagrant setup](https://github.com/dcos/dcos-vagrant#setup) steps to configure your installation.
-1. Use vagrant to deploy a cluster with 3 private agent nodes and 1 public agent node (requires 10GB free memory):
+1. Use vagrant to deploy a cluster with 1 (large) private agent node and 1 (small) public agent node (requires 8.5 GB free memory):
 
     ```
-    vagrant up m1 a1 a2 a3 p1 boot
+    vagrant up m1 a1 p1 boot
     ```
-1. Wait for DC/OS to come up. Check the dashboard: <http://m1.dcos/>.
-1. Install the [DC/OS CLI](https://dcos.io/docs/latest/usage/cli/) by following the instructions on the DC/OS Dashboard
+
+1. Log into the DC/OS UI with a browser: <http://m1.dcos/>.
+1. Install and configure the [DC/OS CLI](https://dcos.io/docs/latest/usage/cli/) by following the instructions in the DC/OS UI.
+1. Log into DC/OS with the DC/OS CLI:
+
+    ```
+    vagrant auth login
+    ```
+
+    Follow the printed instructions to authenticate.
+
+    If you were previously logged into a different cluster, you may have to logout first.
 
 
 ## Install Cassandra
@@ -50,19 +60,23 @@ This example runs [Oinker-Go](https://github.com/mesosphere/oinker-go) on [Marat
     }
     EOF
     ```
-1. Install cassandra:
+1. Install the cassandra package:
 
     ```
     dcos package install --options=/tmp/cassandra.json cassandra --yes
     ```
-1. Wait for the cassandra framework to deploy 3 executors and 3 servers (takes 5m+). Check the Mesos UI: <http://m1.dcos/mesos>.
+1. Wait for the Cassandra service to be running and healthy. Check the DC/OS Services UI: <http://m1.dcos/#/services/>.
+
+    The Cassandra service should deploy 1 scheduler task and 1 cassandra node task on private DC/OS nodes.
+    These can be seen on the service detail page.
+    The service won't be marked as healthy or done deploying until both tasks are running and healthy.
 
 
 ## Install Marathon-LB
 
-For Mesosphere Enterprise DC/OS, reference [the documentation for securely installing Marathon-LB](https://docs.mesosphere.com/1.8/usage/service-discovery/marathon-lb/usage/). Make sure to specify 256 MB memory when configuring Marathon-LB.
+For Mesosphere Enterprise DC/OS, follow the instructions to [Install Marathon-LB on Mesosphere Enterprise DC/OS](enterprise-mlb.md).
 
-For vanilla DC/OS, use the following steps to configure and install Marathon-LB:
+For open DC/OS, use the following steps to configure and install Marathon-LB:
 
 1. Configure marathon-lb with lower memory usage than default:
 
@@ -75,12 +89,14 @@ For vanilla DC/OS, use the following steps to configure and install Marathon-LB:
     }
     EOF
     ```
-1. Install marathon-lb:
+1. Install the marathon-lb package:
 
     ```
     dcos package install --options=/tmp/marathon-lb.json marathon-lb --yes
     ```
-1. Wait for the marathon-lb framework to be running and healthy. Check the DC/OS Services UI: <http://m1.dcos/#/services/>.
+1. Wait for the Marathon-LB service to be running and healthy. Check the DC/OS Services UI: <http://m1.dcos/#/services/>.
+
+    The Marathon-LB service should deploy 1 task on the public DC/OS node. This can be seen on the service detail page.
 
 
 ## Install Oinker

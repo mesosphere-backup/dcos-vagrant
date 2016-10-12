@@ -9,6 +9,7 @@
         "type": "DOCKER",
         "docker": {
             "image": "mesosphere/oinker-go:latest",
+            "forcePullImage": true,
             "network": "BRIDGE",
             "portMappings": [
                 {
