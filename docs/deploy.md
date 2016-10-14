@@ -116,7 +116,7 @@ To test bleeding-edge Master releases of DC/OS it may be necessary to use the ma
 
     If you have multiple `dcos_generate_config.sh` files downloaded you can name them differently and specify which to use with `DCOS_GENERATE_CONFIG_PATH` (e.g. `export DCOS_GENERATE_CONFIG_PATH=dcos_generate_config-1.5-EA.sh`).
 
-    Enterprise edition installers are also supported. Contact your sales representative or <sales@mesosphere.com> to obtain the right DC/OS installer.
+    Enterprise installers are also supported. Contact your sales representative or <sales@mesosphere.com> to obtain the right DC/OS installer. Use e.g. `export DCOS_GENERATE_CONFIG_PATH=dcos_generate_config_ee-1.5` to select it.
 
 1. <a name="configure-the-dcos-installer"></a>Configure the DC/OS Installer
 
@@ -173,12 +173,15 @@ Specify which machines to deploy. For example (requires 5.5GB free memory):
 vagrant up m1 a1 p1 boot
 ```
 
+The order of startup is important: master VMs (beginning with `m`) must be started first.
+
 Many permutations of machines are possible. See [Example Deployments](#example-deployments) for more options.
 
 Once the the machines are created and provisioned, DC/OS will be installed. Once complete, the Web Interface will be available at <http://m1.dcos/>.
 
-See the [DC/OS Usage docs](https://dcos.io/docs/latest/usage/) for more information on how to use you new DC/OS cluster.
+## Get started
 
+See the [DC/OS Usage docs](https://dcos.io/docs/latest/usage/) for more information on how to use your new DC/OS cluster.
 
 # Example Deployments
 
