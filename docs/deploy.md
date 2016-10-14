@@ -177,7 +177,7 @@ Many permutations of machines are possible. See [Example Deployments](#example-d
 
 Once the the machines are created and provisioned, DC/OS will be installed. Once complete, the Web Interface will be available at <http://m1.dcos/>.
 
-See the [DC/OS Usage docs](https://dcos.io/docs/latest/usage/) for more information on how to use you new DC/OS cluster.
+See the [DC/OS Usage docs](https://dcos.io/docs/latest/usage/) for more information on how to use your new DC/OS cluster.
 
 
 # Example Deployments
