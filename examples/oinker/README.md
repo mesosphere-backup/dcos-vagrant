@@ -17,7 +17,7 @@ This example runs [Oinker-Go](https://github.com/mesosphere/oinker-go) on [Marat
 1. Log into DC/OS with the DC/OS CLI:
 
     ```
-    vagrant auth login
+    dcos auth login
     ```
 
     Follow the printed instructions to authenticate.
