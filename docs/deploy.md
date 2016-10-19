@@ -209,7 +209,7 @@ Note: Master nodes may not be added to a DC/OS cluster after initial install.
 
 Individual virtual machines may be configured with greater or fewer resources in `VagrantConfig.yaml`. This is most useful for public and private agent nodes that make their resources available for DC/OS services and jobs.
 
-By default (using the example [VagrantConfig](/VagrantConfig.yaml.example)), each private agent machine requires 6GB free host memory, 5.5GB of which is made available to DC/OS.
+By default (using the example [VagrantConfig](/VagrantConfig.yaml.example)), each private agent machine requires 6GB free host memory, 5.5GB of which is made available to DC/OS. By default, each public agent machine requires 1.5GB free host memory, 1GB of which is made available to DC/OS.
 
 For example, to deploy 3 private agents and 2 public agents:
 
