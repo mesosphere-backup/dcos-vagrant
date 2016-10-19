@@ -15,15 +15,9 @@ Deploy DC/OS Vagrant
 
 **Minimum**:
 
-- 5GB free memory (8GB system memory)
+- 9.5GB free memory (16GB system memory)
 
-Most services *cannot* be installed on the Minimal cluster.
-
-**Recommended (Medium)**:
-
-- 10GB free memory (16GB system memory)
-
-Most services *can* be installed on the Medium cluster, but not all at the same time.
+Most service packages *can* be installed on the Minimum cluster, **when individually configured to use minimal resources**, but not all at the same time.
 
 ## Operating System
 
@@ -167,7 +161,7 @@ To test bleeding-edge Master releases of DC/OS it may be necessary to use the ma
 
 # Deploy
 
-Specify which machines to deploy. For example (requires 5.5GB free memory):
+Specify which machines to deploy. For example (requires 9.5GB free memory):
 
 ```bash
 vagrant up m1 a1 p1 boot
@@ -188,43 +182,42 @@ See [Configure](/docs/configure.md) for more details about node types, cluster c
 
 ## Minimal Cluster
 
-A minimal cluster supports launching small Marathon apps. Most other services will fail to install, because they require more than one agent node.
+A minimal cluster supports the installation of a [minimally configured Cassandra, Marathon-LB, and Oinker example service](/examples/oinker).
+Most default configuration service packages will fail to install, because they require more memory or more than one agent node, but most may be configured to use fewer resources.
 
-Requires > 4.5GB free memory (using the example [VagrantConfig](/VagrantConfig.yaml.example)).
-
-```bash
-vagrant up m1 a1 boot
-```
-
-## Small Cluster
-
-A small cluster supports running tasks on multiple nodes.
-
-Requires > 7.25GB free memory (using the example [VagrantConfig](/VagrantConfig.yaml.example)).
+By default (using the example [VagrantConfig](/VagrantConfig.yaml.example)), a minimal cluster requires 9.5GB free host memory.
 
 ```bash
-vagrant up m1 a1 a2 p1 boot
+vagrant up m1 a1 p1 boot
 ```
 
-## Medium Cluster
+## Multi-Master Cluster
 
-A medium cluster supports the installation of a [minimally configured Cassandra](/examples/oinker#install-cassandra).
+Clusters must have an odd number of master nodes (usually 1, 3, or 5).
 
-Requires > 10GB free memory (using the example [VagrantConfig](/VagrantConfig.yaml.example)).
+By default (using the example [VagrantConfig](/VagrantConfig.yaml.example)), each master machine requires 1GB free host memory.
+
+For example, to deploy three masters (to support master node fail over) in an otherwise minimal cluster:
 
 ```bash
-vagrant up m1 a1 a2 a3 a4 p1 boot
+vagrant up m1 m2 m3 a1 p1 boot
 ```
 
-## Large Cluster
+Note: Master nodes may not be added to a DC/OS cluster after initial install.
 
-Requires > 17GB free memory (using the example [VagrantConfig](/VagrantConfig.yaml.example)).
+## Multi-Agent Cluster
 
-A large cluster supports master node fail over, multiple framework installs, and multiple public load balancers.
+Individual virtual machines may be configured with greater or fewer resources in `VagrantConfig.yaml`. This is most useful for public and private agent nodes that make their resources available for DC/OS services and jobs.
+
+By default (using the example [VagrantConfig](/VagrantConfig.yaml.example)), each private agent machine requires 6GB free host memory, 5.5GB of which is made available to DC/OS.
+
+For example, to deploy 3 private agents and 2 public agents:
 
 ```bash
-vagrant up m1 m2 m3 a1 a2 a3 a4 a5 a6 p1 p2 p3 boot
+vagrant up m1 a1 a2 a3 p1 p2 boot
 ```
+
+Note: Public agents are most often used for load balancers, like Marathon-LB. Other services are deployed on private agents to provide a DMZ for security reasons (tho those reasons are moot for a local development cluster on a host-only network). Regardless, most service packages default to installing onto private agent nodes.
 
 
 # Scale
