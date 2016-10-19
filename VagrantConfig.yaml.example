@@ -16,7 +16,7 @@ m3:
 a1:
   ip: 192.168.65.111
   cpus: 4
-  memory: 4096
+  memory: 6144
   memory-reserved: 512
   type: agent-private
 a2:
@@ -52,7 +52,7 @@ a6:
 p1:
   ip: 192.168.65.60
   cpus: 2
-  memory: 1024
+  memory: 1536
   memory-reserved: 512
   type: agent-public
   aliases:
@@ -61,13 +61,13 @@ p1:
 p2:
   ip: 192.168.65.70
   cpus: 2
-  memory: 1024
+  memory: 1536
   memory-reserved: 512
   type: agent-public
 p3:
   ip: 192.168.65.80
   cpus: 2
-  memory: 1024
+  memory: 1536
   memory-reserved: 512
   type: agent-public
 boot:
