@@ -15,21 +15,33 @@
                 {
                     "containerPort": 8080,
                     "hostPort": 0,
-                    "protocol": "tcp"
+                    "protocol": "tcp",
+                    "name": "http-api"
                 }
             ]
         }
     },
     "healthChecks": [
         {
-            "path": "/ready",
-            "portIndex": 0,
             "protocol": "HTTP",
-            "gracePeriodSeconds": 300,
-            "intervalSeconds": 30,
-            "timeoutSeconds": 10,
+            "path": "/ready",
+            "portName": "http-api",
+            "gracePeriodSeconds": 5,
+            "intervalSeconds": 5,
+            "timeoutSeconds": 4,
             "maxConsecutiveFailures": 3,
             "ignoreHttp1xx": false
+        }
+    ],
+    "readinessChecks": [
+        {
+            "protocol": "HTTP",
+            "path": "/ready",
+            "portName": "http-api",
+            "intervalSeconds": 5,
+            "timeoutSeconds": 4,
+            "httpStatusCodesForReady": [ 200, 302 ],
+            "preserveLastResponse": true
         }
     ],
     "cmd": "export OINKER_INSTANCE_NAME=${MESOS_TASK_ID} && oinker --cassandra-addr=node-0.cassandra.mesos --cassandra-repl=1",
