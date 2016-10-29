@@ -25,7 +25,7 @@ Ideally DC/OS Vagrant would work everywhere Vagrant and VirtualBox do, but each 
 
 The following host OS's have been reported to work:
 
-- Mac OS X 10.10, 10.11
+- Mac OS X 10.10, 10.11, 10.12
 - Windows 7, 10
 - Ubuntu 14, 15, 16
 - Fedora 23
@@ -36,7 +36,7 @@ The default guest OS box from [dcos-vagrant-box](https://github.com/dcos/dcos-va
 ## Software
 
 - [Git](https://git-scm.com/) - clone repo
-- [Vagrant](https://www.vagrantup.com/) (>= 1.8.4) - virtualization orchestration
+- [Vagrant](https://www.vagrantup.com/) (1.8.4; see Known Incomopatibilities) - virtualization orchestration
   - [Host Manager Plugin](https://github.com/smdahlen/vagrant-hostmanager) - manage /etc/hosts
   - (Optional) [VBGuest Plugin](https://github.com/dotless-de/vagrant-vbguest) - manage vbox guest additions
 - [VirtualBox](https://www.virtualbox.org/) (>= 5.0.20) - virtualization engine
@@ -60,14 +60,6 @@ The default guest OS box from [dcos-vagrant-box](https://github.com/dcos/dcos-va
 - 1.7.x
   - Requires DC/OS Vagrant >= 0.6.0
   - Allows faster startup with static Exhibitor storage backend (e.g. [config-1.7.yaml](/etc/config-1.7.yaml))
-- 1.6.x
-  - Requires DC/OS Vagrant >= 0.4.0
-  - Requires flattened yaml config (e.g. [config-1.6.yaml](/etc/config-1.6.yaml))
-- 1.5.x
-  - Requires DC/OS Vagrant >= 0.3.0
-  - Requires yaml config (e.g. [config-1.5.yaml](/etc/config-1.5.yaml))
-- CM.4
-  - Requires [DC/OS Vagrant v0.3.0](https://github.com/dcos/dcos-vagrant/tree/v0.3.0)
 
 The latest version of DC/OS Vagrant usually works with the latest DC/OS Early Access and Stable releases.
 
@@ -108,7 +100,7 @@ To test bleeding-edge Master releases of DC/OS it may be necessary to use the ma
 
     Once downloaded, move the installer (`dcos_generate_config.sh`) to the root of the repo (the repo will be mounted into the vagrant machines as `/vagrant`).
 
-    If you have multiple `dcos_generate_config.sh` files downloaded you can name them differently and specify which to use with `DCOS_GENERATE_CONFIG_PATH` (e.g. `export DCOS_GENERATE_CONFIG_PATH=dcos_generate_config-1.5-EA.sh`).
+    If you have multiple `dcos_generate_config.sh` files downloaded you can name them differently and specify which to use with `DCOS_GENERATE_CONFIG_PATH` (e.g. `export DCOS_GENERATE_CONFIG_PATH=dcos_generate_config-1.8.sh`).
 
     Enterprise edition installers are also supported. Contact your sales representative or <sales@mesosphere.com> to obtain the right DC/OS installer.
 
@@ -116,9 +108,8 @@ To test bleeding-edge Master releases of DC/OS it may be necessary to use the ma
 
    Select a config file template based on the downloaded version of DC/OS (select one):
 
+   - DC/OS 1.8: `export DCOS_CONFIG_PATH=etc/config-1.8.yaml`
    - DC/OS 1.7: `export DCOS_CONFIG_PATH=etc/config-1.7.yaml`
-   - DC/OS 1.6: `export DCOS_CONFIG_PATH=etc/config-1.6.yaml`
-   - DC/OS 1.5: `export DCOS_CONFIG_PATH=etc/config-1.5.yaml`
 
    The path to the config file is relative to the repo dir, because the repo dir will be mounted as `/vagrant` within each VM.
    Alternate configurations may be added to the `<repo>/etc/` dir and configured in a similar manner.
@@ -150,9 +141,9 @@ To test bleeding-edge Master releases of DC/OS it may be necessary to use the ma
 
 1. (Optional) Configure Authentication
 
-    When installing **DC/OS** (>= 1.7) on DC/OS Vagrant, the cluster uses external OAuth by default, which will prompt for authentication through Google, Github, or Microsoft. The first user to log in becomes the superuser and must add additional users to allow multiple. It's also possible to [disable login](https://dcos.io/docs/1.7/administration/id-and-access-mgt/managing-authentication/#authentication-opt-out) in the installation config, if desired.
+    The cluster uses external OAuth by default, which will prompt for authentication through Google, Github, or Microsoft. The first user to log in becomes the superuser and must add additional users to allow multiple. It's also possible to [disable login](https://dcos.io/docs/1.8/administration/id-and-access-mgt/managing-authentication/#authentication-opt-out) in the installation config, if desired.
 
-    When installing **Mesosphere Enterprise DC/OS** (>= 1.6) on DC/OS Vagrant, the cluster uses an internal user database by default, which will prompt for a username and password. If you're using the provided 1.6 or 1.7 installer config file then the superuser credentials are by default `admin`/`admin`. See [Managing Authentication](https://docs.mesosphere.com/administration/security/managing-authorization/) for more details about users and groups.
+    When installing **Mesosphere Enterprise DC/OS** on DC/OS Vagrant, the cluster uses an internal user database by default, which will prompt for a username and password. If you're using the provided (1.7 or 1.8) installer config file then the superuser credentials are by default `admin`/`admin`. See [Managing users and groups](https://docs.mesosphere.com/1.8/administration/id-and-access-mgt/users-groups/) for more details about users and groups.
 
 1. (Optional) Configure Other Options
 
@@ -254,8 +245,13 @@ vagrant destroy -f a1
 vagrant destroy -f p1
 ```
 
+# Shutting Down or Deleting Your Cluster
 
-# Destroy
+The following command stops your running cluster:
+
+```
+vagrant halt
+```
 
 The following command destroys your cluster and any data stored there:
 
