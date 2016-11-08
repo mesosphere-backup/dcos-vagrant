@@ -9,7 +9,9 @@ The following steps demonstrate how to enable and use the private Docker registr
     ```bash
     $ export DCOS_PRIVATE_REGISTRY=true
     ```
+
 1. [Deploy DC/OS Vagrant](/docs/deploy.md)
+
 1. SSH into one of the machines:
 
     ```bash
@@ -27,6 +29,7 @@ The following steps demonstrate how to enable and use the private Docker registr
     ```bash
     $ docker tag $(docker images | grep -m 1 ^nginx.*latest | awk -v N=3 '{print $N}') boot.dcos:5000/nginx
     ```
+
 1. Upload nginx to the private registry:
 
     ```bash
@@ -85,34 +88,35 @@ The following steps demonstrate how to enable and use the private Docker registr
     }
     EOF
     ```
-    1. Create a DC/OS service:
 
-        ```bash
-        $ dcos marathon app add nginx-marathon.json
-        ```
+1. Create a DC/OS service:
 
-        If auth is enabled, authenticate as instructed by the CLI.
-    1. Lookup the nginx container IP
+    ```bash
+    $ dcos marathon app add nginx-marathon.json
+    ```
 
-        With the DC/OS CLI and jq:
+    If auth is enabled, authenticate as instructed by the CLI.
+1. Lookup the nginx container IP
 
-        ```bash
-        NGINX_IP=$(dcos marathon app show nginx | jq -r .tasks[0].host)
-        ```
+    With the DC/OS CLI and jq:
 
-        OR With Mesos-DNS and dig:
+    ```bash
+    NGINX_IP=$(dcos marathon app show nginx | jq -r .tasks[0].host)
+    ```
 
-        ```bash
-        sudo yum install bind-utils -y
-        NGINX_IP=$(dig +short @m1.dcos nginx.marathon.mesos)
-        ```
+    OR With Mesos-DNS and dig:
 
-        OR with the Mesos-DNS HTTP API and jq:
+    ```bash
+    sudo yum install bind-utils -y
+    NGINX_IP=$(dig +short @m1.dcos nginx.marathon.mesos)
+    ```
 
-        ```bash
-        NGINX_IP=$(curl --fail --location --silent --show-error m1.dcos:8123/v1/hosts/nginx.marathon.mesos | jq -r .[0].ip)
-         ```
-        This step is necessary from the boot machine (but not the masters or agents), because configuring it to resolve using Mesos-DNS would create a dependency cycle.
+    OR with the Mesos-DNS HTTP API and jq:
+
+    ```bash
+    NGINX_IP=$(curl --fail --location --silent --show-error m1.dcos:8123/v1/hosts/nginx.marathon.mesos | jq -r .[0].ip)
+     ```
+    This step is necessary from the boot machine (but not the masters or agents), because configuring it to resolve using Mesos-DNS would create a dependency cycle.
     
 1. Test the nginx endpoint with curl
 
