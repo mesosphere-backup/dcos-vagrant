@@ -49,10 +49,10 @@ module VagrantPlugins
 
         machine.ui.output('Inserting generated public key within guest...')
         # Hack to fix a vagrant bug in 1.8.3 & 1.8.4
-	    # https://github.com/mitchellh/vagrant/issues/7455
+        # https://github.com/mitchellh/vagrant/issues/7455
         if VagrantPlugins::GuestLinux::Guest.new.detect?(machine)
           linux_insert_public_key(machine, openssh_key)
-		else
+        else
           machine.guest.capability(:insert_public_key, openssh_key)
         end
 
@@ -71,18 +71,18 @@ module VagrantPlugins
       end
 
       def linux_insert_public_key(machine, contents)
-		comm = machine.communicate
-		contents = contents.chomp
-		contents = Vagrant::Util::ShellQuote.escape(contents, "'")
+        comm = machine.communicate
+        contents = contents.chomp
+        contents = Vagrant::Util::ShellQuote.escape(contents, "'")
 
-		comm.execute <<-EOH.gsub(/^ {12}/, '')
-		  mkdir -p ~/.ssh
-		  chmod 0700 ~/.ssh
-		  [ "$(tail -n 1 ~/.ssh/authorized_keys)" != "" ] && echo >> ~/.ssh/authorized_keys
-		  printf '#{contents}\\n' >> ~/.ssh/authorized_keys
-		  chmod 0600 ~/.ssh/authorized_keys
-		EOH
-	  end
+        comm.execute <<-EOH.gsub(/^ {12}/, '')
+          mkdir -p ~/.ssh
+          chmod 0700 ~/.ssh
+          [ "$(tail -n 1 ~/.ssh/authorized_keys)" != "" ] && echo >> ~/.ssh/authorized_keys
+          printf '#{contents}\\n' >> ~/.ssh/authorized_keys
+          chmod 0600 ~/.ssh/authorized_keys
+        EOH
+      end
     end
   end
 end
