@@ -54,7 +54,7 @@ The default guest OS box from [dcos-vagrant-box](https://github.com/dcos/dcos-va
 
 Known versions: [dcos-versions.yaml](/dcos-versions.yaml)
 
-For additional options, see [Specify DC/OS Version](/docs/configure.md#specify-dc-os-version) or [Specify DC/OS Installer](/docs/configure.md#specify-dc-os-installer).
+For additional options, see [Specify DC/OS Version](/docs/configure.md#specify-dcos-version) or [Specify DC/OS Installer](/docs/configure.md#specify-dcos-installer).
 
 
 # Setup
@@ -85,7 +85,7 @@ For additional options, see [Specify DC/OS Version](/docs/configure.md#specify-d
 
     On some versions of Mac OS X, installing vagrant plugins may require [installing a modern version of Ruby](/docs/install-ruby.md).
 
-1. (Optional) [Specify DC/OS Version](/docs/configure.md#specify-dc-os-version) or [Specify DC/OS Installer](/docs/configure.md#specify-dc-os-installer)
+1. (Optional) [Specify DC/OS Version](/docs/configure.md#specify-dcos-version) or [Specify DC/OS Installer](/docs/configure.md#specify-dcos-installer)
 
 1. Configure the DC/OS Machine Types
 
