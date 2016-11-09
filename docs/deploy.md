@@ -245,13 +245,7 @@ vagrant destroy -f a1
 vagrant destroy -f p1
 ```
 
-# Shutting Down or Deleting Your Cluster
-
-The following command stops your running cluster:
-
-```
-vagrant halt
-```
+# Shutting Down and Deleting Your Cluster
 
 The following command destroys your cluster and any data stored there:
 
