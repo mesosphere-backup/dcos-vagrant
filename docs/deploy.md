@@ -52,18 +52,9 @@ The default guest OS box from [dcos-vagrant-box](https://github.com/dcos/dcos-va
 
 ## Supported DC/OS Versions
 
-[DC/OS Downloads &amp; Release Notes](https://dcos.io/releases/)
+Known versions: [dcos-versions.yaml](/dcos-versions.yaml)
 
-- 1.8.x 
-  - Requires DC/OS Vagrant >= 0.9.0
-  - Requires `check_time: false` (e.g. [config-1.8.yaml](/etc/config-1.8.yaml))
-- 1.7.x
-  - Requires DC/OS Vagrant >= 0.6.0
-  - Allows faster startup with static Exhibitor storage backend (e.g. [config-1.7.yaml](/etc/config-1.7.yaml))
-
-The latest version of DC/OS Vagrant usually works with the latest DC/OS Early Access and Stable releases.
-
-To test bleeding-edge Master releases of DC/OS it may be necessary to use the master branch of the dcos-vagrant repo.
+For additional options, see [Specify Version](/docs/configure.md#specify-version) or [Specify Installer](/docs/configure.md#specify-installer).
 
 
 # Setup
@@ -94,27 +85,7 @@ To test bleeding-edge Master releases of DC/OS it may be necessary to use the ma
 
     On some versions of Mac OS X, installing vagrant plugins may require [installing a modern version of Ruby](/docs/install-ruby.md).
 
-1. Download the DC/OS Installer
-
-    If you don't already have a DC/OS installer downloaded, you'll need to select and download one of the [supported versions](#supported-dcos-versions).
-
-    Once downloaded, move the installer (`dcos_generate_config.sh`) to the root of the repo (the repo will be mounted into the vagrant machines as `/vagrant`).
-
-    If you have multiple `dcos_generate_config.sh` files downloaded you can name them differently and specify which to use with `DCOS_GENERATE_CONFIG_PATH` (e.g. `export DCOS_GENERATE_CONFIG_PATH=dcos_generate_config-1.8.sh`).
-
-    Enterprise edition installers are also supported. Contact your sales representative or <sales@mesosphere.com> to obtain the right DC/OS installer.
-
-1. <a name="configure-the-dcos-installer"></a>Configure the DC/OS Installer
-
-   Select a config file template based on the downloaded version of DC/OS (select one):
-
-   - DC/OS 1.8: `export DCOS_CONFIG_PATH=etc/config-1.8.yaml`
-   - DC/OS 1.7: `export DCOS_CONFIG_PATH=etc/config-1.7.yaml`
-
-   The path to the config file is relative to the repo dir, because the repo dir will be mounted as `/vagrant` within each VM.
-   Alternate configurations may be added to the `<repo>/etc/` dir and configured in a similar manner.
-
-   Alternatively, a URL to an online config can be specified (e.g. `export DCOS_CONFIG_PATH=http://example.com/config.yaml`).
+1. (Optional) [Specify Version](/docs/configure.md#specify-version) or [Specify Installer](/docs/configure.md#specify-installer)
 
 1. Configure the DC/OS Machine Types
 

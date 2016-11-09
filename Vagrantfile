@@ -2,7 +2,11 @@
 # vi: set ft=ruby :
 
 require_relative 'lib/vagrant-dcos'
+require 'vagrant/util/downloader'
 require 'yaml'
+require 'fileutils'
+
+UI = Vagrant::UI::Colored.new
 
 ## User Config
 ##############################################
@@ -13,6 +17,7 @@ class UserConfig
   attr_accessor :box_version
   attr_accessor :machine_config_path
   attr_accessor :config_path
+  attr_accessor :dcos_version
   attr_accessor :generate_config_path
   attr_accessor :install_method
   attr_accessor :vagrant_mount_method
@@ -21,17 +26,28 @@ class UserConfig
 
   def self.from_env
     c = new
-    c.box                  = ENV.fetch('DCOS_BOX', 'mesosphere/dcos-centos-virtualbox')
-    c.box_url              = ENV.fetch('DCOS_BOX_URL', 'https://downloads.dcos.io/dcos-vagrant/metadata.json')
-    c.box_version          = ENV.fetch('DCOS_BOX_VERSION', '~> 0.8.0')
-    c.machine_config_path  = ENV.fetch('DCOS_MACHINE_CONFIG_PATH', 'VagrantConfig.yaml')
-    c.config_path          = ENV.fetch('DCOS_CONFIG_PATH', 'etc/config.yaml')
-    c.generate_config_path = ENV.fetch('DCOS_GENERATE_CONFIG_PATH', 'dcos_generate_config.sh')
-    c.install_method       = ENV.fetch('DCOS_INSTALL_METHOD', 'ssh_pull')
-    c.vagrant_mount_method = ENV.fetch('DCOS_VAGRANT_MOUNT_METHOD', 'virtualbox')
-    c.java_enabled         = (ENV.fetch('DCOS_JAVA_ENABLED', 'false') == 'true')
-    c.private_registry     = (ENV.fetch('DCOS_PRIVATE_REGISTRY', 'false') == 'true')
+    c.box                  = ENV.fetch(env_var('box'), 'mesosphere/dcos-centos-virtualbox')
+    c.box_url              = ENV.fetch(env_var('box_url'), 'https://downloads.dcos.io/dcos-vagrant/metadata.json')
+    c.box_version          = ENV.fetch(env_var('box_version'), '~> 0.8.0')
+    c.machine_config_path  = ENV.fetch(env_var('machine_config_path'), 'VagrantConfig.yaml')
+    c.config_path          = ENV.fetch(env_var('config_path'), '')
+    c.dcos_version         = ENV.fetch(env_var('dcos_version'), '1.8.6')
+    c.generate_config_path = ENV.fetch(env_var('generate_config_path'), '')
+    c.install_method       = ENV.fetch(env_var('install_method'), 'ssh_pull')
+    c.vagrant_mount_method = ENV.fetch(env_var('vagrant_mount_method'), 'virtualbox')
+    c.java_enabled         = (ENV.fetch(env_var('java_enabled'), 'false') == 'true')
+    c.private_registry     = (ENV.fetch(env_var('private_registry'), 'false') == 'true')
     c
+  end
+
+  # resolve relative paths to be relative to the vagrant mount (allow remote urls)
+  def self.path_to_url(path)
+    %r{^\w*:\/\/} =~ path ? path : 'file:///vagrant/' + path
+  end
+
+  # convert field symbol to env var
+  def self.env_var(field)
+    "DCOS_#{field.to_s.upcase}"
   end
 
   # validate required fields and files
@@ -44,8 +60,6 @@ class UserConfig
       :box_url,
       :box_version,
       :machine_config_path,
-      :config_path,
-      :generate_config_path,
       :install_method,
       :vagrant_mount_method
     ]
@@ -56,29 +70,37 @@ class UserConfig
       end
     end
 
-    return errors unless errors.empty?
+    raise ValidationError, errors unless errors.empty?
+
+    if @dcos_version.empty? && @generate_config_path.empty?
+      errors << "Either version (#{UserConfig.env_var('dcos_version')}) or installer (#{UserConfig.env_var('generate_config_path')}) must be specified via environment variables."
+    end
+
+    if @config_path.empty? && !@generate_config_path.empty?
+      errors << "Config path (#{UserConfig.env_var('config_path')}) must be specified when installer (#{UserConfig.env_var('generate_config_path')}) is specified."
+    end
 
     # Validate required files
-    required_files = [
-      :machine_config_path,
-      :generate_config_path,
-      :config_path
-    ]
+    required_files = []
+    required_files << :machine_config_path if !@machine_config_path.empty?
+    required_files << :config_path if !@config_path.empty?
+    required_files << :generate_config_path if !@config_path.empty?
+
     required_files.each do |field_name|
       file_path = send(field_name.to_sym)
       unless File.file?(file_path)
-        errors << "File not found: '#{file_path}'. Ensure that the file exists or reconfigure its location (export #{env_var(field_name)}=<value>)"
+        errors << "File not found: '#{file_path}'. Ensure that the file exists or reconfigure its location (export #{UserConfig.env_var(field_name)}=<value>)."
       end
     end
 
-    errors
+    raise ValidationError, errors unless errors.empty?
   end
 
   # create environment for provisioning scripts
   def provision_env(machine_type)
     env = {
-      'DCOS_CONFIG_PATH' => path_to_url(@config_path),
-      'DCOS_GENERATE_CONFIG_PATH' => path_to_url(@generate_config_path),
+      'DCOS_CONFIG_PATH' => UserConfig.path_to_url(@config_path),
+      'DCOS_GENERATE_CONFIG_PATH' => UserConfig.path_to_url(@generate_config_path),
       'DCOS_JAVA_ENABLED' => @java_enabled ? 'true' : 'false',
       'DCOS_PRIVATE_REGISTRY' => @private_registry ? 'true' : 'false'
     }
@@ -87,17 +109,20 @@ class UserConfig
     end
     env
   end
+end
 
-  protected
-
-  # resolve relative paths to be relative to the vagrant mount (allow remote urls)
-  def path_to_url(path)
-    %r{^\w*:\/\/} =~ path ? path : 'file:///vagrant/' + path
+class ValidationError < StandardError
+  def initialize(list=[], msg="Validation Error")
+    @list = list
+    super(msg)
   end
 
-  # convert field symbol to env var
-  def env_var(field)
-    "DCOS_#{field.to_s.upcase}"
+  def publish
+    UI.error 'Errors:'
+    @list.each do |error|
+      UI.error "  #{error}"
+    end
+    exit 2
   end
 end
 
@@ -117,7 +142,7 @@ def validate_plugins
   end
 
   unless missing_plugins.empty?
-    missing_plugins.each { |x| STDERR.puts x }
+    missing_plugins.each { |x| UI.error x }
     return false
   end
 
@@ -127,29 +152,18 @@ end
 def validate_machine_types(machine_types)
   boot_types = machine_types.select { |_, cfg| cfg['type'] == 'boot' }
   if boot_types.empty?
-    STDERR.puts 'Must have at least one machine of type boot'
-    exit 2
+    raise ValidationError, ['Must have at least one machine of type boot']
   end
 
   master_types = machine_types.select { |_, cfg| cfg['type'] == 'master' }
   if master_types.empty?
-    STDERR.puts 'Must have at least one machine of type master'
-    exit 2
+    raise ValidationError, ['Must have at least one machine of type master']
   end
 
   agent_types = machine_types.select { |_, cfg| cfg['type'] == 'agent-private' || cfg['type'] == 'agent-public' }
   if agent_types.empty?
-    STDERR.puts 'Must have at least one machine of type agent-private or agent-public'
-    exit 2
+    raise ValidationError, ['Must have at least one machine of type agent-private or agent-public']
   end
-end
-
-def raise_errors(errors)
-  STDERR.puts 'Errors:'
-  errors.each do |error|
-    STDERR.puts "  #{error}"
-  end
-  exit 2
 end
 
 # path to the provision shell scripts
@@ -157,14 +171,51 @@ def provision_script_path(type)
   "./provision/bin/#{type}.sh"
 end
 
+# download installer, if not already downloaded
+def download_installer(version)
+  dcos_versions_path = 'dcos-versions.yaml'
+  dcos_versions = YAML.load_file(Pathname.new(dcos_versions_path).realpath)
+  dcos_sha = dcos_versions['shas'][version]
+
+  if dcos_sha.nil? || dcos_sha.empty?
+    raise ValidationError, ["Version not found: '#{version}'. See '#{dcos_versions_path}' for known versions. Either version (#{UserConfig.env_var('dcos_version')}) or installer (#{UserConfig.env_var('generate_config_path')}) must be specified via environment variables."]
+  end
+
+  url = "https://downloads.dcos.io/dcos/stable/commit/#{dcos_sha}/dcos_generate_config.sh"
+  path = "installers/dcos/dcos_generate_config-#{version}.sh"
+
+  FileUtils.mkdir_p Pathname.new(path).dirname
+
+  return path if File.file?(path)
+
+  UI.success "Downloading DC/OS #{version} Installer...", bold:true
+  UI.info "Source: #{url}"
+  UI.info "Destination: #{path}"
+  dl = Vagrant::Util::Downloader.new(url, path, ui: UI)
+  dl.download!
+
+  path
+end
+
+def config_path(version)
+  file_path = "etc/config-#{version}.yaml"
+  return file_path if File.file?(file_path)
+
+  if result = version.match(/^([^.]*\.[^.]*)\./)
+    file_path = "etc/config-#{result[1]}.yaml"
+    return file_path if File.file?(file_path)
+  end
+
+  raise ValidationError, ["No installer config found for version '#{version}' at 'etc/config-#{version}.yaml'. Ensure that the file exists or reconfigure its location (export #{UserConfig.env_var('config_path')}=<value>)."]
+end
+
 ## One Time Setup
 ##############################################
 
 if Vagrant::VERSION == '1.8.5'
-  ui = Vagrant::UI::Colored.new
-  ui.error 'Unsupported Vagrant Version: 1.8.5'
-  ui.error 'For more info, visit https://github.com/dcos/dcos-vagrant/blob/master/docs/troubleshooting.md#ssh-authentication-failure'
-  ui.error ''
+  UI.error 'Unsupported Vagrant Version: 1.8.5', bold:true
+  UI.error 'For more info, visit https://github.com/dcos/dcos-vagrant/blob/master/docs/troubleshooting.md#ssh-authentication-failure'
+  UI.error ''
 end
 
 Vagrant.require_version '>= 1.8.4', '!= 1.8.5'
@@ -175,17 +226,36 @@ if Vagrant::VERSION == '1.8.6'
   require_relative 'lib/linux_network_interfaces'
 end
 
-validate_plugins || exit(1)
+begin
 
-# parse and validate environment
-user_config = UserConfig.from_env
-errors = user_config.validate
-raise_errors(errors) unless errors.empty?
+  UI.info 'Validating Plugins...'
+  validate_plugins || exit(1)
 
-# parse and validate machine config
-machine_types = YAML.load_file(Pathname.new(user_config.machine_config_path).realpath)
-validate_machine_types(machine_types)
+  UI.info 'Validating User Config...'
+  user_config = UserConfig.from_env
+  user_config.validate
 
+  # update installer based on version, unless specified
+  if !user_config.dcos_version.empty? && user_config.generate_config_path.empty?
+    user_config.generate_config_path = download_installer(user_config.dcos_version)
+  end
+  UI.success "Using DC/OS Installer: #{user_config.generate_config_path}", bold: true
+
+  # update config based on version, unless specified
+  if !user_config.dcos_version.empty? && user_config.config_path.empty?
+    user_config.config_path = config_path(user_config.dcos_version)
+  end
+  UI.success "Using DC/OS Config: #{user_config.config_path}", bold: true
+
+  UI.info 'Validating Machine Config...'
+  machine_types = YAML.load_file(Pathname.new(user_config.machine_config_path).realpath)
+  validate_machine_types(machine_types)
+
+rescue ValidationError => e
+  e.publish
+end
+
+UI.info 'Configuring VirtualBox Host-Only Network...'
 # configure vbox host-only network
 system(provision_script_path('vbox-network'))
 

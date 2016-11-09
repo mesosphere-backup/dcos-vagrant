@@ -54,4 +54,4 @@ module VagrantPlugins
   end
 end
 
-puts "Vagrant Patch Loaded: GuestLinux network_interfaces"
+Vagrant::UI::Colored.new.info 'Vagrant Patch Loaded: GuestLinux network_interfaces'

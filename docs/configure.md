@@ -53,9 +53,10 @@ There are several configurable options when deploying a cluster and installing D
 - `DCOS_BOX_VERSION` - VirtualBox box image version (default: `~> 0.5.0`)
 - `DCOS_MACHINE_CONFIG_PATH` - Path to virtual machine configuration manifest (default: `VagrantConfig.yaml`)
     - Must contain at least one `boot` type machine, one `master` type machine, and one `agent` or `agent-public` type machine.
-- `DCOS_CONFIG_PATH` - Path to DC/OS configuration template (default: `etc/config.yaml`)
+- `DCOS_CONFIG_PATH` - Path to DC/OS configuration template (default: unset)
     - `master_list`, `agent_list`, `exhibitor_zk_hosts`, and `bootstrap_url` will be overridden.
-- `DCOS_GENERATE_CONFIG_PATH` - Path to DC/OS configuration generation script (default: `dcos_generate_config.sh`)
+- `DCOS_VERSION` - Version of DC/OS to download and install, unless `DCOS_GENERATE_CONFIG_PATH` is specified. (default: `1.8.6`)
+- `DCOS_GENERATE_CONFIG_PATH` - Path to DC/OS configuration generation script (default: unset)
 - `DCOS_INSTALL_METHOD` - One of the following [installation methods](/docs/alternate-install-methods.md) (default: `ssh_pull`):
     - `ssh_pull` - Use the "manual" DC/OS installation method (`dcos_install.sh`) with a pool of thread workers performing remote SHH installation.
     - `ssh_push` - Use the "automated" DC/OS installation method (`dcos_generate_config.sh --deploy`). WARNING: Does not (yet) support agent-public nodes!
@@ -67,6 +68,53 @@ There are several configurable options when deploying a cluster and installing D
     - `nfs` - Use faster [NFS shared folders](https://www.vagrantup.com/docs/synced-folders/nfs.html).
 
 Additional advanced configuration may be possible by modifying the Vagrantfile directly, but is not encouraged because the internal APIs may change at any time.
+
+## Specify Version
+
+Any of the known DC/OS versions in [dcos-versions.yaml](/dcos-versions.yaml) can be specified before [deployment](/docs/deploy.md#deploy) by setting `DCOS_VERSION`.
+
+For example:
+
+```
+export DCOS_VERSION=1.8.5
+vagrant up m1 a1 boot
+```
+
+New versions will be added as they become available. `git checkout master && git pull` to update your local version list.
+
+## Specify Installer
+
+To install DC/OS from an installer that is not in [dcos-versions.yaml](/dcos-versions.yaml):
+
+1. Download the DC/OS installer.
+
+    For example:
+
+    ```
+    curl https://downloads.dcos.io/dcos/testing/master/dcos_generate_config.sh -o dcos_generate_config.sh
+    ```
+
+    See [DC/OS Releases](https://dcos.io/releases/) for download links.
+
+    Mesosphere Enterprise DC/OS installers are also supported. Contact your sales representative or <sales@mesosphere.com> to obtain the right DC/OS installer.
+
+1. Move the installer into the `dcos-vagrant` directory. This allows it to be executed during `boot` machine provisioning.
+
+1. Export `DCOS_GENERATE_CONFIG_PATH` as the path to the installer, relative to the `dcos-vagrant` directory.
+
+    For example:
+
+    ```
+    export DCOS_GENERATE_CONFIG_PATH=dcos_generate_config.sh
+    ```
+
+1. Export `DCOS_CONFIG_PATH` as the path to the DC/OS config yaml, relative to the `dcos-vagrant` directory.
+
+    For example (select one):
+
+    - DC/OS 1.8: `export DCOS_CONFIG_PATH=etc/config-1.8.yaml`
+    - DC/OS 1.7: `export DCOS_CONFIG_PATH=etc/config-1.7.yaml`
+
 
 # Configure DC/OS
 

@@ -2,9 +2,10 @@
 .idea
 .vagrant
 exhibitor.properties
-dcos
-provision/jre-*-linux-x64.tgz
+/dcos
+/provision/jre-*-linux-x64.tgz
 
 dcos_generate_config*.sh
 /etc/config.yaml
 /VagrantConfig.yaml
+/installers
