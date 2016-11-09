@@ -69,7 +69,7 @@ There are several configurable options when deploying a cluster and installing D
 
 Additional advanced configuration may be possible by modifying the Vagrantfile directly, but is not encouraged because the internal APIs may change at any time.
 
-## Specify Version
+## Specify DC/OS Version
 
 Any of the known DC/OS versions in [dcos-versions.yaml](/dcos-versions.yaml) can be specified before [deployment](/docs/deploy.md#deploy) by setting `DCOS_VERSION`.
 
@@ -82,7 +82,7 @@ vagrant up m1 a1 boot
 
 New versions will be added as they become available. `git checkout master && git pull` to update your local version list.
 
-## Specify Installer
+## Specify DC/OS Installer
 
 To install DC/OS from an installer that is not in [dcos-versions.yaml](/dcos-versions.yaml):
 
