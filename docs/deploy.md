@@ -218,7 +218,9 @@ vagrant destroy -f p1
 
 # Shutting Down and Deleting Your Cluster
 
-The following command destroys your cluster and any data stored there:
+The normal Vagrant way to shut down VMs is `vagrant halt`, but if you use that method then the cluster won't come up again. For similar reasons, `vagrant reload` and `vagrant suspend && vagrant resume` also may not work. For more information, see [JIRA VAGRANT-7](https://dcosjira.atlassian.net/browse/VAGRANT-7).
+
+Instead, the recommended way to shut down a cluster is to destroy it (removing the the VMs and deleting their disks):
 
 ```
 vagrant destroy -f
