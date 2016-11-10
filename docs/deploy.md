@@ -21,7 +21,7 @@ Most service packages *can* be installed on the Minimum cluster, **when individu
 
 ## Operating System
 
-Ideally DC/OS Vagrant would work everywhere Vagrant and VirtualBox do, but each platform tends to require custom tweaks to the vagrant and guest OS configurations.
+Ideally, DC/OS Vagrant would work everywhere Vagrant and VirtualBox do, but each platform tends to require custom tweaks to the vagrant and guest OS configurations.
 
 The following host OS's have been reported to work:
 
@@ -131,7 +131,7 @@ vagrant up m1 a1 p1 boot
 
 Many permutations of machines are possible. See [Example Deployments](#example-deployments) for more options.
 
-Once the the machines are created and provisioned, DC/OS will be installed. Once complete, the Web Interface will be available at <http://m1.dcos/>.
+Once the the machines are created and provisioned, DC/OS will be installed. Once complete, the web interface will be available at <http://m1.dcos/>.
 
 See the [DC/OS Usage docs](https://dcos.io/docs/latest/usage/) for more information on how to use your new DC/OS cluster.
 
@@ -192,7 +192,7 @@ Adding more nodes to an existing cluster requires your VagrantConfig.yaml to hav
 
 ## Add an Agent Node
 
-Adding a node will not immediately change scheduled services by may allow pending tasks to be scheduled using the newly available resources.
+Adding a node will not immediately change scheduled services, but may allow pending tasks to be scheduled using the newly available resources.
 
 ```
 # Example initial cluster deploy
