@@ -1,4 +1,6 @@
+latest: '1.8.7'
 shas:
+  '1.8.7': '1b43ff7a0b9124db9439299b789f2e2dc3cc086c'
   '1.8.6': 'cfccfbf84bbba30e695ae4887b65db44ff216b1d'
   '1.8.5': 'e665123df0dbb19adacaefe47d16a3de144d5733'
   '1.8.4': 'e64024af95b62c632c90b9063ed06296fcf38ea5'
