@@ -47,7 +47,7 @@ The default guest OS box from [dcos-vagrant-box](https://github.com/dcos/dcos-va
 - Vagrant 1.8.3 and earlier are incompatible with Ubuntu 16
 - [Vagrant 1.8.4 and earlier are incompatible with VirtualBox 5.1](/docs/troubleshooting.md#no-usable-default-provider)
 - [Vagrant 1.8.5 has an SSH key permissions bug](/docs/troubleshooting.md#ssh-authentication-failure).
-- [Vagrant 1.8.6 has a network interface detection bug](/docs/troubleshooting.md#network-interface-configuration-failure). dcos-vagrant has a 
+- [Vagrant 1.8.6 has a network interface detection bug](/docs/troubleshooting.md#network-interface-configuration-failure). dcos-vagrant includes a patch to work around this issue.
 - [Vagrant 1.8.7 has a problem with downloading boxes](https://github.com/mitchellh/vagrant/issues/7969)
 - [Vagrant 1.9.1 has a network interface detection bug](https://github.com/mitchellh/vagrant/issues/8115)
 
