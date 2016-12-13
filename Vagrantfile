@@ -85,8 +85,17 @@ class UserConfig
 
     required_files.each do |field_name|
       file_path = send(field_name.to_sym)
+      field_env_var = UserConfig.env_var(field_name)
+      if file_path.empty?
+        errors << "File path not specified: '#{field_env_var}'. Ensure that the file path is configured (export #{field_env_var}=<value>)."
+        next
+      end
+      if file_path.start_with?(File::SEPARATOR)
+        errors << "File path not relative: '#{file_path}'. Ensure that the path is relative to the repo directory, which is mounted into the VMs (export #{field_env_var}=<value>)."
+        next
+      end
       unless File.file?(file_path)
-        errors << "File not found: '#{file_path}'. Ensure that the file exists or reconfigure its location (export #{UserConfig.env_var(field_name)}=<value>)."
+        errors << "File not found: '#{file_path}'. Ensure that the file exists or reconfigure its location (export #{field_env_var}=<value>)."
       end
     end
 
