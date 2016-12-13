@@ -18,7 +18,7 @@ class UserConfig
   attr_accessor :box_version
   attr_accessor :machine_config_path
   attr_accessor :config_path
-  attr_accessor :dcos_version
+  attr_accessor :version
   attr_accessor :generate_config_path
   attr_accessor :install_method
   attr_accessor :vagrant_mount_method
@@ -32,7 +32,7 @@ class UserConfig
     c.box_version          = ENV.fetch(env_var('box_version'), '~> 0.8.0')
     c.machine_config_path  = ENV.fetch(env_var('machine_config_path'), 'VagrantConfig.yaml')
     c.config_path          = ENV.fetch(env_var('config_path'), '')
-    c.dcos_version         = ENV.fetch(env_var('dcos_version'), '')
+    c.version              = ENV.fetch(env_var('version'), '')
     c.generate_config_path = ENV.fetch(env_var('generate_config_path'), '')
     c.install_method       = ENV.fetch(env_var('install_method'), 'ssh_pull')
     c.vagrant_mount_method = ENV.fetch(env_var('vagrant_mount_method'), 'virtualbox')
@@ -177,23 +177,24 @@ def provision_script_path(type)
   "./provision/bin/#{type}.sh"
 end
 
-def load_dcos_versions
-  dcos_versions_path = 'dcos-versions.yaml'
-  dcos_versions = YAML.load_file(Pathname.new(dcos_versions_path).realpath)
+DCOS_VERSIONS_FILE = 'dcos-versions.yaml'
 
-  #TODO: validate versions content?
+def load_dcos_versions
+  dcos_versions = YAML.load_file(Pathname.new(DCOS_VERSIONS_FILE).realpath)
+
+  #TODO: validate content?
   dcos_versions
 end
 
 # download installer, if not already downloaded
 def download_installer(dcos_versions, version)
-  dcos_sha = dcos_versions['shas'][version]
+  version_meta = dcos_versions['versions'][version]
 
-  if dcos_sha.nil? || dcos_sha.empty?
-    raise ValidationError, ["Version not found: '#{version}'. See '#{dcos_versions_path}' for known versions. Either version (#{UserConfig.env_var('dcos_version')}) or installer (#{UserConfig.env_var('generate_config_path')}) must be specified via environment variables."]
+  if version_meta.nil?
+    raise ValidationError, ["Version not found: '#{version}'. See '#{DCOS_VERSIONS_FILE}' for known versions. Either version (#{UserConfig.env_var('version')}) or installer (#{UserConfig.env_var('generate_config_path')}) must be specified via environment variables."]
   end
 
-  url = "https://downloads.dcos.io/dcos/stable/commit/#{dcos_sha}/dcos_generate_config.sh"
+  url = "https://downloads.dcos.io/dcos/#{version_meta['channel']}/commit/#{version_meta['ref']}/dcos_generate_config.sh"
   path = "installers/dcos/dcos_generate_config-#{version}.sh"
 
   FileUtils.mkdir_p Pathname.new(path).dirname
@@ -213,7 +214,7 @@ def config_path(version)
   file_path = "etc/config-#{version}.yaml"
   return file_path if File.file?(file_path)
 
-  if result = version.match(/^([^.]*\.[^.]*)\./)
+  if result = version.match(/^([0-9]+\.[0-9]+)/)
     file_path = "etc/config-#{result[1]}.yaml"
     return file_path if File.file?(file_path)
   end
@@ -261,14 +262,14 @@ begin
   if user_config.generate_config_path.empty?
     dcos_versions = load_dcos_versions
     # use latest known, if not specified
-    user_config.dcos_version = user_config.dcos_version.empty? ? dcos_versions['latest'] : user_config.dcos_version
-    user_config.generate_config_path = download_installer(dcos_versions, user_config.dcos_version)
+    user_config.version = user_config.version.empty? ? dcos_versions['latest'] : user_config.version
+    user_config.generate_config_path = download_installer(dcos_versions, user_config.version)
   end
   UI.success "Using DC/OS Installer: #{user_config.generate_config_path}", bold: true
 
   # update config based on version, unless specified
-  if user_config.config_path.empty? && !user_config.dcos_version.empty?
-    user_config.config_path = config_path(user_config.dcos_version)
+  if user_config.config_path.empty? && !user_config.version.empty?
+    user_config.config_path = config_path(user_config.version)
   end
   UI.success "Using DC/OS Config: #{user_config.config_path}", bold: true
 
