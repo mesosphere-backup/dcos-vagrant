@@ -1,5 +1,7 @@
 # Monkey patch for network interface detection bug in Vagrant 1.8.6
 # https://github.com/mitchellh/vagrant/issues/7876
+#
+# This file is a Derivative Work of Vagrant source, covered by the MIT license.
 
 require Vagrant.source_root.join('plugins/guests/linux/cap/network_interfaces.rb')
 
@@ -54,4 +56,4 @@ module VagrantPlugins
   end
 end
 
-Vagrant::UI::Colored.new.info 'Vagrant Patch Loaded: GuestLinux network_interfaces'
+Vagrant::UI::Colored.new.info 'Vagrant Patch Loaded: GuestLinux network_interfaces (1.8.6)'
