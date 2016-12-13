@@ -319,6 +319,9 @@ Vagrant.configure(2) do |config|
         v.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
 
         override.vm.network :private_network, ip: machine_type['ip']
+
+        # guest should sync time if more than 10s off host
+        v.customize [ "guestproperty", "set", :id, "/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold", 1000 ]
       end
 
       # Hack to remove loopback host alias that conflicts with vagrant-hostmanager
