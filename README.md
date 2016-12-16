@@ -10,17 +10,37 @@ Deploying DC/OS Vagrant involves creating a local cluster of VirtualBox VMs usin
 - Issue tracking is in [DCOS JIRA](https://dcosjira.atlassian.net/projects/VAGRANT/).
 - Remember to make a DC/OS JIRA account and login so you can get update notifications!
 
+# Quick Start
 
-# Where Do I Start?
+1. Install [Git](https://git-scm.com/downloads), [Vagrant](https://www.vagrantup.com/downloads.html), and [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
+
+1. Install vagrant-hostmanager plugin
+
+    ```
+    vagrant plugin install vagrant-hostmanager
+    ```
+
+1. Clone, Configure, and Deploy
+
+    ```
+    git clone https://github.com/dcos/dcos-vagrant
+    cd dcos-vagrant
+    cp VagrantConfig-1m-1a-1p.yaml VagrantConfig.yaml
+    vagrant up
+    ```
+
+    When prompted for a password, provide your local machine user password (modifies `/etc/hosts`).
+
+1. Access the GUI <http://m1.dcos/>
+
+For more detailed instructions, see [Deploy](/docs/deploy.md) and [Configure](/docs/configure.md).
+
+# DC/OS Vagrant Documentation
 
 - [Deploy](/docs/deploy.md)
 - [Configure](/docs/configure.md)
 - [Upgrade](/docs/upgrade.md)
 - [Examples](/examples)
-
-
-# DC/OS Vagrant Documentation
-
 - [Audience and Goals](/docs/audience-and-goals.md)
 - [Network Topology](/docs/network-topology.md)
 - [Alternate Install Methods](/docs/alternate-install-methods.md)

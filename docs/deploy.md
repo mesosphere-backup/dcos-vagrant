@@ -101,7 +101,7 @@ For additional options, see [Specify DC/OS Version](/docs/configure.md#specify-d
 
     ```bash
     cd <repo>
-    cp VagrantConfig.yaml.example VagrantConfig.yaml
+    cp VagrantConfig-1m-1a-1p.yaml VagrantConfig.yaml
     ```
 
     See [Configure DC/OS Vagrant](/docs/configure.md) for more details on customizing your cluster.
@@ -131,10 +131,10 @@ For additional options, see [Specify DC/OS Version](/docs/configure.md#specify-d
 
 # Deploy
 
-Specify which machines to deploy. For example (requires 9.5GB free memory):
+By default, all machines in the selected configuration are deployed.
 
 ```bash
-vagrant up m1 a1 p1 boot
+vagrant up
 ```
 
 Many permutations of machines are possible. See [Example Deployments](#example-deployments) for more options.
@@ -155,40 +155,42 @@ See [Configure](/docs/configure.md) for more details about node types, cluster c
 A minimal cluster supports the installation of a [minimally configured Cassandra, Marathon-LB, and Oinker example service](/examples/oinker).
 Most default configuration service packages will fail to install, because they require more memory or more than one agent node, but most may be configured to use fewer resources.
 
-By default (using the example [VagrantConfig](/VagrantConfig.yaml.example)), a minimal cluster requires 9.5GB free host memory.
-
 ```bash
-vagrant up m1 a1 p1 boot
+cp VagrantConfig-1m-1a-1p.yaml VagrantConfig.yaml
+vagrant up
 ```
+
+By default, a minimal cluster requires 9.5GB free host memory.
 
 ## Multi-Master Cluster
 
 Clusters must have an odd number of master nodes (usually 1, 3, or 5).
 
-By default (using the example [VagrantConfig](/VagrantConfig.yaml.example)), each master machine requires 1GB free host memory.
-
-For example, to deploy three masters (to support master node fail over) in an otherwise minimal cluster:
+To deploy a cluster with three masters:
 
 ```bash
-vagrant up m1 m2 m3 a1 p1 boot
+cp VagrantConfig-3m-1a-1p.yaml VagrantConfig.yaml
+vagrant up
 ```
+
+By default with this config, each master requires 1GB free host memory.
 
 Note: Master nodes may not be added to a DC/OS cluster after initial install.
 
 ## Multi-Agent Cluster
 
+To deploy a cluster three private agents:
+
+```bash
+cp VagrantConfig-1m-3a-1p.yaml VagrantConfig.yaml
+vagrant up
+```
+
 Individual virtual machines may be configured with greater or fewer resources in `VagrantConfig.yaml`. This is most useful for public and private agent nodes that make their resources available for DC/OS services and jobs.
 
 By default (using the example [VagrantConfig](/VagrantConfig.yaml.example)), each private agent machine requires 6GB free host memory, 5.5GB of which is made available to DC/OS. By default, each public agent machine requires 1.5GB free host memory, 1GB of which is made available to DC/OS.
 
-For example, to deploy 3 private agents and 2 public agents:
-
-```bash
-vagrant up m1 a1 a2 a3 p1 p2 boot
-```
-
 Note: Public agents are most often used for load balancers, like Marathon-LB. Other services are deployed on private agents to provide a DMZ for security reasons (tho those reasons are moot for a local development cluster on a host-only network). Regardless, most service packages default to installing onto private agent nodes.
-
 
 # Scale
 
@@ -200,15 +202,16 @@ Adding more nodes to an existing cluster requires your VagrantConfig.yaml to hav
 
 ## Add an Agent Node
 
+To add a node, your `VagrantCOnfig.yaml` must have more agents specified than you currently have deployed.
+
 Adding a node will not immediately change scheduled services, but may allow pending tasks to be scheduled using the newly available resources.
 
 ```
 # Example initial cluster deploy
+cp VagrantConfig-1m-3a-1p.yaml VagrantConfig.yaml
 vagrant up m1 a1 p1 boot
 # Add a private agent node
 vagrant up a2
-# Add a public agent node
-vagrant up p2
 ```
 
 ## Remove an Agent Node
@@ -217,11 +220,10 @@ Removing an agent node will cause all tasks running on that node to be reschedul
 
 ```
 # Example initial cluster deploy
-vagrant up m1 a1 p1 boot
+cp VagrantConfig-1m-3a-1p.yaml VagrantConfig.yaml
+vagrant up
 # Remove a private agent node
-vagrant destroy -f a1
-# Remove a public agent node
-vagrant destroy -f p1
+vagrant destroy -f a3
 ```
 
 # Shutting Down and Deleting Your Cluster

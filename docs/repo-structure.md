@@ -7,12 +7,13 @@
 	├── docs                           # Misc images or supporting documentation
 	├── etc                            # DC/OS config templates
 	├── examples                       # Example app/service definitions
+	├── installers                     # Location where DC/OS releases are downloaded
 	├── lib                            # DC/OS Vagrant plugin source
+	├── patch                          # Patches for buggy Vagrant versions
 	├── provision                      # Machine provisioning scripts and artifacts
-	├── <dcos_generate_config.sh>      # (Required) DC/OS installer
 	├── LICENSE                        # Software license
 	├── NOTICE                         # Non-license attributions
 	├── README.md                      # Intro Documentation
 	├── <VagrantConfig.yaml>           # (Required) Machine resource definitions
-	├── VagrantConfig.yaml.example     # Used to define node types. Copy to VagrantConfig.yaml
+	├── VagrantConfig-*.yaml           # Example machine configs. Copy to VagrantConfig.yaml
 	└── VagrantFile                    # Used to deploy nodes and install DC/OS

@@ -2,7 +2,7 @@
 
 The number of machines and their resources is configurable, depending on your needs and hardware constraints.
 
-The [VagrantConfig.yaml.example](/VagrantConfig.yaml.example) includes some preset machine configurations that have been chosen to allow the widest possible use cases within a constrained memory environment (e.g. a laptop with 16GB memory). These presets may or may not fit your use case. If they don't, just modify your `VagrantConfig.yaml` file to fit your needs.
+Several example `VagrantConfig.yaml` files are provided, but they can also be individually customized to change the number of nodes and the resources they are provisioned with.
 
 Deploying multiple VMs takes a lot of memory and Mesos reserves more for overhead on each node. So don't expect to be able to install every DC/OS service or use production-grade configurations. Most services will require reduced configurations in order to fit within the allocated memory. Some services (e.g. Cassandra) may require more nodes/resources than others.
 
@@ -21,10 +21,10 @@ Each machine in `VagrantConfig.yaml` must specify one of the following node type
 
 Which exact machines are created and provisioned can be specified in one of two ways:
 
+1. Deploy all machines specified in the `VagrantConfig.yaml` file with `vagrant up`
 1. Specify the machines by name when deploying (e.g. `vagrant up m1 a1 p1 boot`)
-1. Remove the unwanted machines from the `VagrantConfig.yaml` file and deploy them all with `vagrant up`
 
-Generally option 1 is recommended to avoid having to modify the `VagrantConfig.yaml` file.
+Generally option 1 is recommended for simplicity, but option 2 is equally valid.
 
 When selecting which machines to deploy, the following constraints must be observed:
 
@@ -39,7 +39,7 @@ DC/OS services will be installed on Mesos agent nodes. Mesos will auto-detect th
 
 - Mesos reserves half or 1 GB of each machine's memory for overhead (whichever is least)
 
-For example, `m1` has 3328 MB memory by default. Some of that memory will be taken by OS and DC/OS component processes (~ MB). 1 GB will be reserved by Mesos as overhead. The rest will be offered to Mesos frameworks for launching tasks (~ MB).
+For example, `a1` has 6144 MB memory by default. Some of that memory will be taken by OS and DC/OS component processes (~ MB). 1 GB will be reserved by Mesos as overhead (unless `memory-reserved` is specified). The rest will be offered to Mesos frameworks for launching tasks (~ MB).
 
 **IMPORTANT**: Make sure your local machine has enough memory to launch all your desired VMs, otherwise your machine may lock up as all the memory is consumed.
 
@@ -77,7 +77,7 @@ For example:
 
 ```
 export DCOS_VERSION=1.8.5
-vagrant up m1 a1 boot
+vagrant up
 ```
 
 New versions will be added as they become available. `git checkout master && git pull` to update your local version list.

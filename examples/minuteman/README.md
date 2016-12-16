@@ -11,10 +11,11 @@ Remember, the Minuteman VIPs are only accessible from other machines running Min
 ## Install DC/OS
 
 1. Follow the [dcos-vagrant setup](https://github.com/dcos/dcos-vagrant#setup) steps to configure your installation.
-1. Use vagrant to deploy a cluster with 4 private agent nodes and 1 public agent node (requires 10GB free memory):
+1. Use vagrant to deploy a cluster with 1 private agent node and 1 public agent node (requires 9.5GB free memory):
 
     ```
-    vagrant up m1 a1 a2 p1 boot
+    cp VagrantConfig-1m-1a-1p.yaml VagrantConfig.yaml
+    vagrant up
     ```
 1. Wait for DC/OS to come up. Check the dashboard: <http://m1.dcos/>.
 1. Install the [DC/OS CLI](https://dcos.io/docs/latest/usage/cli/) by following the instructions on the DC/OS Dashboard
