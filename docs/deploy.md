@@ -202,7 +202,7 @@ Adding more nodes to an existing cluster requires your VagrantConfig.yaml to hav
 
 ## Add an Agent Node
 
-To add a node, your `VagrantCOnfig.yaml` must have more agents specified than you currently have deployed.
+To add a node, your `VagrantConfig.yaml` must have more agents specified than you currently have deployed.
 
 Adding a node will not immediately change scheduled services, but may allow pending tasks to be scheduled using the newly available resources.
 
