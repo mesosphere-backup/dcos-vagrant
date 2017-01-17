@@ -3,27 +3,36 @@ versions:
   '1.8.7':
     channel: stable
     ref: '1b43ff7a0b9124db9439299b789f2e2dc3cc086c'
+    sha256: 'ddd9a86e4fc6ab149fb6c2ce38fc7d7c2f5891e62fb5ed41b91c3e99e02ed536'
   '1.8.6':
     channel: stable
     ref: 'cfccfbf84bbba30e695ae4887b65db44ff216b1d'
+    sha256: 'f6f0e7f8b478ad176764f29b2d3b0c89d226bf8b9bc0bf928f69555cd0f6ba77'
   '1.8.5':
     channel: stable
     ref: 'e665123df0dbb19adacaefe47d16a3de144d5733'
+    sha256: '05660575d0dc88ac1fbe78626e0429b82ed0c62f7185522e616fcfd16eae1b23'
   '1.8.4':
     channel: stable
     ref: 'e64024af95b62c632c90b9063ed06296fcf38ea5'
+    sha256: 'a77d8855df329e0394fa949f462bc5c06f894d798ee5619e88c83d7939c061ba'
   '1.8.3':
     channel: EarlyAccess
     ref: '636f8b72288e82ad3b0065928e0b492af4c7cf66'
+    sha256: '421010c3b78c4cb779d93b1f5788f4711621c407f53b534284912efa381dc147'
   '1.8.2':
     channel: EarlyAccess
     ref: '4cfc235259a2375c558f2e1bab3564419110459e'
+    sha256: '462202c19fe71394af51e1876ff9f910a11514e7e0325fc7cf2985f2f046deed'
   '1.8.1':
     channel: EarlyAccess
     ref: 'c1915a9f9f02caf7e34022eaea04f15ff853bd0e'
+    sha256: 'bb26cc21b18080fb0233bd9047ae74c4181dbe2eb662d103822c9eeb69d9f9a6'
   '1.8.0':
     channel: EarlyAccess
     ref: '586c0496863000322c016c631e463248d863690d'
+    sha256: '45471f4c9601022c8c18059d50beeb84c5141be3905fd02d6e179901f1d4f4c7'
   '1.7-open':
     channel: EarlyAccess
     ref: '14509fe1e7899f439527fb39867194c7a425c771'
+    sha256: '1f8093d4a88113d7490acd3c00e67068c07e0585189ea07e745c9e81517001a0'

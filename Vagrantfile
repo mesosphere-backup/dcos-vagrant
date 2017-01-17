@@ -6,6 +6,7 @@ require 'vagrant/util/downloader'
 require 'vagrant/ui'
 require 'yaml'
 require 'fileutils'
+require 'digest'
 
 UI = Vagrant::UI::Colored.new
 
@@ -123,6 +124,10 @@ class ValidationError < StandardError
     super(msg)
   end
 
+  def list
+    @list.dup
+  end
+
   def publish
     UI.error 'Errors:'
     @list.each do |error|
@@ -186,6 +191,38 @@ def load_dcos_versions
   dcos_versions
 end
 
+def validate_installer(path, sha256Expected)
+  UI.info "Validating Installer Checksum..."
+  sha256 = Digest::SHA256.file(path).hexdigest
+  unless sha256Expected == sha256
+    errorMsg = "Installer Checksum (SHA256) Mismatch - expected: '#{sha256Expected}'; found: '#{sha256}'"
+    UI.warn errorMsg
+    raise ValidationError, [errorMsg]
+  end
+end
+
+def download_installer_version(version, url, path, sha256Expected)
+  UI.success "Downloading DC/OS #{version} Installer...", bold:true
+  UI.info "Source: #{url}"
+  UI.info "Destination: #{path}"
+  dl = Vagrant::Util::Downloader.new(url, path, ui: UI)
+
+  retriesMax = 3
+  retries = 0
+  errorMsgs = []
+  begin
+    File.delete(path) if File.file?(path)
+    dl.download!
+    validate_installer(path, sha256Expected)
+
+  rescue ValidationError => e
+    errorMsgs += e.list
+    retry if (retries += 1) < retriesMax
+    errorMsgs += ["Maximum download retries exceeded: #{retriesMax}"]
+    raise ValidationError, errorMsgs
+  end
+end
+
 # download installer, if not already downloaded
 def download_installer(dcos_versions, version)
   version_meta = dcos_versions['versions'][version]
@@ -196,16 +233,22 @@ def download_installer(dcos_versions, version)
 
   url = "https://downloads.dcos.io/dcos/#{version_meta['channel']}/commit/#{version_meta['ref']}/dcos_generate_config.sh"
   path = "installers/dcos/dcos_generate_config-#{version}.sh"
+  sha256Expected = version_meta['sha256']
 
   FileUtils.mkdir_p Pathname.new(path).dirname
 
-  return path if File.file?(path)
+  if File.file?(path)
+    begin
+      validate_installer(path, sha256Expected)
+      # valid installer already exists
+      return path
+    rescue ValidationError
+      # stifle first checksum failure, if file already existed
+      # delete and re-download (with retries) as if it didn't exist
+    end
+  end
 
-  UI.success "Downloading DC/OS #{version} Installer...", bold:true
-  UI.info "Source: #{url}"
-  UI.info "Destination: #{path}"
-  dl = Vagrant::Util::Downloader.new(url, path, ui: UI)
-  dl.download!
+  download_installer_version(version, url, path, sha256Expected)
 
   path
 end
