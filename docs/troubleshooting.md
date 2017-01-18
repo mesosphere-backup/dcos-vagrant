@@ -159,3 +159,44 @@ This is a known behavior and should be fixed with Vagrant 1.8.5. See [mitchellh/
 ```
 
 **Solution**: Vagrant 1.8.6 introduced an [network interface detection bug](https://github.com/mitchellh/vagrant/issues/7876). It should be [fixed in 1.8.7](https://github.com/mitchellh/vagrant/pull/7866). For now use [Vagrant 1.8.4](https://releases.hashicorp.com/vagrant/1.8.4/) (with [VirtualBox 5.0](https://www.virtualbox.org/wiki/Download_Old_Builds_5_0)).
+
+## Vagrant was unable to mount VirtualBox shared folders
+
+**Problem**: While running `vagrant up` for the first time, bootstrapping the VM fails with an error like the following:
+
+```
+==> a1: Machine booted and ready!
+==> a1: Checking for guest additions in VM...
+a1: The guest additions on this VM do not match the installed version of
+a1: VirtualBox! In most cases this is fine, but in rare cases it can
+a1: prevent things such as shared folders from working properly. If you see
+a1: shared folder errors, please make sure the guest additions within the
+a1: virtual machine match the version of VirtualBox you have installed on
+a1: your host and reload your VM.
+a1:
+a1: Guest Additions Version: 5.0.20
+a1: VirtualBox Version: 5.1
+==> a1: Setting hostname...
+==> a1: Configuring and enabling network interfaces...
+==> a1: Mounting shared folders...
+a1: /vagrant => /data2/tmarble/src/github/dcos/dcos-vagrant
+Vagrant was unable to mount VirtualBox shared folders. This is usually
+because the filesystem "vboxsf" is not available. This filesystem is
+made available via the VirtualBox Guest Additions and kernel module.
+Please verify that these guest additions are properly installed in the
+guest. This is not a bug in Vagrant and is usually caused by a faulty
+Vagrant box. For context, the command attempted was:
+
+mount -t vboxsf -o uid=501,gid=501 vagrant /vagrant
+
+The error output from the command was: /sbin/mount.vboxsf: mounting failed with the error: No such device <device name>
+```
+
+As of this writing there is [a known issue with vagrant-vbguest](https://github.com/dotless-de/vagrant-vbguest/issues/240) (v0.13). If you have that installed, try uninstalling the plugin:
+
+    vagrant plugin uninstall vagrant-vbguest
+
+Then, destroy the VM and start over:
+
+    vagrant destroy
+    vagrant up
