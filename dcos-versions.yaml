@@ -1,5 +1,13 @@
-latest: '1.8.7'
+latest: '1.8.8'
 versions:
+  '1.9.0-rc1':
+    channel: EarlyAccess
+    ref: '26d16366a29aba258541a8653b00522c4c1c21fc'
+    sha256: '2708a904df43b73a34d701131a257954ba194c576e3f1b01799ee4ee1c0446ca'
+  '1.8.8':
+    channel: stable
+    ref: '602edc1b4da9364297d166d4857fc8ed7b0b65ca'
+    sha256: 'd00f31df6122d11fd5668f4b81c63c5c3b22f1753687f5207d67d49f89b5a0b1'
   '1.8.7':
     channel: stable
     ref: '1b43ff7a0b9124db9439299b789f2e2dc3cc086c'

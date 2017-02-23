@@ -35,6 +35,27 @@ Deploying DC/OS Vagrant involves creating a local cluster of VirtualBox VMs usin
 
 For more detailed instructions, see [Deploy](/docs/deploy.md) and [Configure](/docs/configure.md).
 
+
+# DC/OS Versions
+
+By default, DC/OS Vagrant uses the latest **stable** version of DC/OS.
+
+To use a newer **Early Access** version, specify the version explicitly (must be in the [list of known releases](dcos-versions.yaml)):
+
+```
+export DCOS_VERSION=1.9.0-rc1
+vagrant up
+```
+
+To use a bleeding edge **Master** or custom build, download the installer yourself, place it under the dcos-vagrant directory, and configure DC/OS Vagrant to use it:
+
+```
+export DCOS_GENERATE_CONFIG_PATH=dcos_generate_config-1.9.0-dev.sh
+export DCOS_CONFIG_PATH=etc/config-1.9.yaml
+vagrant up
+```
+
+
 # DC/OS Vagrant Documentation
 
 - [Deploy](/docs/deploy.md)
