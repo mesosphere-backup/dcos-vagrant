@@ -38,7 +38,7 @@ For more detailed instructions, see [Deploy](/docs/deploy.md) and [Configure](/d
 
 # DC/OS Versions
 
-Official release of DC/OS can be found at <http://dcos.io/releases/>
+Official releases of DC/OS can be found at <http://dcos.io/releases/>
 
 By default, DC/OS Vagrant uses the latest **stable** version of DC/OS.
 
