@@ -38,6 +38,8 @@ For more detailed instructions, see [Deploy](/docs/deploy.md) and [Configure](/d
 
 # DC/OS Versions
 
+Official release of DC/OS can be found at <http://dcos.io/releases/>
+
 By default, DC/OS Vagrant uses the latest **stable** version of DC/OS.
 
 To use a newer **early access** version, specify the version explicitly (must be in the [list of known releases](dcos-versions.yaml)):
@@ -47,15 +49,13 @@ export DCOS_VERSION=1.9.0-rc1
 vagrant up
 ```
 
-To use a bleeding edge **master** or custom build, download the installer yourself, place it under the dcos-vagrant directory, and configure DC/OS Vagrant to use it:
+To use a bleeding edge **master**, **enterprise**, or **custom** build, download the installer yourself, place it under the dcos-vagrant directory, and configure DC/OS Vagrant to use it:
 
 ```
 export DCOS_GENERATE_CONFIG_PATH=dcos_generate_config-1.9.0-dev.sh
 export DCOS_CONFIG_PATH=etc/config-1.9.yaml
 vagrant up
 ```
-
-Official release of DC/OS can be found at <http://dcos.io/releases/>
 
 
 # DC/OS Vagrant Documentation
