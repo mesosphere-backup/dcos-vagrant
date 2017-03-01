@@ -7,7 +7,7 @@ Deploying DC/OS Vagrant involves creating a local cluster of VirtualBox VMs usin
 
 ### Issue Tracking
 
-- Issue tracking is in [DCOS JIRA](https://jira.mesosphere.com/projects/DCOS_VAGRANT).
+- Issue tracking is in [DCOS JIRA](https://jira.mesosphere.com/projects/DCOS_VAGRANT/).
 - Remember to make a DC/OS JIRA account and login so you can get update notifications!
 
 # Quick Start
@@ -81,8 +81,8 @@ vagrant up
 - Find the Docs - https://dcos.io/docs/
 - Get Help - http://chat.dcos.io/
 - Join the Discussion - https://groups.google.com/a/dcos.io/d/forum/users/
-- Report a DC/OS Vagrant Issue - https://dcosjira.atlassian.net/projects/VAGRANT/
-- Report a DC/OS Issue - https://dcosjira.atlassian.net/projects/DCOS/
+- Report a DC/OS Vagrant Issue - https://jira.mesosphere.com/projects/DCOS_VAGRANT/
+- Report a DC/OS Issue - https://jira.mesosphere.com/projects/DCOS_OSS/
 - Contribute - https://dcos.io/contribute/
 
 
