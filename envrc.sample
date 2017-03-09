@@ -1,0 +1,18 @@
+#!/bin/sh
+
+# If you use [direnv](http://direnv.net), then you might want to copy this file
+# to `.envrc` and then do `direnv allow`.
+#
+# This will ensure that your [dcos-cli](https://github.com/dcos/dcos-cli/)
+# always points to your dcos-vagrant cluster, when you are in this directory.
+
+if which dcos > /dev/null 2>&1; then
+    export DCOS_CONFIG=$(pwd)/dcos.toml
+    if ! dcos config show core.dcos_url > /dev/null 2>&1; then
+        dcos config set core.dcos_url http://m1.dcos
+    fi
+    echo "DCOS_CONFIG = ${DCOS_CONFIG}"
+    dcos config show
+fi
+
+# vim: autoindent tabstop=4 shiftwidth=4 expandtab softtabstop=4 filetype=sh
