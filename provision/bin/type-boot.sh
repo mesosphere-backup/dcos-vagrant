@@ -13,7 +13,7 @@ fi
 
 if [ "$(docker inspect -f '{{.State.Running}}' nginx-boot)" != "true" ]; then
   echo ">>> Starting nginx (for distributing bootstrap artifacts to cluster)"
-  docker run -d --name=ngnix-boot -v /var/tmp/dcos:/usr/share/nginx/html -p 80:80 --restart=always nginx
+  docker run -d --name=nginx-boot -v /var/tmp/dcos:/usr/share/nginx/html -p 80:80 --restart=always nginx
 else
   echo ">>> Found nginx container running"
 fi
