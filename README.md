@@ -42,7 +42,7 @@ Official releases of DC/OS can be found at <http://dcos.io/releases/>
 
 By default, DC/OS Vagrant uses the latest **stable** version of DC/OS.
 
-To use a newer **early access** version, specify the version explicitly (must be in the [list of known releases](dcos-versions.yaml)):
+To use a different **stable** or **early access** version, specify the version explicitly (must be in the [list of known releases](dcos-versions.yaml)):
 
 ```
 export DCOS_VERSION=1.9.0-rc1
