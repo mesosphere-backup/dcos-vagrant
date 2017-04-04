@@ -341,7 +341,7 @@ Vagrant.configure(2) do |config|
 
   # Avoid random ssh key for demo purposes
   config.ssh.insert_key = false
-  
+
   # Vagrant Plugin Configuration: vagrant-vbguest
   if Vagrant.has_plugin?('vagrant-vbguest')
     # enable auto update guest additions
@@ -369,6 +369,12 @@ Vagrant.configure(2) do |config|
         v.name = machine.vm.hostname
         v.cpus = machine_type['cpus'] || 2
         v.memory = machine_type['memory'] || 2048
+
+        # Manually configure DNS
+        v.auto_nat_dns_proxy = false
+        # NAT proxy is flakey (times out frequently)
+        v.customize ['modifyvm', :id, '--natdnsproxy1', 'off']
+        # Host DNS resolution required to support host proxies and faster global DNS resolution
         v.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
 
         override.vm.network :private_network, ip: machine_type['ip']
