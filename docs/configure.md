@@ -48,6 +48,7 @@ For example, `a1` has 6144 MB memory by default. Some of that memory will be tak
 
 There are several configurable options when deploying a cluster and installing DC/OS on it. Most of them are configurable via environment variables:
 
+- `VAGRANT_LOG` - Vagrant log level (values: `debug`, `info`, `warn`, `error`; default: `info`)
 - `DCOS_BOX` - VirtualBox box image name (default: `mesosphere/dcos-centos-virtualbox`)
 - `DCOS_BOX_URL` - VirtualBox box image url or vagrant-cloud style image repo (default: `https://downloads.dcos.io/dcos-vagrant/metadata.json`)
 - `DCOS_BOX_VERSION` - VirtualBox box image version (default: `~> 0.5.0`)

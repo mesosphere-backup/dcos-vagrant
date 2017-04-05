@@ -3,12 +3,49 @@
 
 require_relative 'lib/vagrant-dcos'
 require 'vagrant/util/downloader'
-require 'vagrant/ui'
 require 'yaml'
 require 'fileutils'
 require 'digest'
 
-UI = Vagrant::UI::Colored.new
+class String
+  # colorization
+  def colorize(color_code)
+    "\e[#{color_code}m#{self}\e[0m"
+  end
+
+  def red
+    colorize(31)
+  end
+
+  def green
+    colorize(32)
+  end
+
+  def yellow
+    colorize(33)
+  end
+
+  def blue
+    colorize(34)
+  end
+
+  def pink
+    colorize(35)
+  end
+
+  def light_blue
+    colorize(36)
+  end
+end
+
+require 'log4r/config'
+UI = Log4r::Logger.new("dcos-vagrant")
+UI.add Log4r::Outputter.stdout
+if ENV['VAGRANT_LOG'] && ENV['VAGRANT_LOG'] != ''
+  Log4r.define_levels(*Log4r::Log4rConfig::LogLevels)
+  level = Log4r.const_get(ENV['VAGRANT_LOG'].upcase)
+  UI.level = level
+end
 
 ## User Config
 ##############################################
@@ -202,7 +239,7 @@ def validate_installer(path, sha256Expected)
 end
 
 def download_installer_version(version, url, path, sha256Expected)
-  UI.success "Downloading DC/OS #{version} Installer...", bold:true
+  UI.info "Downloading DC/OS #{version} Installer...".yellow
   UI.info "Source: #{url}"
   UI.info "Destination: #{path}"
   dl = Vagrant::Util::Downloader.new(url, path, ui: UI)
@@ -308,13 +345,13 @@ begin
     user_config.version = user_config.version.empty? ? dcos_versions['latest'] : user_config.version
     user_config.generate_config_path = download_installer(dcos_versions, user_config.version)
   end
-  UI.success "Using DC/OS Installer: #{user_config.generate_config_path}", bold: true
+  UI.info "Using DC/OS Installer: #{user_config.generate_config_path}".yellow
 
   # update config based on version, unless specified
   if user_config.config_path.empty? && !user_config.version.empty?
     user_config.config_path = config_path(user_config.version)
   end
-  UI.success "Using DC/OS Config: #{user_config.config_path}", bold: true
+  UI.info "Using DC/OS Config: #{user_config.config_path}".yellow
 
   UI.info 'Validating Machine Config...'
   machine_types = YAML.load_file(Pathname.new(user_config.machine_config_path).realpath)
