@@ -28,43 +28,10 @@ This example runs [Oinker-Go](https://github.com/mesosphere/oinker-go) on [Marat
 
 ## Install Cassandra
 
-1. Configure Cassandra with lower resource usage than default:
+1. Install the cassandra package using a low memory, single-node configuration:
 
     ```
-    cat >/tmp/cassandra.json <<EOF
-    {
-        "service": {
-            "cpus": 0.1,
-            "mem": 512,
-            "heap": 256
-        },
-        "executor": {
-            "cpus": 0.1,
-            "mem": 512,
-            "heap": 256
-        },
-        "nodes": {
-            "cpus": 0.5,
-            "mem": 2048,
-            "disk": 4096,
-            "heap": {
-                "size": 1024,
-                "new": 100
-            },
-            "count": 1,
-            "seeds": 1
-        },
-        "task": {
-            "cpus": 0.1,
-            "mem": 128
-        }
-    }
-    EOF
-    ```
-1. Install the cassandra package:
-
-    ```
-    dcos package install --options=/tmp/cassandra.json cassandra --yes
+    dcos package install --options=examples/oinker/pkg-cassandra.json cassandra --yes
     ```
 1. Wait for the Cassandra service to be running and healthy. Check the DC/OS Services UI: <http://m1.dcos/#/services/>.
 
@@ -79,21 +46,10 @@ For Mesosphere Enterprise DC/OS, follow the instructions to [Install Marathon-LB
 
 For open DC/OS, use the following steps to configure and install Marathon-LB:
 
-1. Configure marathon-lb with lower memory usage than default:
+1. Install the marathon-lb package using a low memory configuration:
 
     ```
-    cat >/tmp/marathon-lb.json <<EOF
-    {
-        "marathon-lb": {
-            "mem": 256
-        }
-    }
-    EOF
-    ```
-1. Install the marathon-lb package:
-
-    ```
-    dcos package install --options=/tmp/marathon-lb.json marathon-lb --yes
+    dcos package install --options=examples/oinker/pkg-marathon-lb.json marathon-lb --yes
     ```
 1. Wait for the Marathon-LB service to be running and healthy. Check the DC/OS Services UI: <http://m1.dcos/#/services/>.
 
