@@ -57,7 +57,7 @@ echo >&2 "DC/OS Major Version: ${DCOS_MAJOR_VERSION}"
 case "${OSTYPE}" in
   darwin*)  PLATFORM='darwin/x86-64'; BIN='/usr/local/bin'; EXE='dcos' ;;
   linux*)   PLATFORM='linux/x86-64'; BIN='/usr/local/bin'; EXE='dcos' ;;
-  msys*)    PLATFORM='windows/x86-64'; BIN='${HOME}/AppData/Local/Microsoft/WindowsApps'; EXE='dcos.exe' ;;
+  msys*)    PLATFORM='windows/x86-64'; BIN="${HOME}/AppData/Local/Microsoft/WindowsApps"; EXE='dcos.exe' ;;
   *)        echo >&2 "Unsupported operating system: ${OSTYPE}"; exit 1 ;;
 esac
 
