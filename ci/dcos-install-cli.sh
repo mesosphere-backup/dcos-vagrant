@@ -1,22 +1,26 @@
 #!/usr/bin/env bash
 
-# Installs the cli and configures the DC/OS URL.
+# Installs and configures the DC/OS CLI.
+#
+# Auto-detects the DC/OS version by asking an existing DC/OS cluster.
+# Auto-detects the local operating system to download the right DC/OS CLI binary.
 #
 # Options:
-#   DCOS_VERSION (defaults to the "latest" in dcos-versions.yaml)
+#   DCOS_URL -- URL to DC/OS cluster (default: http://m1.dcos/)
+#   DCOS_VERSION -- Version of DC/OS (default: <auto-detected>)
+#   DCOS_VERSION_DETECT -- URL of version detection script (default: file://${PWD}/ci/dcos-version.sh or https://raw.githubusercontent.com/dcos/dcos-vagrant/master/ci/dcos-version.sh)
 #
 # Usage:
 # $ ci/dcos-install-cli.sh
-#
-# Remote Usage:
-# $ curl https://raw.githubusercontent.com/dcos/dcos-vagrant/master/ci/dcos-install-cli.sh | bash
-#
-# CLI Usage:
 # $ dcos --version
 #
 # Alt Usage:
 # $ EXE="$(ci/dcos-install-cli.sh 2>/dev/null)"
 # $ ${EXE} --version
+#
+# Remote Usage:
+# $ curl https://raw.githubusercontent.com/dcos/dcos-vagrant/master/ci/dcos-install-cli.sh | bash
+# $ dcos --version
 
 set -o errexit
 set -o nounset
