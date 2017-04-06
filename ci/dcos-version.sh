@@ -21,6 +21,7 @@ DCOS_URL="${DCOS_URL:-http://m1.dcos/}"
 # Auto-detect version (unauthenticated)
 DCOS_VERSION_META="$(curl --fail --location --silent --show-error ${DCOS_URL%/}/dcos-metadata/dcos-version.json)"
 
+# Extract version from metadata
 DCOS_VERSION="$(echo "${DCOS_VERSION_META}" | grep 'version' | cut -d ':' -f 2 | cut -d '"' -f 2)"
 
 echo "${DCOS_VERSION}"
