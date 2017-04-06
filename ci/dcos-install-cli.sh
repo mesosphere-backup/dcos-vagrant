@@ -66,7 +66,12 @@ curl --fail --location --silent --show-error -O https://downloads.dcos.io/binari
 
 echo >&2 "Installing CLI..."
 chmod a+x "${EXE}"
-mv "${EXE}" "${BIN}/"
+# only use sudo if required
+if [[ -w "${BIN}" ]]; then
+  mv "${EXE}" "${BIN}/"
+else
+  sudo mv "${EXE}" "${BIN}/"
+fi
 
 echo >&2 "Configuring CLI..."
 dcos config set core.dcos_url "${DCOS_URL}"
