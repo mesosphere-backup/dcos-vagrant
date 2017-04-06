@@ -19,8 +19,12 @@ if [[ ${BASH_VERSINFO[0]} -lt 4 ]]; then
   exit 1
 fi
 
-DCOS_VERSION_LATEST="$(cat dcos-versions.yaml | grep '^latest' | cut -d "'" -f 2)"
-export DCOS_VERSION="${DCOS_VERSION:-${DCOS_VERSION_LATEST}}"
+# Default to latest known version unless DCOS_VERSION is specified
+if [[ -z "${DCOS_VERSION:-}" ]]; then
+  export DCOS_VERSION="$(cat dcos-versions.yaml | grep '^latest' | cut -d "'" -f 2)"
+fi
+
+# Minimal config
 export DCOS_MACHINE_CONFIG_PATH='VagrantConfig-1m-1a-1p.yaml'
 
 project_dir=$(cd "$(dirname "${BASH_SOURCE}")/.." && pwd -P)
@@ -63,6 +67,9 @@ dcos config set core.dcos_acs_token "${DCOS_ACS_TOKEN}"
 
 # Install & test Oinker
 ci/test-oinker.sh
+
+# Detect URL
+DCOS_URL="$(dcos config show core.dcos_url)"
 
 # Test GUI (authenticated)
 curl --fail --location --silent --show-error --verbose -H "Authorization: token=${DCOS_ACS_TOKEN}" ${DCOS_URL} -o /dev/null
