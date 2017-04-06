@@ -3,6 +3,7 @@
 
 require_relative 'lib/vagrant-dcos'
 require 'vagrant/util/downloader'
+require 'vagrant/ui'
 require 'yaml'
 require 'fileutils'
 require 'digest'
@@ -242,7 +243,12 @@ def download_installer_version(version, url, path, sha256Expected)
   UI.info "Downloading DC/OS #{version} Installer...".yellow
   UI.info "Source: #{url}"
   UI.info "Destination: #{path}"
-  dl = Vagrant::Util::Downloader.new(url, path, ui: UI)
+
+  options = {}
+  if UI.level <= Log4r::INFO
+    options[:ui] = Vagrant::UI::Colored.new
+  end
+  dl = Vagrant::Util::Downloader.new(url, path, options)
 
   retriesMax = 3
   retries = 0
