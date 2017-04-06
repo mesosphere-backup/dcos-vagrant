@@ -45,7 +45,7 @@ CLI_DIR="$(pwd)/.cli"
 mkdir -p "${CLI_DIR}"
 mv dcos "${CLI_DIR}/"
 PATH="${CLI_DIR}:$PATH"
-trap 'rm -f "${CLI_DIR}"; ci/cleanup.sh' EXIT
+trap 'rm -rf "${CLI_DIR}"; ci/cleanup.sh' EXIT
 
 # Configure CLI
 DCOS_URL="http://${DCOS_ADDRESS}/"
