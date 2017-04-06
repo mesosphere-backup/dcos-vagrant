@@ -6,9 +6,7 @@ set -o pipefail
 set -o xtrace
 
 # Require bash 4+ for associative arrays
-BASH_VERSION="$(bash --version | grep 'GNU bash, version' | sed 's/.*version \([0-9.]*\).*/\1/')"
-BASH_MAJOR_VERSION="${BASH_VERSION%.*.*}"
-if [[ ${BASH_MAJOR_VERSION} -lt 4 ]]; then
+if [[ ${BASH_VERSINFO[0]} -lt 4 ]]; then
   echo "Requires Bash 4+" >&2
   exit 1
 fi
