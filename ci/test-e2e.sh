@@ -5,6 +5,14 @@ set -o nounset
 set -o pipefail
 set -o xtrace
 
+# Require bash 4+ for associative arrays
+BASH_VERSION="$(bash --version | grep 'GNU bash, version' | sed 's/.*version \([0-9.]*\).*/\1/')"
+BASH_MAJOR_VERSION="${BASH_VERSION%.*.*}"
+if [[ ${BASH_MAJOR_VERSION} -lt 4 ]]; then
+  echo "Requires Bash 4+" >&2
+  exit 1
+fi
+
 DCOS_VERSION_LATEST="$(cat dcos-versions.yaml | grep '^latest' | cut -d "'" -f 2)"
 export DCOS_VERSION="${DCOS_VERSION:-${DCOS_VERSION_LATEST}}"
 DCOS_CLI_VERSION="dcos-${DCOS_VERSION%.*}" # strip last version segment
