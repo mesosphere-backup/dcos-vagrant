@@ -25,6 +25,8 @@ set -o pipefail
 # Default to dcos-vagrant address
 export DCOS_URL="${DCOS_URL:-http://m1.dcos/}"
 
+echo >&2 "DC/OS URL: ${DCOS_URL}"
+
 if [[ -z "${DCOS_VERSION:-}" ]]; then
   # Find version detection script
   if [[ -z "${DCOS_VERSION_DETECT:-}" ]]; then
