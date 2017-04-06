@@ -1,12 +1,17 @@
 #!/usr/bin/env bash
 
+# Installs and tests Oinker on DC/OS Vagrant.
+# Requires dcos CLI to be installed, configured, and logged in.
+#
+# Usage:
+# $ ci/test-oinker.sh
+
 set -o errexit
 set -o nounset
 set -o pipefail
 set -o xtrace
 
 project_dir=$(cd "$(dirname "${BASH_SOURCE}")/.." && pwd -P)
-
 cd "${project_dir}"
 
 # Install Cassandra

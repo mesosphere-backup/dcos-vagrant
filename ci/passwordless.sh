@@ -1,5 +1,18 @@
 #!/usr/bin/env bash
 
+# Configures the local (host) machine for passwordless sudo.
+#
+# This allows vagrant-hostmanager to modify /etc/hosts without entering the user's sudo password.
+# Only the exact command used by vagrant-hostmanager is made passwordless.
+# So this method is mildly more secure than global passwordless sudo.
+#
+# WARNING: ~/.vagrant.d/tmp/hosts.local can be used to hijack host resolution!
+# This method is primarily intended for CI machines.
+# Local users should avoid passwordless sudo for increased security.
+#
+# Usage:
+# $ sudo ci/passwordless.sh
+
 set -o errexit
 set -o nounset
 set -o pipefail

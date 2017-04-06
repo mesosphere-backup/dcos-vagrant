@@ -1,9 +1,23 @@
 #!/usr/bin/env bash
 
+# Performs End To End (e2e) testing of DC/OS Vagrant.
+#
+# Options:
+#   DCOS_VERSION (defaults to the "latest" in dcos-versions.yaml)
+#
+# Usage:
+# $ ci/test-e2e.sh
+
 set -o errexit
 set -o nounset
 set -o pipefail
 set -o xtrace
+
+# Mac-Only (for now)
+if ! echo "${OSTYPE}" | grep -q 'darwin'; then
+  echo >&2 "Incompatible OS - ${OSTYPE}"
+  exit 1
+fi
 
 # Require bash 4+ for associative arrays
 if [[ ${BASH_VERSINFO[0]} -lt 4 ]]; then
@@ -28,6 +42,8 @@ jq --version
 
 # Destroy All VMs
 ci/cleanup.sh
+
+# Destroy All VMs on exit
 trap 'ci/cleanup.sh' EXIT
 
 # Deploy
@@ -39,20 +55,10 @@ DCOS_ADDRESS=m1.dcos
 curl --fail --location --silent --show-error --verbose http://${DCOS_ADDRESS}/dcos-metadata/dcos-version.json
 
 # Install CLI
-curl -O https://downloads.dcos.io/binaries/cli/darwin/x86-64/${DCOS_CLI_VERSION}/dcos
-chmod +x dcos
-CLI_DIR="$(pwd)/.cli"
-mkdir -p "${CLI_DIR}"
-mv dcos "${CLI_DIR}/"
-PATH="${CLI_DIR}:$PATH"
-trap 'rm -rf "${CLI_DIR}"; ci/cleanup.sh' EXIT
+ci/dcos-install-cli.sh
 
-# Configure CLI
-DCOS_URL="http://${DCOS_ADDRESS}/"
-dcos config set core.dcos_url "${DCOS_URL}"
-
-# Log CLI & Cluster versions
-dcos --version
+# Delete CLI on exit
+trap 'rm -rf "$(pwd)/.cli"; ci/cleanup.sh' EXIT
 
 # Create User
 DCOS_USER="test@example.com"
@@ -65,5 +71,5 @@ dcos config set core.dcos_acs_token "${DCOS_ACS_TOKEN}"
 # Install & test Oinker
 ci/test-oinker.sh
 
-# Test GUI
+# Test GUI (authenticated)
 curl --fail --location --silent --show-error --verbose -H "Authorization: token=${DCOS_ACS_TOKEN}" ${DCOS_URL} -o /dev/null

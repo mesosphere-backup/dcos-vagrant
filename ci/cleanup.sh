@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
-# VirtualBox shutdown/delete is a bit flaky. So perform some more aggressive destruction.
+# Performs aggressive VM deletion.
+# Vagrant destroy can be flaky. So this method tries harder.
+#
+# Usage:
+# $ ci/cleanup.sh
 
 vagrant destroy -f
 

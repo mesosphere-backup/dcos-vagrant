@@ -1,5 +1,16 @@
 #!/usr/bin/env bash
 
+# Generates a JWT (token) for a user using the dcos-oauth private key.
+# Technically, this bypasses the login API and authentication provider.
+# This method is only for testing and should not be used in production!
+#
+# Usage:
+# $ ci/dcos-login.sh <user-email>
+#
+# Configure CLI:
+# $ DCOS_ACS_TOKEN="$(ci/dcos-login.sh "${DCOS_USER}")"
+# $ dcos config set core.dcos_acs_token "${DCOS_ACS_TOKEN}"
+
 set -o errexit
 set -o nounset
 set -o pipefail
