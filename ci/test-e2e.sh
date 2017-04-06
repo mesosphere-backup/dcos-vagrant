@@ -13,12 +13,6 @@ set -o nounset
 set -o pipefail
 set -o xtrace
 
-# Mac-Only (for now)
-if ! echo "${OSTYPE}" | grep -q 'darwin'; then
-  echo >&2 "Incompatible OS - ${OSTYPE}"
-  exit 1
-fi
-
 # Require bash 4+ for associative arrays
 if [[ ${BASH_VERSINFO[0]} -lt 4 ]]; then
   echo "Requires Bash 4+" >&2
@@ -27,7 +21,6 @@ fi
 
 DCOS_VERSION_LATEST="$(cat dcos-versions.yaml | grep '^latest' | cut -d "'" -f 2)"
 export DCOS_VERSION="${DCOS_VERSION:-${DCOS_VERSION_LATEST}}"
-DCOS_CLI_VERSION="dcos-${DCOS_VERSION%.*}" # strip last version segment
 export DCOS_MACHINE_CONFIG_PATH='VagrantConfig-1m-1a-1p.yaml'
 
 project_dir=$(cd "$(dirname "${BASH_SOURCE}")/.." && pwd -P)
