@@ -35,10 +35,11 @@ curl --fail --location --silent --show-error --verbose http://${DCOS_ADDRESS}/dc
 # Install CLI
 curl -O https://downloads.dcos.io/binaries/cli/darwin/x86-64/${DCOS_CLI_VERSION}/dcos
 chmod +x dcos
-mkdir -p .cli
-mv dcos .cli/
-PATH="$(pwd)/bin:$PATH"
-trap 'rm -f ./bin; ci/cleanup.sh' EXIT
+CLI_DIR="$(pwd)/.cli"
+mkdir -p "${CLI_DIR}"
+mv dcos "${CLI_DIR}/"
+PATH="${CLI_DIR}:$PATH"
+trap 'rm -f "${CLI_DIR}"; ci/cleanup.sh' EXIT
 
 # Configure CLI
 DCOS_URL="http://${DCOS_ADDRESS}/"
