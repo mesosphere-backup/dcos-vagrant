@@ -55,9 +55,6 @@ case "${OSTYPE}" in
   *)        echo >&2 "Unsupported operating system: ${OSTYPE}"; exit 1 ;;
 esac
 
-project_dir=$(cd "$(dirname "${BASH_SOURCE}")/.." && pwd -P)
-cd "${project_dir}"
-
 echo >&2 "Downloading CLI..."
 curl --fail --location --silent --show-error -O https://downloads.dcos.io/binaries/cli/${PLATFORM}/dcos-${DCOS_MAJOR_VERSION}/${EXE}
 
