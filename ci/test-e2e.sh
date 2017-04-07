@@ -52,10 +52,21 @@ DCOS_ADDRESS=m1.dcos
 curl --fail --location --silent --show-error --verbose http://${DCOS_ADDRESS}/dcos-metadata/dcos-version.json
 
 # Install CLI
-ci/dcos-install-cli.sh
+DCOS_CLI="$(ci/dcos-install-cli.sh)"
+echo "${DCOS_CLI}"
 
 # Delete CLI on exit
-trap 'rm -rf "$(pwd)/.cli"; ci/cleanup.sh' EXIT
+function cleanup() {
+  # only use sudo if required
+  if [[ -w "${DCOS_CLI}" ]]; then
+    rm -rf "${DCOS_CLI}"
+  else
+    sudo rm -rf "${DCOS_CLI}"
+  fi
+  # Burninate Everything!
+  ci/cleanup.sh
+}
+trap cleanup EXIT
 
 # Create User
 DCOS_USER="test@example.com"

@@ -9,4 +9,3 @@ dcos_generate_config*.sh
 /etc/config.yaml
 /VagrantConfig.yaml
 /installers
-/.cli
