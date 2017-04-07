@@ -6,11 +6,16 @@
 # Usage:
 # $ ci/cleanup.sh
 
+project_dir=$(cd "$(dirname "${BASH_SOURCE}")/.." && pwd -P)
+cd "${project_dir}"
+
+VBM="$(ci/find-vboxmanage.sh)"
+
 vagrant destroy -f
 
-for box in $( VBoxManage list vms | grep .dcos | cut -d '{' -f 2 | tr -d '}' ); do
-  VBoxManage controlvm "$box" poweroff
-  VBoxManage unregistervm "$box" --delete
+for box in $( "${VBM}" list vms | grep .dcos | cut -d '{' -f 2 | tr -d '}' ); do
+  "${VBM}" controlvm "$box" poweroff
+  "${VBM}" unregistervm "$box" --delete
 done
 
 vagrant global-status --prune

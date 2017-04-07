@@ -28,13 +28,12 @@ fi
 export DCOS_MACHINE_CONFIG_PATH='VagrantConfig-1m-1a-1p.yaml'
 
 project_dir=$(cd "$(dirname "${BASH_SOURCE}")/.." && pwd -P)
-
 cd "${project_dir}"
 
 # Log dependency versions
 vagrant --version
 vagrant plugin list
-VBoxManage --version
+"$(ci/find-vboxmanage.sh)" --version
 jq --version
 
 # Destroy All VMs
