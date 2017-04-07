@@ -33,6 +33,12 @@ Deploying DC/OS Vagrant involves creating a local cluster of VirtualBox VMs usin
 
 1. Access the GUI <http://m1.dcos/>
 
+1. Install the DC/OS CLI
+
+   ```
+   ci/dcos-install-cli.sh
+   ```
+
 For more detailed instructions, see [Deploy](/docs/deploy.md) and [Configure](/docs/configure.md).
 
 
@@ -70,7 +76,6 @@ vagrant up
 - [DC/OS Install Process](/docs/dcos-install-process.md)
 - [Install Ruby](/docs/install-ruby.md)
 - [Repo Structure](/docs/repo-structure.md)
-- [DC/OS CLI](/docs/dcos-cli.md)
 - [Troubleshooting](/docs/troubleshooting.md)
 - [VirtualBox Guest Additions](/docs/virtualbox-guest-additions.md)
 

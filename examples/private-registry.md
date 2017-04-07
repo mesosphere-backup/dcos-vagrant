@@ -38,21 +38,11 @@ The following steps demonstrate how to enable and use the private Docker registr
 
 1. Install the DC/OS CLI:
 
-    The following instructions are tailored to the CentOS base image, dcos-vagrant, and [dcos-cli](https://github.com/dcos/dcos-cli) 0.4.4. For general reference, see [Installing the DC/OS CLI](https://docs.mesosphere.com/usage/cli/install/)
-
     ```bash
-    $ curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py &&
-        sudo python get-pip.py &&
-        sudo pip install virtualenv &&
-        mkdir dcos &&
-        cd dcos &&
-            curl -O https://downloads.dcos.io/dcos-cli/install.sh &&
-            bash ./install.sh . https://m1.dcos &&
-        cd .. &&
-        source ./dcos/bin/env-setup
+    $ curl https://raw.githubusercontent.com/dcos/dcos-vagrant/master/ci/dcos-install-cli.sh | bash
     ```
 
-    Enter `yes` or `no` when prompted with `Modify your bash profile to add DCOS to your PATH? [yes/no]`.
+    For CLI reference, see [Installing the DC/OS CLI](https://docs.io/latest/usage/cli/)
 
 1. Prepare a DC/OS service definition:
 
@@ -117,7 +107,7 @@ The following steps demonstrate how to enable and use the private Docker registr
     NGINX_IP=$(curl --fail --location --silent --show-error m1.dcos:8123/v1/hosts/nginx.marathon.mesos | jq -r .[0].ip)
      ```
     This step is necessary from the boot machine (but not the masters or agents), because configuring it to resolve using Mesos-DNS would create a dependency cycle.
-    
+
 1. Test the nginx endpoint with curl
 
     ```bash

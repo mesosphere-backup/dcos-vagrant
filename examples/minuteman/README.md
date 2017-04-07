@@ -11,6 +11,7 @@ Remember, the Minuteman VIPs are only accessible from other machines running Min
 ## Install DC/OS
 
 1. Follow the [dcos-vagrant setup](https://github.com/dcos/dcos-vagrant#setup) steps to configure your installation.
+
 1. Use vagrant to deploy a cluster with 1 private agent node and 1 public agent node (requires 9.5GB free memory):
 
     ```
@@ -18,7 +19,12 @@ Remember, the Minuteman VIPs are only accessible from other machines running Min
     vagrant up
     ```
 1. Wait for DC/OS to come up. Check the dashboard: <http://m1.dcos/>.
-1. Install the [DC/OS CLI](https://dcos.io/docs/latest/usage/cli/) by following the instructions on the DC/OS Dashboard
+
+1. Install the [DC/OS CLI](https://dcos.io/docs/latest/usage/cli/)
+
+    ```
+    curl https://raw.githubusercontent.com/dcos/dcos-vagrant/master/ci/dcos-install-cli.sh | bash
+    ```
 
 
 
@@ -45,4 +51,4 @@ You can do this by running the following commands:
 
 
 ## Enable Minuteman on Your own App
-Add a label in the format `vip_PORT${IDX}` -> `tcp://1.2.3.4:5000`. Where, `1.2.3.4:5000` is the VIP. `${IDX}` should be replaced by the index for the port, beginning from 0 in the resource allocations. 
+Add a label in the format `vip_PORT${IDX}` -> `tcp://1.2.3.4:5000`. Where, `1.2.3.4:5000` is the VIP. `${IDX}` should be replaced by the index for the port, beginning from 0 in the resource allocations.

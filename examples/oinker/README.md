@@ -6,6 +6,7 @@ This example runs [Oinker-Go](https://github.com/mesosphere/oinker-go) on [Marat
 ## Install DC/OS
 
 1. Follow the [dcos-vagrant setup](https://github.com/dcos/dcos-vagrant#setup) steps to configure your installation.
+
 1. Use vagrant to deploy a cluster with 1 (large) private agent node and 1 (small) public agent node (requires 9.5 GB free memory):
 
     ```
@@ -14,7 +15,13 @@ This example runs [Oinker-Go](https://github.com/mesosphere/oinker-go) on [Marat
     ```
 
 1. Log into the DC/OS UI with a browser: <http://m1.dcos/>.
-1. Install and configure the [DC/OS CLI](https://dcos.io/docs/latest/usage/cli/) by following the instructions in the DC/OS UI.
+
+1. Install the [DC/OS CLI](https://dcos.io/docs/latest/usage/cli/)
+
+    ```
+    curl https://raw.githubusercontent.com/dcos/dcos-vagrant/master/ci/dcos-install-cli.sh | bash
+    ```
+
 1. Log into DC/OS with the DC/OS CLI:
 
     ```
