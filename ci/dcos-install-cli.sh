@@ -31,20 +31,16 @@ export DCOS_URL="${DCOS_URL:-http://m1.dcos/}"
 
 echo >&2 "DC/OS URL: ${DCOS_URL}"
 
+if [[ -z "${DCOS_VERSION:-}" ]] && [[ -z "${DCOS_VERSION_DETECT:-}" ]] && [[ -f 'ci/dcos-version.sh' ]]; then
+  # Default to local version detection script, if available.
+  echo >&2 "Version detect script: ci/dcos-version.sh"
+  DCOS_VERSION="$(ci/dcos-version.sh)"
+fi
+
 if [[ -z "${DCOS_VERSION:-}" ]]; then
-  # Find version detection script
-  if [[ -z "${DCOS_VERSION_DETECT:-}" ]]; then
-    if [[ -f 'ci/dcos-version.sh' ]]; then
-      DCOS_VERSION_DETECT="file://${PWD}/ci/dcos-version.sh"
-    else
-      # support curl | bash
-      DCOS_VERSION_DETECT='https://raw.githubusercontent.com/dcos/dcos-vagrant/master/ci/dcos-version.sh'
-    fi
-  fi
-
+  # Default to version remote detection script
+  DCOS_VERSION_DETECT="${DCOS_VERSION_DETECT:-https://raw.githubusercontent.com/dcos/dcos-vagrant/master/ci/dcos-version.sh}"
   echo >&2 "Version detect script: ${DCOS_VERSION_DETECT}"
-
-  # Detect version
   DCOS_VERSION="$(curl --fail --location --silent --show-error "${DCOS_VERSION_DETECT}" | bash)"
 fi
 
