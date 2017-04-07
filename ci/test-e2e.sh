@@ -58,7 +58,7 @@ echo "${DCOS_CLI}"
 # Delete CLI on exit
 function cleanup() {
   # only use sudo if required
-  if [[ -w "${DCOS_CLI}" ]]; then
+  if [[ -w "$(dirname "${DCOS_CLI}")" ]]; then
     rm -rf "${DCOS_CLI}"
   else
     sudo rm -rf "${DCOS_CLI}"
