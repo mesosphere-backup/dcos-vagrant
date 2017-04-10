@@ -1,5 +1,5 @@
-require 'semi_semantic/parse_error'
-require 'semi_semantic/version_segment'
+require_relative 'parse_error'
+require_relative 'version_segment'
 
 module SemiSemantic
   class Version

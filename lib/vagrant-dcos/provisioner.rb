@@ -3,6 +3,7 @@
 
 require_relative 'executor'
 require_relative 'errors'
+require_relative '../../vendor/semi_semantic/lib/semi_semantic/version'
 require 'thread'
 require 'yaml'
 require 'uri'
@@ -56,26 +57,25 @@ module VagrantPlugins
       def dcos_version()
         return @dcos_version if @dcos_version
 
-        # Run `dcos_generate_config.sh --version` twice.
         # Run inside `~/dcos` to cache output (tarball, genconf dir) for future runs.
-
-        # The first time extracts and loads the docker image which outputs non-json to stderr.
-        exit_code = sudo('cd ~/dcos && bash ~/dcos/dcos_generate_config.sh --version', error_check: false)
+        version_json = ''
+        exit_code = sudo('cd ~/dcos && bash ~/dcos/dcos_generate_config.sh --version', error_check: false) do |type, data|
+          version_json << data if type == :stdout
+        end
         if exit_code != 0
           # `--version` was added in 1.8
-          @dcos_version = 'Unknown'
+          # TODO: remove fallback once 1.7 support is dropped
+          @dcos_version = SemiSemantic::Version.parse('0.0.0-unknown')
           return @dcos_version
-        end
-
-        # The second time outputs just json.
-        version_json = ''
-        sudo('cd ~/dcos && bash ~/dcos/dcos_generate_config.sh --version') do |type, data|
-          version_json << data if type == :stdout
         end
         version_json = version_json.chomp
 
+        # trim lines before start of the json hash (stdout is messy)
+        json_start = version_json.index(/^{$/)
+        version_json = version_json[json_start..-1]
+
         # Parse json as yaml (yaml is a superset of json)
-        @dcos_version = YAML.load(version_json)['version']
+        @dcos_version = SemiSemantic::Version.parse(YAML.load(version_json)['version'])
         @dcos_version
       end
 
@@ -94,6 +94,13 @@ module VagrantPlugins
         # configure how to access the nodes from the boot machine
         gen_conf_config['master_list'] = machine_ips(active_machines, machine_types, 'master')
         gen_conf_config['agent_list'] = machine_ips(active_machines, machine_types, 'agent-private')
+        gen_conf_config['public_agent_list'] = machine_ips(active_machines, machine_types, 'agent-public')
+
+        # validate version/configuration compatibility
+        # TODO: remove check once 1.7 support is dropped
+        if [:ssh_push, :web].include?(install_method) && gen_conf_config['public_agent_list'].length > 0 && dcos_version < SemiSemantic::Version.parse('1.8.0')
+          raise InstallError.new("Public agents are not supported by install method '#{install_method}' prior to DC/OS 1.8.0")
+        end
 
         # configure how to access the boot machine from the nodes
         boot_address = find_address(@machine)
