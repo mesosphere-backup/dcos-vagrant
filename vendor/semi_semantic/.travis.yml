@@ -1,0 +1,10 @@
+language: ruby
+
+rvm:
+- 1.9
+- 2.0.0-p648 # OS X El Capitan default
+- 2.1
+- 2.3.0
+
+script:
+- bundle exec rspec
