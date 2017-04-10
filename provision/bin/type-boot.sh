@@ -4,14 +4,14 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-if [ "$(docker inspect -f '{{.State.Running}}' zookeeper-boot)" != "true" ]; then
+if [ "$(docker inspect -f '{{.State.Running}}' zookeeper-boot 2>/dev/null)" != "true" ]; then
   echo ">>> Starting zookeeper (for exhibitor bootstrap and quorum)"
   docker run -d --name=zookeeper-boot -p 2181:2181 -p 2888:2888 -p 3888:3888 --restart=always jplock/zookeeper
 else
   echo ">>> Found zookeeper container running"
 fi
 
-if [ "$(docker inspect -f '{{.State.Running}}' nginx-boot)" != "true" ]; then
+if [ "$(docker inspect -f '{{.State.Running}}' nginx-boot 2>/dev/null)" != "true" ]; then
   echo ">>> Starting nginx (for distributing bootstrap artifacts to cluster)"
   docker run -d --name=nginx-boot -v /var/tmp/dcos:/usr/share/nginx/html -p 80:80 --restart=always nginx
 else
@@ -39,4 +39,4 @@ fi
 mkdir -p ~/dcos/genconf
 
 echo ">>> Downloading dcos_generate_config.sh (for building bootstrap image for system)"
-curl "${DCOS_GENERATE_CONFIG_PATH}" > ~/dcos/dcos_generate_config.sh
+curl --fail --silent --show-error "${DCOS_GENERATE_CONFIG_PATH}" > ~/dcos/dcos_generate_config.sh
