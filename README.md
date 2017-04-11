@@ -1,14 +1,16 @@
-DC/OS Vagrant
-==================
+# DC/OS Vagrant
 
 Quickly provision a [DC/OS](https://github.com/dcos/dcos) cluster on a local machine for development, testing, or demonstration.
 
 Deploying DC/OS Vagrant involves creating a local cluster of VirtualBox VMs using the [dcos-vagrant-box](https://github.com/dcos/dcos-vagrant-box) base image and then installing [DC/OS](https://dcos.io/).
 
+[![Build Status](https://jenkins.mesosphere.com/service/jenkins/buildStatus/icon?job=dcos-vagrant-oinker)](https://jenkins.mesosphere.com/service/jenkins/view/DCOS%20Vagrant/job/dcos-vagrant-oinker/)
+
 ### Issue Tracking
 
 - Issue tracking is in [DCOS JIRA](https://jira.mesosphere.com/projects/DCOS_VAGRANT/).
 - Remember to make a DC/OS JIRA account and login so you can get update notifications!
+
 
 # Quick Start
 
