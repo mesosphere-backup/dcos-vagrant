@@ -319,14 +319,14 @@ end
 # Monkey patches and known-bad Vagrant versions
 case Vagrant::VERSION
 when '1.9.1'
-  require_relative 'patch/redhat_change_host_name_1.9.1'
-  require_relative 'patch/redhat_configure_networks_1.9.1'
+  require_relative 'vendor/vagrant-patches/redhat_change_host_name_1.9.1'
+  require_relative 'vendor/vagrant-patches/redhat_configure_networks_1.9.1'
 when '1.8.7'
   UI.error 'Unsupported Vagrant Version: 1.8.7', bold:true
   UI.error 'For more info, see https://github.com/mitchellh/vagrant/issues/7969'
   error_known_good_versions
 when '1.8.6'
-  require_relative 'patch/linux_network_interfaces_1.8.6'
+  require_relative 'vendor/vagrant-patches/linux_network_interfaces_1.8.6'
 when '1.8.5'
   UI.error 'Unsupported Vagrant Version: 1.8.5', bold:true
   UI.error 'For more info, see https://github.com/mitchellh/vagrant/issues/7610'
