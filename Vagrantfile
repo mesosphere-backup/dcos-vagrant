@@ -448,7 +448,7 @@ Vagrant.configure(2) do |config|
       end
 
       # Hack to remove loopback host alias that conflicts with vagrant-hostmanager
-      # https://dcosjira.atlassian.net/browse/VAGRANT-15
+      # https://jira.mesosphere.com/browse/DCOS_VAGRANT-15
       machine.vm.provision :shell, inline: "sed -i'' '/^127.0.0.1\\t#{machine.vm.hostname}\\t#{name}$/d' /etc/hosts"
 
       # provision a shared SSH key (required by DC/OS SSH installer)
