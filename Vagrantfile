@@ -311,6 +311,24 @@ end
 ## One Time Setup
 ##############################################
 
+def validate_command(machine_types)
+  args = ARGV.dup.select { |arg| !arg.start_with?('-') }
+  command = args[0]
+  args = args[1..-1]
+
+  machine_names = args.empty? && machine_types.keys || args
+  has_master_machine = !machine_names.select { |machine_name| machine_types[machine_name]['type'] == 'master' }.empty?
+
+  if command == 'halt' && has_master_machine
+    UI.error 'Halt command disabled by dcos-vagrant.'.red
+    UI.error 'DC/OS Master nodes will not automatically recover from quorum loss.'.red
+    UI.error 'Use `vagrant suspend` or `vagrant destroy` instead.'.red
+    return false
+  end
+
+  true
+end
+
 def error_known_good_versions
   UI.error 'Latest known-working versions: Vagrant 1.9.1, VirtualBox 5.1.10'
   UI.error ''
@@ -362,6 +380,9 @@ begin
   UI.info 'Validating Machine Config...'
   machine_types = YAML.load_file(Pathname.new(user_config.machine_config_path).realpath)
   validate_machine_types(machine_types)
+
+  UI.info 'Validating Command...'
+  validate_command(machine_types) || exit(1)
 
 rescue ValidationError => e
   e.publish
