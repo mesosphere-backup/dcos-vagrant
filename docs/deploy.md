@@ -238,10 +238,19 @@ vagrant destroy -f a3
 
 # Shutting Down and Deleting Your Cluster
 
-The normal Vagrant way to shut down VMs is `vagrant halt`, but if you use that method then the cluster won't come up again. For similar reasons, `vagrant reload` and `vagrant suspend && vagrant resume` also may not work. For more information, see [JIRA VAGRANT-7](https://dcosjira.atlassian.net/browse/VAGRANT-7).
+The normal Vagrant way to shut down VMs is `vagrant halt`, but if you use that method then the cluster won't come up again. For this reason, `vagrant halt` of master nodes has been disabled by dcos-vagrant. For more information, see [JIRA VAGRANT-7](https://dcosjira.atlassian.net/browse/VAGRANT-7).
 
 Instead, the recommended way to shut down a cluster is to destroy it (removing the the VMs and deleting their disks):
 
 ```
 vagrant destroy -f
 ```
+
+If you need to preserve the state of the cluster, use suspend/resume, which stores and restores memory state:
+
+```
+vagrant suspend
+vagrant resume
+```
+
+Restoring after a significant amount of time may cause timeouts to expire almost instantly after resume, as the VM clocks are adjusted. DC/OS may not always automatically recover from this unnatural state.
