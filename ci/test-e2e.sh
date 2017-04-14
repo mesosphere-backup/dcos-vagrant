@@ -42,6 +42,9 @@ ci/cleanup.sh
 # Destroy All VMs on exit
 trap 'ci/cleanup.sh' EXIT
 
+# Ensure latest dcos-vagrant-box
+vagrant box update
+
 # Deploy
 vagrant up
 
