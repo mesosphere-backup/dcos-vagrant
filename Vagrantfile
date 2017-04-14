@@ -316,14 +316,15 @@ def validate_command(machine_types)
   command = args[0]
   args = args[1..-1]
 
-  machine_names = args.empty? && machine_types.keys || args
-  has_master_machine = !machine_names.select { |machine_name| machine_types[machine_name]['type'] == 'master' }.empty?
-
-  if command == 'halt' && has_master_machine
-    UI.error 'Halt command disabled by dcos-vagrant.'.red
-    UI.error 'DC/OS Master nodes will not automatically recover from quorum loss.'.red
-    UI.error 'Use `vagrant suspend` or `vagrant destroy` instead.'.red
-    return false
+  if command == 'halt'
+    machine_names = args.empty? && machine_types.keys || args
+    has_master_machine = !machine_names.select { |machine_name| machine_types[machine_name]['type'] == 'master' }.empty?
+    if has_master_machine
+      UI.error 'Halt command disabled by dcos-vagrant.'.red
+      UI.error 'DC/OS Master nodes will not automatically recover from quorum loss.'.red
+      UI.error 'Use `vagrant suspend` or `vagrant destroy` instead.'.red
+      return false
+    end
   end
 
   true
