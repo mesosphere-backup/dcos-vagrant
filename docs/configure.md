@@ -56,7 +56,7 @@ There are several configurable options when deploying a cluster and installing D
     - Must contain at least one `boot` type machine, one `master` type machine, and one `agent` or `agent-public` type machine.
 - `DCOS_CONFIG_PATH` - Path to DC/OS configuration template (default: unset)
     - `master_list`, `agent_list`, `exhibitor_zk_hosts`, and `bootstrap_url` will be overridden.
-- `DCOS_VERSION` - Version of DC/OS to download and install, unless `DCOS_GENERATE_CONFIG_PATH` is specified. (default: `1.8.8`)
+- `DCOS_VERSION` - Version of DC/OS to download and install, unless `DCOS_GENERATE_CONFIG_PATH` is specified. (default: `1.9.0`)
 - `DCOS_GENERATE_CONFIG_PATH` - Path to DC/OS configuration generation script (default: unset)
 - `DCOS_INSTALL_METHOD` - One of the following [installation methods](/docs/alternate-install-methods.md) (default: `ssh_pull`):
     - `ssh_pull` - Use the "manual" DC/OS installation method (`dcos_install.sh`) with a pool of thread workers performing remote SHH installation.
