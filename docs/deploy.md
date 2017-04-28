@@ -24,11 +24,11 @@ Most service packages *can* be installed on the Minimum cluster, **when individu
 
 Ideally, DC/OS Vagrant would work everywhere Vagrant and VirtualBox do, but each platform tends to require custom tweaks to the vagrant and guest OS configurations.
 
-The following host OS's have been reported to work:
+The following host OS's have been reported to work (regularly tested versions in bold):
 
-- Mac OS X 10.10, 10.11, 10.12
-- Windows 7, 10
-- Ubuntu 14, 15, 16
+- Mac OS X **10.10**, 10.11, 10.12
+- Windows 7, **10**
+- Ubuntu 14, 15, **16**
 - Fedora 23
 - Arch Linux
 
