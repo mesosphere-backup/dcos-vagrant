@@ -57,19 +57,25 @@ case "${OSTYPE}" in
   *)        echo >&2 "Unsupported operating system: ${OSTYPE}"; exit 1 ;;
 esac
 
-echo >&2 "Downloading CLI..."
-curl --fail --location --silent --show-error -O https://downloads.dcos.io/binaries/cli/${PLATFORM}/dcos-${DCOS_MAJOR_VERSION}/${EXE}
+CLI_DIR="$(mktemp -d "${TMPDIR:-/tmp/}dcos-install-cli.XXXXXXXXXXXX")"
+trap "rm -rf ${CLI_DIR}" EXIT
 
-echo >&2 "Installing CLI..."
-chmod a+x "${EXE}"
+DCOS_CLI_URL="https://downloads.dcos.io/binaries/cli/${PLATFORM}/dcos-${DCOS_MAJOR_VERSION}/${EXE}"
+echo >&2 "Download URL: ${DCOS_CLI_URL}"
+echo >&2 "Download Path: ${CLI_DIR}/${EXE}"
+curl --fail --location --silent --show-error -o "${CLI_DIR}/${EXE}" "${DCOS_CLI_URL}"
+
+echo >&2 "Install Path: ${BIN}/${EXE}"
+chmod a+x "${CLI_DIR}/${EXE}"
 # only use sudo if required
 if [[ -w "${BIN}" ]]; then
-  mv "${EXE}" "${BIN}/"
+  mv "${CLI_DIR}/${EXE}" "${BIN}/"
 else
-  sudo mv "${EXE}" "${BIN}/"
+  sudo mv "${CLI_DIR}/${EXE}" "${BIN}/"
 fi
+rm -rf ${CLI_DIR}
 
-echo >&2 "Configuring CLI..."
+echo >&2 "Config: core.dcos_url=${DCOS_URL}"
 dcos config set core.dcos_url "${DCOS_URL}"
 
 # Log CLI & Cluster versions
