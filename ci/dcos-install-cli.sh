@@ -57,7 +57,8 @@ case "${OSTYPE}" in
   *)        echo >&2 "Unsupported operating system: ${OSTYPE}"; exit 1 ;;
 esac
 
-CLI_DIR="$(mktemp -d "${TMPDIR:-/tmp/}dcos-install-cli.XXXXXXXXXXXX")"
+TMPDIR="${TMPDIR:-/tmp/}"
+CLI_DIR="$(mktemp -d "${TMPDIR%/}/dcos-install-cli.XXXXXXXXXXXX")"
 trap "rm -rf ${CLI_DIR}" EXIT
 
 DCOS_CLI_URL="https://downloads.dcos.io/binaries/cli/${PLATFORM}/dcos-${DCOS_MAJOR_VERSION}/${EXE}"
