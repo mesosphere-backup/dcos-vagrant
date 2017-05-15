@@ -167,9 +167,9 @@ class ValidationError < StandardError
   end
 
   def publish
-    UI.error 'Errors:'
+    UI.error 'Errors:'.red
     @list.each do |error|
-      UI.error "  #{error}"
+      UI.error "  #{error}".red
     end
     exit 2
   end
@@ -331,7 +331,7 @@ def validate_command(machine_types)
 end
 
 def error_known_good_versions
-  UI.error 'Latest known-working versions: Vagrant 1.9.3, VirtualBox 5.1.22'
+  UI.error 'Latest known-working versions: Vagrant 1.9.3, VirtualBox 5.1.22'.red
   UI.error ''
 end
 
@@ -339,22 +339,23 @@ end
 case Vagrant::VERSION
 when '1.9.4'
   if Vagrant::Util::Platform.windows?
-    UI.error 'Unsupported Vagrant Version (on Windows): 1.9.4', bold:true
-    UI.error 'For more info, see https://github.com/mitchellh/vagrant/issues/8520'
+    UI.error 'Unsupported Vagrant Version (on Windows): 1.9.4'.red
+    UI.error 'For more info, see https://github.com/mitchellh/vagrant/issues/8520'.red
     error_known_good_versions
+    Vagrant.require_version '>= 1.8.4', '!= 1.8.5', '!= 1.8.7', '!= 1.9.4'
   end
 when '1.9.1'
   require_relative 'vendor/vagrant-patches/redhat_change_host_name_1.9.1'
   require_relative 'vendor/vagrant-patches/redhat_configure_networks_1.9.1'
 when '1.8.7'
-  UI.error 'Unsupported Vagrant Version: 1.8.7', bold:true
-  UI.error 'For more info, see https://github.com/mitchellh/vagrant/issues/7969'
+  UI.error 'Unsupported Vagrant Version: 1.8.7'.red
+  UI.error 'For more info, see https://github.com/mitchellh/vagrant/issues/7969'.red
   error_known_good_versions
 when '1.8.6'
   require_relative 'vendor/vagrant-patches/linux_network_interfaces_1.8.6'
 when '1.8.5'
-  UI.error 'Unsupported Vagrant Version: 1.8.5', bold:true
-  UI.error 'For more info, see https://github.com/mitchellh/vagrant/issues/7610'
+  UI.error 'Unsupported Vagrant Version: 1.8.5'.red
+  UI.error 'For more info, see https://github.com/mitchellh/vagrant/issues/7610'.red
   error_known_good_versions
 end
 
