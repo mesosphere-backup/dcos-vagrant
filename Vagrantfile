@@ -332,7 +332,6 @@ end
 
 def error_known_good_versions
   UI.error 'Latest known-working versions: Vagrant 1.9.3, VirtualBox 5.1.22'.red
-  UI.error ''
 end
 
 # Monkey patches and known-bad Vagrant versions
