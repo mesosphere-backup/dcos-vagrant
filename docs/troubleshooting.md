@@ -159,3 +159,23 @@ This is a known behavior and should be fixed with Vagrant 1.8.5. See [mitchellh/
 ```
 
 **Solution**: Vagrant 1.8.6 introduced an [network interface detection bug](https://github.com/mitchellh/vagrant/issues/7876). It should be [fixed in 1.8.7](https://github.com/mitchellh/vagrant/pull/7866). For now use [Vagrant 1.8.4](https://releases.hashicorp.com/vagrant/1.8.4/) (with [VirtualBox 5.0](https://www.virtualbox.org/wiki/Download_Old_Builds_5_0)).
+
+## Connection Aborted Without Retry
+
+**Problem**: Connection to guest machine fails and machine is destroyed without retry:
+
+```
+==> m1: Waiting for machine to boot. This may take a few minutes...
+    m1: SSH address: 127.0.0.1:2222
+    m1: SSH username: vagrant
+    m1: SSH auth method: private key
+    m1: Warning: Connection reset. Retrying...
+==> m1: Forcing shutdown of VM...
+==> m1: Destroying VM and associated drives...
+C:/HashiCorp/Vagrant/embedded/gems/gems/net-ssh-4.1.0/lib/net/ssh/transport/server_version.rb:54:in `readpartial': An established connection was aborted by the software in your host machine. (Errno::ECONNABORTED)
+	from C:/HashiCorp/Vagrant/embedded/gems/gems/net-ssh-4.1.0/lib/net/ssh/transport/server_version.rb:54:in `block (2 levels) in negotiate!'
+...
+	from C:/HashiCorp/Vagrant/embedded/gems/gems/vagrant-1.9.4/lib/vagrant/action/builtin/wait_for_communicator.rb:16:in `block in call'
+```
+
+**Solution**: Vagrant 1.9.4 introduces a [forced shutdown of VM bug](https://github.com/mitchellh/vagrant/issues/8520) on Windows. It should be fixed in [1.9.5](https://github.com/mitchellh/vagrant/pull/8526). For now use [Vagrant 1.9.3](https://releases.hashicorp.com/vagrant/1.9.3/).
