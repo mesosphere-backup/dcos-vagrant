@@ -18,7 +18,7 @@ VAGRANT_VERSIONS_JSON="$(curl -s https://releases.hashicorp.com/vagrant/index.js
 LATEST_VERSION="$(echo "${VAGRANT_VERSIONS_JSON}" |jq -r '.versions | keys' | jq -r max)"
 echo >&2 "Latest Version: ${LATEST_VERSION}"
 
-DEB_URL=$(echo $JSON | jq -r ".versions" | jq -r ".[\"${LATEST_VERSION}\"]" | jq -r ".builds | .[] | select(.arch==\"${ARCH}\") | select(.os==\"debian\") | .url")
+DEB_URL=$(echo ${VAGRANT_VERSIONS_JSON}" | jq -r ".versions" | jq -r ".[\"${LATEST_VERSION}\"]" | jq -r ".builds | .[] | select(.arch==\"${ARCH}\") | select(.os==\"debian\") | .url")
 echo >&2 "Deb URL: ${DEB_URL}"
 
 DEB_FILE="$(basename "${DEB_URL}")"
