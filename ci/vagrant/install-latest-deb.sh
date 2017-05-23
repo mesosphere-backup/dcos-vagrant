@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+# Installs the latest Vagrant from deb file.
+# For Debian or Debian-like operating systems, like Ubuntu.
+# New binary will overwrite old binary (unless it changes between versions).
+#
+# Usage: install-latest.sh <x86_64|i686>
+
 set -o errexit -o nounset -o pipefail
 
 function create_temp_dir() {
@@ -32,8 +38,15 @@ echo >&2 "Downloading deb file..."
 curl --fail --location --silent --show-error -o "${DOWNLOAD_PATH}/${DEB_FILE}" "${DEB_URL}"
 echo >&2 "Downloaded deb file: ${DOWNLOAD_PATH}/${DEB_FILE}"
 
+# detect if sudo is required
+if [[ "${EUID}" != "0" ]]; then
+  SUDO='sudo'
+else
+  SUDO=''
+fi
+
 echo >&2 "Installing from deb file..."
-sudo dpkg -i "${DOWNLOAD_PATH}/${DEB_FILE}"
+${SUDO} dpkg -i "${DOWNLOAD_PATH}/${DEB_FILE}"
 
 echo >&2 "vagrant --version"
 vagrant --version >&2
