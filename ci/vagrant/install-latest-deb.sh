@@ -11,14 +11,15 @@ ARCH="${1:-}"
 if [[ "${ARCH}" != 'x86_64' ]] && [[ "${ARCH}" != 'i686' ]]; then
   echo >&2 "Invalid architecture: must be 'x86_64' or 'i686' but found '${ARCH}'"
   echo >&2 "Usage: install-latest.sh <x86_64|i686>"
+  exit 2
 fi
 echo >&2 "Architecture: ${ARCH}"
 
 VAGRANT_VERSIONS_JSON="$(curl -s https://releases.hashicorp.com/vagrant/index.json)"
-LATEST_VERSION="$(echo "${VAGRANT_VERSIONS_JSON}" |jq -r '.versions | keys' | jq -r max)"
+LATEST_VERSION="$(echo "${VAGRANT_VERSIONS_JSON}" | jq -e -r '.versions | keys | max')"
 echo >&2 "Latest Version: ${LATEST_VERSION}"
 
-DEB_URL=$(echo "${VAGRANT_VERSIONS_JSON}" | jq -r ".versions" | jq -r ".[\"${LATEST_VERSION}\"]" | jq -r ".builds | .[] | select(.arch==\"${ARCH}\") | select(.os==\"debian\") | .url")
+DEB_URL=$(echo "${VAGRANT_VERSIONS_JSON}" | jq -e -r ".versions[\"${LATEST_VERSION}\"].builds[] | select(.arch==\"${ARCH}\") | select(.os==\"debian\") | .url")
 echo >&2 "Deb URL: ${DEB_URL}"
 
 DEB_FILE="$(basename "${DEB_URL}")"
