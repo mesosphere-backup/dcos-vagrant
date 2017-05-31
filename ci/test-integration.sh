@@ -5,7 +5,7 @@ set -o nounset
 set -o pipefail
 
 #TODO: detect agent IPs
-export SLAVE_HOSTS=192.168.65.111
+export SLAVE_HOSTS=192.168.65.111,192.168.65.121
 export PUBLIC_SLAVE_HOSTS=192.168.65.60
 export VAGRANT_LOG=error
 
