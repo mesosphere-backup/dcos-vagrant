@@ -25,7 +25,7 @@ if [[ -z "${DCOS_VERSION:-}" ]]; then
 fi
 
 # Minimal config
-export DCOS_MACHINE_CONFIG_PATH='VagrantConfig-1m-1a-1p.yaml'
+export DCOS_MACHINE_CONFIG_PATH='VagrantConfig-1m-2a-1p.yaml'
 
 project_dir=$(cd "$(dirname "${BASH_SOURCE}")/.." && pwd -P)
 cd "${project_dir}"
