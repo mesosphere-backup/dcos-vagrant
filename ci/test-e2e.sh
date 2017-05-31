@@ -92,4 +92,4 @@ curl --fail --location --silent --show-error --verbose -H "Authorization: token=
 ci/dcos-create-user.sh "albert@bekstil.net"
 
 # Integration tests
-ci/test/integration.sh
+ci/test-integration.sh
