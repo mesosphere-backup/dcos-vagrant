@@ -86,3 +86,10 @@ DCOS_URL="$(dcos config show core.dcos_url)"
 
 # Test GUI (authenticated)
 curl --fail --location --silent --show-error --verbose -H "Authorization: token=${DCOS_ACS_TOKEN}" ${DCOS_URL} -o /dev/null
+
+# Add test user (required to be added when not the first user)
+# TODO: only required for OSS DC/OS
+ci/dcos-create-user.sh "albert@bekstil.net"
+
+# Integration tests
+ci/test/integration.sh
