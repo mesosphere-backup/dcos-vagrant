@@ -4,7 +4,7 @@ Quickly provision a [DC/OS](https://github.com/dcos/dcos) cluster on a local mac
 
 Deploying DC/OS Vagrant involves creating a local cluster of VirtualBox VMs using the [dcos-vagrant-box](https://github.com/dcos/dcos-vagrant-box) base image and then installing [DC/OS](https://dcos.io/).
 
-[![Build Status](https://jenkins.mesosphere.com/service/jenkins/buildStatus/icon?job=dcos-vagrant-oinker)](https://jenkins.mesosphere.com/service/jenkins/view/dcos-vagrant/job/dcos-vagrant-oinker/)
+[![Build Status](https://jenkins.mesosphere.com/service/jenkins/buildStatus/icon?job=dcos-vagrant-test-e2e)](https://jenkins.mesosphere.com/service/jenkins/view/dcos-vagrant/job/dcos-vagrant-test-e2e/)
 
 ### Issue Tracking
 
