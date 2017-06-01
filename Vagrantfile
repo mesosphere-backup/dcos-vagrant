@@ -460,7 +460,10 @@ Vagrant.configure(2) do |config|
 
       # provision a shared SSH key (required by DC/OS SSH installer)
       machine.vm.provision :dcos_ssh, name: 'Shared SSH Key'
-
+	    
+      # restart network so private network interfaces are enabled
+      machine.vm.provision :shell, inline: "service network restart"
+	    
       machine.vm.provision :shell do |vm|
         vm.name = 'Certificate Authorities'
         vm.path = provision_script_path('ca-certificates')
