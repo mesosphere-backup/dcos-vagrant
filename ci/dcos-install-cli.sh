@@ -47,7 +47,7 @@ fi
 echo >&2 "DC/OS Version: ${DCOS_VERSION}"
 
 # Get major version by stripping the last version segment
-DCOS_MAJOR_VERSION="${DCOS_VERSION%.*}"
+DCOS_MAJOR_VERSION="$(echo "${DCOS_VERSION}" | sed -e "s#[^0-9]*\([0-9][0-9]*[.][0-9][0-9]*\).*#\1#")"
 echo >&2 "DC/OS Major Version: ${DCOS_MAJOR_VERSION}"
 
 case "${OSTYPE}" in
