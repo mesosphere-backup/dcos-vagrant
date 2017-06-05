@@ -16,7 +16,7 @@ cat << 'EOF' > "/usr/local/sbin/dcos-postflight"
 TIMEOUT_SECONDS="${1:-900}"
 if [[ -e "/opt/mesosphere/bin/3dt" ]]; then
     # DC/OS >= 1.7
-    CMD="/opt/mesosphere/bin/3dt -diag"
+    CMD="/opt/mesosphere/bin/3dt --diag"
 elif [[ -e "/opt/mesosphere/bin/dcos-diagnostics.py" ]]; then
     # DC/OS <= 1.6
     CMD="/opt/mesosphere/bin/dcos-diagnostics.py"
