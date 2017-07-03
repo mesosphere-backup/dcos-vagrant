@@ -22,6 +22,10 @@ versions:
     channel: EarlyAccess
     ref: '26d16366a29aba258541a8653b00522c4c1c21fc'
     sha256: '2708a904df43b73a34d701131a257954ba194c576e3f1b01799ee4ee1c0446ca'
+  '1.8.9':
+    channel: 'stable/1.8.9'
+    ref: '65d66d7f399fe13bba8960c1f2c42ef9fa5dcf8d'
+    sha256: '0883173ace1276ba9d609deae30a7377e82f65bbe6b01f282a1c47434d9d7155'
   '1.8.8':
     channel: stable
     ref: '602edc1b4da9364297d166d4857fc8ed7b0b65ca'
