@@ -37,10 +37,10 @@ The default guest OS box from [dcos-vagrant-box](https://github.com/dcos/dcos-va
 ## Software
 
 - [Git](https://git-scm.com/) - clone repo
-- [Vagrant](https://www.vagrantup.com/) (1.9.1 recommended) - virtualization orchestration
+- [Vagrant](https://www.vagrantup.com/) (1.9.7 recommended) - virtualization orchestration
   - [Host Manager Plugin](https://github.com/smdahlen/vagrant-hostmanager) - manage /etc/hosts
   - (Optional) [VBGuest Plugin](https://github.com/dotless-de/vagrant-vbguest) - manage vbox guest additions
-- [VirtualBox](https://www.virtualbox.org/) (5.1.10 recommended) - virtualization engine
+- [VirtualBox](https://www.virtualbox.org/) (5.1.24 recommended) - virtualization engine
 - (Optional) [jq](https://stedolan.github.io/jq/) - json parser used by examples
 
 **Vagrant Notes**:
