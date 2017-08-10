@@ -76,7 +76,7 @@ function await() {
   PREV_STATUS_OUT=""
   until eval "${PROGRESS_CMD}" >&2 && OUT=$(eval "${CMD}" 2>&1) || [[ TIMEOUT_SECONDS -eq 0 ]]; do
     if [[ -n "${STATUS_CMD}" ]]; then
-      STATUS_OUT=$(eval "${STATUS_CMD}" 2>&1)
+      STATUS_OUT=$(eval "${STATUS_CMD}" 2>&1 || true)
       if [[ "${STATUS_OUT}" != "${PREV_STATUS_OUT}" ]]; then
         PREV_STATUS_OUT="${STATUS_OUT}"
         if [[ "${PROGRESS}" == "dots" ]]; then
