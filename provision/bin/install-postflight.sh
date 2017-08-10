@@ -111,7 +111,7 @@ if [[ -e "/opt/mesosphere/bin/dcos-diagnostics" ]]; then
   # DC/OS >= 1.10
   TARGET="dcos-diagnostics check node-poststart"
   CMD="/opt/mesosphere/bin/dcos-diagnostics check node-poststart"
-  STATUS_CMD="echo \"\$(${CMD} 2>&1 || true)\" | grep '^\[.*\]:' | sed 's/^\[\(.*\)\]:.*/\1/' | sort | tr '\n' ',' | sed 's/,$//' | xargs echo 'Pending:'"
+  STATUS_CMD="echo 'Pending:' && echo \"\$(${CMD} 2>&1 || true)\" | jq -r '.checks | select(.status != 0) | to_entries[] | \"\(.key) - \(.value.output)\"' | sed '/^\s*$/d'"
 elif [[ -e "/opt/mesosphere/bin/3dt" ]]; then
   # DC/OS <= 1.9
   TARGET="3dt --diag"
