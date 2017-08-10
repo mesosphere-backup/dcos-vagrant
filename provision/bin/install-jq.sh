@@ -4,12 +4,18 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
+LOCATION="/usr/sbin/jq"
+
 if hash jq 2>/dev/null; then
   echo "jq already installed: $(which jq)"
+  if [[ "$(which jq)" != "${LOCATION}" ]]; then
+    echo "Moving jq: ${LOCATION}"
+    mv "$(which jq)" "${LOCATION}"
+  fi
   exit 0
 fi
 
-echo ">>> Installing jq: /usr/local/sbin/jq"
+echo ">>> Installing jq: ${LOCATION}"
 
 WORK_DIR="$(mktemp -d)"
 trap "rm -rf '${WORK_DIR}'" EXIT
@@ -29,5 +35,5 @@ if ! sha256sum -c "jq-checksums" --status; then
   exit 1
 fi
 
-mv "jq-linux64" "/usr/local/sbin/jq"
-chmod a+x "/usr/local/sbin/jq"
+mv "jq-linux64" "${LOCATION}"
+chmod a+x "${LOCATION}"

@@ -4,12 +4,18 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
+LOCATION="/usr/sbin/probe"
+
 if hash probe 2>/dev/null; then
   echo "Probe already installed: $(which probe)"
+  if [[ "$(which probe)" != "${LOCATION}" ]]; then
+    echo "Moving probe: ${LOCATION}"
+    mv "$(which probe)" "${LOCATION}"
+  fi
   exit 0
 fi
 
-echo ">>> Installing Probe: /usr/local/sbin/probe"
+echo ">>> Installing Probe: ${LOCATION}"
 
 WORK_DIR="$(mktemp -d)"
 trap "rm -rf '${WORK_DIR}'" EXIT
@@ -32,4 +38,6 @@ if ! sha256sum -c "${PROBE_CHECKSUMS_PATH}" --status; then
   exit 1
 fi
 
-tar -zxf "${PROBE_ARCHIVE_PATH}" --directory "/usr/local/sbin/"
+tar -zxf "${PROBE_ARCHIVE_PATH}" --directory "${WORK_DIR}/"
+
+mv "${WORK_DIR}/probe" "${LOCATION}"

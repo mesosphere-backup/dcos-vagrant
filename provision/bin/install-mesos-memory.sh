@@ -4,9 +4,9 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-echo ">>> Installing Mesos Memory Modifier: /usr/local/sbin/mesos-memory"
+echo ">>> Installing Mesos Memory Modifier: /usr/sbin/mesos-memory"
 
-cat << 'EOF' > "/usr/local/sbin/mesos-memory"
+cat << 'EOF' > "/usr/sbin/mesos-memory"
 #!/usr/bin/env bash
 set -o errexit -o nounset -o pipefail
 
@@ -152,4 +152,4 @@ sed "s/MESOS_RESOURCES=.*/MESOS_RESOURCES='${MESOS_RESOURCES}'/" "${MESOS_RESOUR
 rm "${MESOS_RESOURCES_FILE}.bak"
 EOF
 
-chmod u+x "/usr/local/sbin/mesos-memory"
+chmod u+x "/usr/sbin/mesos-memory"

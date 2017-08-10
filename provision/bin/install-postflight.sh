@@ -4,12 +4,12 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-echo ">>> Installing DC/OS Postflight: /usr/local/sbin/dcos-postflight"
+echo ">>> Installing DC/OS Postflight: /usr/sbin/dcos-postflight"
 
 # from https://github.com/mesosphere/dcos-installer/blob/master/dcos_installer/action_lib/__init__.py#L250
 # TODO: hopefully this goes away at some point so we dont have to write a looping postflight check
 
-cat << 'EOF' > "/usr/local/sbin/dcos-postflight"
+cat << 'EOF' > "/usr/sbin/dcos-postflight"
 #!/usr/bin/env bash
 shopt -s nullglob
 
@@ -49,4 +49,4 @@ fi
 exit ${RETCODE}
 EOF
 
-chmod u+x "/usr/local/sbin/dcos-postflight"
+chmod u+x "/usr/sbin/dcos-postflight"
