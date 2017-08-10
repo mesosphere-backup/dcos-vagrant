@@ -111,7 +111,10 @@ if [[ -e "/opt/mesosphere/bin/dcos-diagnostics" ]]; then
   # DC/OS >= 1.10
   TARGET="dcos-diagnostics check node-poststart"
   CMD="/opt/mesosphere/bin/dcos-diagnostics check node-poststart"
-  STATUS_CMD="echo 'Pending:' && echo \"\$(${CMD} 2>&1 || true)\" | jq -r '.checks | select(.status != 0) | to_entries[] | \"\(.key) - \(.value.output)\"' | sed '/^\s*$/d'"
+  # parse the json output into something human readable, like:
+  # components_master:
+  #   component Admin Router Reloader has health status 1
+  STATUS_CMD="echo \"\$(${CMD} 2>&1 || true)\" | jq -r '.checks | to_entries[] | select(.value.status != 0) | \"\(.key):\\n  \(.value.output | split(\"\\n\") | map(select(length > 0)) | join(\"\\n  \"))\"'"
 elif [[ -e "/opt/mesosphere/bin/3dt" ]]; then
   # DC/OS <= 1.9
   TARGET="3dt --diag"
