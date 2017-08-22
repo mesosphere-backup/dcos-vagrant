@@ -127,9 +127,10 @@ In DC/OS 1.8.5 proxies are allowed to be configured in `config.yaml`.
 
 Make sure that `no_proxy` includes all DC/OS Vagrant VM IPs and any local network addresses you want accessible to the cluster.
 
-Also make sure to update the user, password, and proxy address bellow.
+Also make sure to update the user, password, and proxy address below.
 
-While the example routes https through http, you probably want to use http -> http and https -> https, however this requires your proxy to use a valid SSL certificate.
+If the proxy intercepts SSL connections, set the environment variable `CURL_CA_BUNDLE` to the path of the proxy CA certificate to verify the installer download.
+This does not change the CA certificates used inside the cluster to verify secure connections.
 
 Example:
 
