@@ -67,6 +67,7 @@ There are several configurable options when deploying a cluster and installing D
 - `DCOS_VAGRANT_MOUNT_METHOD` - One of the following methods (default: `virtualbox`):
     - `virtualbox` - Use cross-platform [VirtualBox shared folders](https://www.vagrantup.com/docs/synced-folders/virtualbox.html)
     - `nfs` - Use faster [NFS shared folders](https://www.vagrantup.com/docs/synced-folders/nfs.html).
+- `CURL_CA_BUNDLE` - Path to an alternative CA certificate bundle to verify the installer download.
 
 Additional advanced configuration may be possible by modifying the Vagrantfile directly, but is not encouraged because the internal APIs may change at any time.
 
