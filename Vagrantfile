@@ -245,6 +245,9 @@ def download_installer_version(version, url, path, sha256Expected)
   UI.info "Destination: #{path}"
 
   options = {}
+  if ENV.has_key?('CURL_CA_BUNDLE')
+    options[:ca_cert] = ENV.fetch('CURL_CA_BUNDLE')
+  end
   if UI.level <= Log4r::INFO
     options[:ui] = Vagrant::UI::Colored.new
   end
