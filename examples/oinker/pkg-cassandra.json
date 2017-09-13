@@ -17,8 +17,7 @@
       "size": 1024,
       "new": 100
     },
-    "count": 1,
-    "seeds": 1
+    "count": 1
   },
   "task": {
     "cpus": 0.1,
