@@ -46,9 +46,9 @@ fi
 
 echo >&2 "DC/OS Version: ${DCOS_VERSION}"
 
-# Get major version by stripping the last version segment
-DCOS_MAJOR_VERSION="$(echo "${DCOS_VERSION}" | sed -e "s#[^0-9]*\([0-9][0-9]*[.][0-9][0-9]*\).*#\1#")"
-echo >&2 "DC/OS Major Version: ${DCOS_MAJOR_VERSION}"
+# Get major.minor version by stripping the patch version segment (if present)
+DCOS_MAJOR_MINOR_VERSION="$(echo "${DCOS_VERSION}" | sed -e "s#[^0-9]*\([0-9][0-9]*[.][0-9][0-9]*\).*#\1#")"
+echo >&2 "DC/OS Major Version: ${DCOS_MAJOR_MINOR_VERSION}"
 
 case "${OSTYPE}" in
   darwin*)  PLATFORM='darwin/x86-64'; BIN='/usr/local/bin'; EXE='dcos' ;;
@@ -61,7 +61,7 @@ TMPDIR="${TMPDIR:-/tmp/}"
 CLI_DIR="$(mktemp -d "${TMPDIR%/}/dcos-install-cli.XXXXXXXXXXXX")"
 trap "rm -rf ${CLI_DIR}" EXIT
 
-DCOS_CLI_URL="https://downloads.dcos.io/binaries/cli/${PLATFORM}/dcos-${DCOS_MAJOR_VERSION}/${EXE}"
+DCOS_CLI_URL="https://downloads.dcos.io/binaries/cli/${PLATFORM}/dcos-${DCOS_MAJOR_MINOR_VERSION}/${EXE}"
 echo >&2 "Download URL: ${DCOS_CLI_URL}"
 echo >&2 "Download Path: ${CLI_DIR}/${EXE}"
 curl --fail --location --silent --show-error -o "${CLI_DIR}/${EXE}" "${DCOS_CLI_URL}"
@@ -76,8 +76,30 @@ else
 fi
 rm -rf ${CLI_DIR}
 
-echo >&2 "Config: core.dcos_url=${DCOS_URL}"
-dcos config set core.dcos_url "${DCOS_URL}"
+# 1.10 changed the auth commands
+DCOS_MAJOR_VERSION="$(echo "${DCOS_MAJOR_MINOR_VERSION}" | cut -d'.' -f1)"
+DCOS_MINOR_VERSION="$(echo "${DCOS_MAJOR_MINOR_VERSION}" | cut -d'.' -f2)"
+if [[ "${DCOS_MAJOR_VERSION}" -ge "1" ]] && [[ "${DCOS_MINOR_VERSION}" -ge "10" ]]; then
+  # >= 1.10
+  CLUSTER_ID="$(curl --fail --location --silent --show-error ${DCOS_URL}/dcos-metadata/ui-config.json | jq -e -r .clusterConfiguration.id)"
+  mkdir -p ~/.dcos/clusters/${CLUSTER_ID}
+  cat > ~/.dcos/clusters/${CLUSTER_ID}/dcos.toml << EOM
+[core]
+dcos_url = "${DCOS_URL}"
+ssl_verify = "false"
+reporting = false
+[cluster]
+name = "DCOS"
+EOM
+  chmod 0600 ~/.dcos/clusters/${CLUSTER_ID}/dcos.toml
+  # TODO: cluster name requires auth...
+  # CLUSTER_NAME="$(curl --fail --location --silent --show-error ${DCOS_URL}/mesos/state-summary | jq -e -r .cluster)"
+  # dcos cluster rename "DCOS" "${CLUSTER_NAME}"
+else
+  # < 1.10
+  echo >&2 "Config: core.dcos_url=${DCOS_URL}"
+  dcos config set core.dcos_url "${DCOS_URL}"
+fi
 
 # Log CLI & Cluster versions
 dcos --version >&2
