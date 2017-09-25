@@ -4,7 +4,7 @@
 # Times out after 5 minutes.
 #
 # Usage:
-# $ ci/test-app-health.sh <app-id> [timeout-seconds]
+# $ ci/await-app-health.sh <app-id> [timeout-seconds]
 
 set -o errexit
 set -o nounset
