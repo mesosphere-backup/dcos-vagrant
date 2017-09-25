@@ -38,7 +38,7 @@ This example runs [Oinker-Go](https://github.com/mesosphere/oinker-go) on [Marat
 1. Install the cassandra package using a low memory, single-node configuration:
 
     ```
-    dcos package install --options=examples/oinker/pkg-cassandra.json cassandra --yes
+    dcos package install --options=examples/oinker/pkg-cassandra.json cassandra --package-version=1.0.25-3.0.10 --yes
     ```
 1. Wait for the Cassandra service to be running and healthy. Check the DC/OS Services UI: <http://m1.dcos/#/services/>.
 

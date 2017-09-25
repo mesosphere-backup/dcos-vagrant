@@ -44,7 +44,7 @@
             "preserveLastResponse": true
         }
     ],
-    "cmd": "export OINKER_INSTANCE_NAME=${MESOS_TASK_ID} && oinker --cassandra-addr=node-0-server.cassandra.mesos --cassandra-repl=1",
+    "cmd": "export OINKER_INSTANCE_NAME=${MESOS_TASK_ID} && oinker --cassandra-addr=node-0.cassandra.mesos --cassandra-repl=1",
     "ports": [0],
     "cpus": 0.25,
     "mem": 128.0
