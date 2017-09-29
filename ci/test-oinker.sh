@@ -23,6 +23,9 @@ else
   CONFIRM='--yes'
 fi
 
+# Print config for debugging purposes
+dcos config show
+
 # Install Cassandra
 # Stick to v1.x because it allows 1-node Cassandra, while v2.x does not.
 dcos package install --options=examples/oinker/pkg-cassandra.json cassandra --package-version=1.0.25-3.0.10 --yes
