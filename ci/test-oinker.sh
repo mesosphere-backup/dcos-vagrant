@@ -59,5 +59,5 @@ dcos package uninstall cassandra ${CONFIRM}
 
 # Clean up Mesos & ZooKeeper
 # DC/OS 1.10 added auto-cleanup, but Cassandra 1.x doesn't use it.
-dcos node ssh --leader --user=root --option StrictHostKeyChecking=no --option IdentityFile=$(pwd)/genconf/ssh_key \
+dcos node ssh --leader --user=vagrant --option StrictHostKeyChecking=no --option IdentityFile=$(pwd)/.vagrant/dcos/private_key_vagrant \
      "docker run mesosphere/janitor /janitor.py -r cassandra-role -p cassandra-principal -z dcos-service-cassandra"
