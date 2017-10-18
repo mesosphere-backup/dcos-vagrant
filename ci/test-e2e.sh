@@ -13,6 +13,12 @@ set -o nounset
 set -o pipefail
 set -o xtrace
 
+if [[ -n "${LOG_LINES:-}" ]]; then
+  LOG_LINES_ARG="-n=${LOG_LINES}"
+else
+  LOG_LINES_ARG=""
+fi
+
 # Require bash 4+ for associative arrays
 if [[ ${BASH_VERSINFO[0]} -lt 4 ]]; then
   echo "Requires Bash 4+" >&2
@@ -40,7 +46,11 @@ jq --version
 ci/cleanup.sh
 
 # Destroy All VMs on exit
-trap 'ci/cleanup.sh' EXIT
+function cleanup() {
+  ci/dcos-logs.sh ${LOG_LINES_ARG} || true
+  ci/cleanup.sh
+}
+trap cleanup EXIT
 
 # Ensure latest dcos-vagrant-box
 vagrant box update
@@ -58,17 +68,16 @@ DCOS_CLI="$(ci/dcos-install-cli.sh)"
 echo "${DCOS_CLI}"
 
 # Delete CLI on exit
-function cleanup() {
-  # only use sudo if required
+function cleanup2() {
+  # Only use sudo if required
   if [[ -w "$(dirname "${DCOS_CLI}")" ]]; then
     rm -rf "${DCOS_CLI}"
   else
     sudo rm -rf "${DCOS_CLI}"
   fi
-  # Burninate Everything!
-  ci/cleanup.sh
+  cleanup
 }
-trap cleanup EXIT
+trap cleanup2 EXIT
 
 # Create User
 DCOS_USER="test@example.com"
