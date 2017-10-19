@@ -10,3 +10,4 @@ dcos_generate_config*.sh
 /VagrantConfig.yaml
 /installers
 /test-junit.xml
+/*.log
