@@ -1,7 +1,7 @@
 m1:
   ip: 192.168.65.90
   cpus: 2
-  memory: 1024
+  memory: 2048
   type: master
 a1:
   ip: 192.168.65.111
