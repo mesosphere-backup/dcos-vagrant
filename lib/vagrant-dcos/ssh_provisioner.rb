@@ -36,6 +36,8 @@ module VagrantPlugins
           key_dir.mkpath
           private_key_file.open('w') { |io| io.write(private_key) }
           public_key_file.open('w') { |io| io.write(openssh_key) }
+          FileUtils.chmod(0600, private_key_file)
+          FileUtils.chmod(0644, public_key_file)
         end
 
         [private_key, openssh_key]
