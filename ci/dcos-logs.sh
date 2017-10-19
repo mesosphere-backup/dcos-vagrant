@@ -25,7 +25,8 @@ for i in "$@"; do
   esac
 done
 
-while read VM_NAME; do
+while read -r VM_NAME; do
   echo "Extracting Logs: ${VM_NAME}"
-  VAGRANT_LOG=error vagrant ssh "${VM_NAME}" -c "journalctl ${LINES_ARG:-}" > "${VM_NAME}.log"
-done < "$(grep '.dcos' /etc/hosts | sed 's/^.*[[:space:]][[:space:]]*\(.*\)\.dcos.*$/\1/')"
+  echo "empty" > "${VM_NAME}.log"
+  VAGRANT_LOG=error < /dev/null vagrant ssh "${VM_NAME}" -c "journalctl --no-pager ${LINES_ARG:-}" > "${VM_NAME}.log"
+done < <(grep '.dcos' /etc/hosts | sed 's/^.*[[:space:]][[:space:]]*\(.*\)\.dcos.*$/\1/')
