@@ -18,5 +18,5 @@ vagrant ssh m1 -c " \
   export SLAVE_HOSTS='${SLAVE_HOSTS}' && \
   export PUBLIC_SLAVE_HOSTS='${PUBLIC_SLAVE_HOSTS}' && \
   cd /opt/mesosphere/active/dcos-integration-test && \
-  py.test -vv --junitxml=/vagrant/test-junit.xml -m 'not ccm' \
+  pytest -vv --junitxml=/vagrant/test-junit.xml -m 'not ccm' \
 "
