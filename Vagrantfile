@@ -450,6 +450,8 @@ Vagrant.configure(2) do |config|
         v.customize ['modifyvm', :id, '--natdnsproxy1', 'off']
         # Host DNS resolution required to support host proxies and faster global DNS resolution
         v.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
+        # Assign unique mac address
+        v.customize ['modifyvm', :id, '--macaddress1', 'auto']
 
         override.vm.network :private_network, ip: machine_type['ip']
 
