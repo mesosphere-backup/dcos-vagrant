@@ -334,17 +334,24 @@ def validate_command(machine_types)
 end
 
 def error_known_good_versions
-  UI.error 'Latest known-working versions: Vagrant 1.9.3, VirtualBox 5.1.22'.red
+  UI.error 'Latest known-working versions: Vagrant 2.0.0, VirtualBox 5.1.30'.red
 end
 
 # Monkey patches and known-bad Vagrant versions
 case Vagrant::VERSION
+when '1.9.7'
+  if Vagrant::Util::Platform.windows?
+    UI.error 'Unsupported Vagrant Version (on Windows): 1.9.7'.red
+    UI.error 'For more info, see https://jira.mesosphere.com/browse/DCOS_VAGRANT-62'.red
+    error_known_good_versions
+    Vagrant.require_version '>= 1.8.4', '!= 1.8.5', '!= 1.8.7', '!= 1.9.4', '!= 1.9.7'
+  end
 when '1.9.4'
   if Vagrant::Util::Platform.windows?
     UI.error 'Unsupported Vagrant Version (on Windows): 1.9.4'.red
     UI.error 'For more info, see https://github.com/mitchellh/vagrant/issues/8520'.red
     error_known_good_versions
-    Vagrant.require_version '>= 1.8.4', '!= 1.8.5', '!= 1.8.7', '!= 1.9.4'
+    Vagrant.require_version '>= 1.8.4', '!= 1.8.5', '!= 1.8.7', '!= 1.9.4', '!= 1.9.7'
   end
 when '1.9.1'
   require_relative 'vendor/vagrant-patches/redhat_change_host_name_1.9.1'
