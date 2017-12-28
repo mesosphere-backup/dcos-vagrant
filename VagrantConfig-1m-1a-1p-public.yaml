@@ -1,0 +1,27 @@
+m1:
+  publicip : 10.119.180.34
+  route: 10.119.180.254
+  ip: 192.168.65.90
+  cpus: 2
+  memory: 2048
+  type: master
+a1:
+  ip: 192.168.65.111
+  cpus: 4
+  memory: 6144
+  memory-reserved: 512
+  type: agent-private
+p1:
+  ip: 192.168.65.60
+  cpus: 2
+  memory: 1536
+  memory-reserved: 512
+  type: agent-public
+  aliases:
+  - spring.acme.org
+  - oinker.acme.org
+boot:
+  ip: 192.168.65.50
+  cpus: 2
+  memory: 1024
+  type: boot
