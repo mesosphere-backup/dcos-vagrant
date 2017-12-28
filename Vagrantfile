@@ -460,11 +460,19 @@ Vagrant.configure(2) do |config|
         # Assign unique mac address
         v.customize ['modifyvm', :id, '--macaddress1', 'auto']
 
-        override.vm.network :private_network, ip: machine_type['ip']
+        # Configure master with another bridge network
+        if machine_type['type'] != "master"
+          override.vm.network "private_network", ip: machine_type['ip']
+        else
+          override.vm.network "public_network", ip: machine_type['publicip'], bridge: "em1"
+	  default_router = machine_type["route"]
+          config.vm.network "private_network", ip: machine_type['ip']
+        end
 
         # guest should sync time if more than 10s off host
         v.customize [ "guestproperty", "set", :id, "/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold", 1000 ]
       end
+
 
       # Hack to remove loopback host alias that conflicts with vagrant-hostmanager
       # https://jira.mesosphere.com/browse/DCOS_VAGRANT-15
