@@ -1,7 +1,11 @@
 # Get version number, channel, and git commit ref: https://dcos.io/releases/
 # Get sha256: shasum -a 256 dcos_generate_config.sh
-latest: '1.10.2'
+latest: '1.10.4'
 versions:
+  '1.10.4':
+    channel: 'stable/1.10.4'
+    ref: '2d45a8f9e277a60007f277f70f01d076c913a7fe'
+    sha256: '108b0d66af1a96508219627f7dd897b3110235eb1d9729ae5a576025192ccb61'
   '1.10.2':
     channel: 'stable/1.10.2'
     ref: '12b494a3309c65a22b7d5553debd1c053e008a31'
@@ -14,6 +18,18 @@ versions:
     channel: 'stable/1.10.0'
     ref: 'e38ab2aa282077c8eb7bf103c6fff7b0f08db1a4'
     sha256: 'b3f7cdaac065b196206d76724204d2227438232d2858ce1ca7ffd699f458f876'
+  '1.9.7':
+    channel: 'stable/1.9.7'
+    ref: '888d171dbd85d2a56cc046b95c751989ea6c7604'
+    sha256: '91fbbfac7f5e09c0ad70fb70e74c2366c301eefe45f177d21d2c6253d21f56e3'
+  '1.9.6':
+    channel: 'stable/1.9.6'
+    ref: 'f25e9dcfd0abae4de8bc18cc1fc9584a7a0a586a'
+    sha256: '89644f4bd6821177a2396d955b105986b71f855f12df822adfe9377e97496d85'
+  '1.9.5':
+    channel: 'stable/1.9.5'
+    ref: '4308d88bfc0dd979703f4ef500ce415c5683b3c5'
+    sha256: 'c9d7209f44bf755bf62b59166979069f7e31755d6661d0f4adb72145bf727d52'
   '1.9.4':
     channel: 'stable/1.9.4'
     ref: 'ff2481b1d2c1008010bdc52554f872d66d9e5904'
