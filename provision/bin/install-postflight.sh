@@ -150,8 +150,15 @@ else
   exit 1
 fi
 TARGET="dcos-adminrouter"
-CMD="curl --insecure --fail --location --silent http://127.0.0.1:${API_PORT}/"
-STATUS_CMD="curl --insecure --fail --location --silent -o /dev/null -w "%{http_code}" http://127.0.0.1:${API_PORT}/"
+if [[ -e "/opt/mesosphere/bin/dcos-diagnostics" ]]; then
+    # DC/OS >= 1.10
+    READINESS_CHECK_PATH=/dcos-metadata/dcos-version.json
+else
+    # DC/OS <= 1.9
+    READINESS_CHECK_PATH=/
+fi
+CMD="curl --insecure --fail --location --silent http://127.0.0.1:${API_PORT}${READINESS_CHECK_PATH}"
+STATUS_CMD="curl --insecure --fail --location --silent -o /dev/null -w "%{http_code}" http://127.0.0.1:${API_PORT}${READINESS_CHECK_PATH}"
 await
 EOF
 
