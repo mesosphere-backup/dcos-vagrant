@@ -2,6 +2,10 @@
 # Get sha256: shasum -a 256 dcos_generate_config.sh
 latest: '1.10.4'
 versions:
+  '1.11.0-rc4':
+    channel: EarlyAccess
+    ref: '6c09a7e99d5c77b16a65cdb3fcbcdbe2a2406041'
+    sha256: '7f4d5182c4b22b61e1e2beacc17452c28bb82f6abb86cf46404c54b074b1214e'
   '1.10.4':
     channel: 'stable/1.10.4'
     ref: '2d45a8f9e277a60007f277f70f01d076c913a7fe'
