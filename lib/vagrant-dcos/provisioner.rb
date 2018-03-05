@@ -56,7 +56,7 @@ module VagrantPlugins
       end
 
       def dcos_version()
-        #return @dcos_version if @dcos_version
+        return @dcos_version if @dcos_version
 
         # Run inside `~/dcos` to cache output (tarball, genconf dir) for future runs.
         version_json = ''
