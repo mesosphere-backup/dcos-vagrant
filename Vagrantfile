@@ -63,6 +63,7 @@ class UserConfig
   attr_accessor :vagrant_mount_method
   attr_accessor :java_enabled
   attr_accessor :private_registry
+  attr_accessor :license_key_contents
 
   def self.from_env
     c = new
@@ -74,6 +75,7 @@ class UserConfig
     c.version              = ENV.fetch(env_var('version'), '')
     c.generate_config_path = ENV.fetch(env_var('generate_config_path'), '')
     c.install_method       = ENV.fetch(env_var('install_method'), 'ssh_pull')
+    c.license_key_contents = ENV.fetch(env_var('license_key_contents'), '')
     c.vagrant_mount_method = ENV.fetch(env_var('vagrant_mount_method'), 'virtualbox')
     c.java_enabled         = (ENV.fetch(env_var('java_enabled'), 'false') == 'true')
     c.private_registry     = (ENV.fetch(env_var('private_registry'), 'false') == 'true')
@@ -146,6 +148,7 @@ class UserConfig
     env = {
       'DCOS_CONFIG_PATH' => UserConfig.path_to_url(@config_path),
       'DCOS_GENERATE_CONFIG_PATH' => UserConfig.path_to_url(@generate_config_path),
+      'DCOS_LICENSE_KEY_CONTENTS' => UserConfig.path_to_url(@license_key_contents),
       'DCOS_JAVA_ENABLED' => @java_enabled ? 'true' : 'false',
       'DCOS_PRIVATE_REGISTRY' => @private_registry ? 'true' : 'false'
     }
@@ -523,6 +526,7 @@ Vagrant.configure(2) do |config|
           dcos.install_method = user_config.install_method
           dcos.machine_types = machine_types
           dcos.config_template_path = user_config.config_path
+          dcos.license_key_contents = user_config.license_key_contents
         end
       end
     end

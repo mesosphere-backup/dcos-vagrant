@@ -21,6 +21,7 @@ module VagrantPlugins
           @config.machine_types,
           @config.config_template_path,
           @config.install_method.to_sym,
+          @config.license_key_contents,
           @config.max_install_threads,
         )
       end
@@ -76,10 +77,13 @@ module VagrantPlugins
 
         # Parse json as yaml (yaml is a superset of json)
         @dcos_version = SemiSemantic::Version.parse(YAML.load(version_json)['version'])
+        @dcos_variant = YAML.load(version_json)['variant']
+        @machine.ui.info "Setting variant #{@dcos_variant}"
+
         @dcos_version
       end
 
-      def install(machine_types, config_template_path, install_method, max_install_threads)
+      def install(machine_types, config_template_path, install_method, license_key_contents, max_install_threads)
         @machine.ui.info "Installing DC/OS #{dcos_version}"
 
         @machine.ui.info "Reading #{config_template_path}"
@@ -100,6 +104,11 @@ module VagrantPlugins
         # TODO: remove check once 1.7 support is dropped
         if [:ssh_push, :web].include?(install_method) && gen_conf_config['public_agent_list'].length > 0 && dcos_version < SemiSemantic::Version.parse('1.8.0')
           raise InstallError.new("Public agents are not supported by install method '#{install_method}' prior to DC/OS 1.8.0")
+        end
+
+        if @dcos_variant == 'ee'
+          gen_conf_config['fault_domain_enabled'] = 'false'
+          gen_conf_config['license_key_contents'] = license_key_contents
         end
 
         # configure how to access the boot machine from the nodes

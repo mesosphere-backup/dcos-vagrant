@@ -8,6 +8,7 @@ module VagrantPlugins
       attr_accessor :max_install_threads
       attr_accessor :machine_types
       attr_accessor :config_template_path
+      attr_accessor :license_key_contents
 
       def initialize
         super
@@ -15,6 +16,7 @@ module VagrantPlugins
         @max_install_threads = UNSET_VALUE
         @machine_types = UNSET_VALUE
         @config_template_path = UNSET_VALUE
+        @license_key_contents = UNSET_VALUE
       end
 
       def finalize!
