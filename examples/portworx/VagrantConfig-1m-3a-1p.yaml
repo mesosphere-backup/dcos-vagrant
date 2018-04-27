@@ -1,0 +1,40 @@
+m1:
+  ip: 192.168.65.90
+  cpus: 2
+  memory: 1024
+  type: master
+a1:
+  ip: 192.168.65.111
+  cpus: 4
+  memory: 3123
+  memory-reserved: 512
+  type: agent-private
+  disk: 10240
+a2:
+  ip: 192.168.65.121
+  cpus: 4
+  memory: 3123
+  memory-reserved: 512
+  type: agent-private
+  disk: 10240
+a3:
+  ip: 192.168.65.131
+  cpus: 4
+  memory: 3123
+  memory-reserved: 512
+  type: agent-private
+  disk: 10240
+p1:
+  ip: 192.168.65.60
+  cpus: 2
+  memory: 1024
+  memory-reserved: 512
+  type: agent-public
+  aliases:
+  - spring.acme.org
+  - oinker.acme.org
+boot:
+  ip: 192.168.65.50
+  cpus: 2
+  memory: 1024
+  type: boot
