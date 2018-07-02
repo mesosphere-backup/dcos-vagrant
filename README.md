@@ -31,7 +31,7 @@ Deploying DC/OS Vagrant involves creating a local cluster of VirtualBox VMs usin
     vagrant up
     ```
 
-    When prompted for a password, provide your local machine user password (modifies `/etc/hosts`).
+    When prompted for a password, provide your local machine user password (modifies `/etc/hosts`). cp is unix copy command.
 
 1. Access the GUI <http://m1.dcos/>
 
