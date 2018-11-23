@@ -2,7 +2,7 @@
 
 This tool is deprecated in favor of the [DC/OS E2E CLI](https://dcos-e2e-cli.readthedocs.io/en/latest/).
 
-That means that we do not guarantee that DC/OS Docker will continue to work.
+That means that we do not guarantee that DC/OS Vagrant will continue to work.
 
 We aim to provide all the same functionality, and more, in the [DC/OS E2E CLI](https://dcos-e2e.readthedocs.io/en/latest/cli.html).
 
