@@ -1,4 +1,14 @@
-# DC/OS Vagrant
+# Deprecation Notice
+
+This tool is deprecated in favor of the [DC/OS E2E CLI](https://dcos-e2e-cli.readthedocs.io/en/latest/).
+
+That means that we do not guarantee that DC/OS Docker will continue to work.
+
+We aim to provide all the same functionality, and more, in the [DC/OS E2E CLI](https://dcos-e2e.readthedocs.io/en/latest/cli.html).
+
+Let us know if anything you have been using this tool for is not covered by the DC/OS E2E CLI.
+
+# Deprecated - DC/OS Vagrant
 
 Quickly provision a [DC/OS](https://github.com/dcos/dcos) cluster on a local machine for development, testing, or demonstration.
 
